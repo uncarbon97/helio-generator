@@ -1,0 +1,53 @@
+package ${package}.${moduleName}.model.request;
+
+import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+
+/**
+ * 后台管理-新增/编辑${comments}
+ * @author ${author}
+ */
+@Accessors(chain = true)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+public class AdminInsertOrUpdate${className}DTO implements Serializable {
+
+    @ApiModelProperty(value = "主键ID", hidden = true, notes = "仅更新时使用")
+    private Long id;
+#foreach ($column in $columns)
+#if($column.columnName != $pk.columnName
+    && $column.columnName != "tenant_id"
+    && $column.columnName != "revision"
+    && $column.columnName != "del_flag"
+    && $column.columnName != "created_at"
+    && $column.columnName != "created_by"
+    && $column.columnName != "updated_at"
+    && $column.columnName != "updated_by"
+    && $column.columnName != "remark"
+)
+
+    @ApiModelProperty(value = "$column.comments"#if(!$column.nullable), required = true#end)
+#if(!$column.nullable)
+#if($column.attrType == 'String')
+    @NotBlank(message = "$column.comments不能为空")
+#else
+    @NotNull(message = "$column.comments不能为空")
+#end
+#end
+    private $column.attrType $column.camelAttrName;
+#end
+#end
+
+}

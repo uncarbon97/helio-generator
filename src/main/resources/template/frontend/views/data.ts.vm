@@ -1,0 +1,121 @@
+import { BasicColumn, FormSchema } from '/@/components/Table';
+import { DescItem } from '/@/components/Description';
+
+/**
+ * 表格列
+ */
+export const columns: BasicColumn[] = [
+#foreach ($column in $columns)
+#if($column.columnName != $pk.columnName
+    && $column.columnName != "tenant_id"
+    && $column.columnName != "revision"
+    && $column.columnName != "del_flag"
+    && $column.columnName != "created_at"
+    && $column.columnName != "created_by"
+    && $column.columnName != "updated_at"
+    && $column.columnName != "updated_by"
+    && $column.columnName != "remark"
+)
+  {
+    title: '$column.comments',
+    dataIndex: '$column.camelAttrName',
+    width: 80,
+  },
+#end
+#end
+  {
+    title: '创建时间',
+    dataIndex: 'createdAt',
+    width: 80,
+  },
+];
+
+/**
+ * 查询条件
+ */
+export const queryFormSchema: FormSchema[] = [
+#foreach ($column in $columns)
+#if($column.columnName != $pk.columnName
+    && $column.columnName != "tenant_id"
+    && $column.columnName != "revision"
+    && $column.columnName != "del_flag"
+    && $column.columnName != "created_at"
+    && $column.columnName != "created_by"
+    && $column.columnName != "updated_at"
+    && $column.columnName != "updated_by"
+    && $column.columnName != "remark"
+)
+  {
+    field: '$column.camelAttrName',
+    label: '$column.comments',
+    component: 'Input',
+    componentProps: {},
+    colProps: { span: 8 },
+  },
+#end
+#end
+];
+
+/**
+ * 查看详情表单
+ */
+export const retrieveDetailFormSchema: DescItem[] = [
+#foreach ($column in $columns)
+#if($column.columnName != $pk.columnName
+    && $column.columnName != "tenant_id"
+    && $column.columnName != "revision"
+    && $column.columnName != "del_flag"
+    && $column.columnName != "created_at"
+    && $column.columnName != "created_by"
+    && $column.columnName != "updated_at"
+    && $column.columnName != "updated_by"
+    && $column.columnName != "remark"
+)
+  {
+    field: '$column.camelAttrName',
+    label: '$column.comments',
+  },
+#end
+#end
+  {
+    field: 'createdAt',
+    label: '创建时间',
+  },
+  {
+    field: 'updatedAt',
+    label: '更新时间',
+  },
+];
+
+/**
+ * 新增/编辑表单
+ */
+export const insertOrUpdateFormSchema: FormSchema[] = [
+  {
+    field: 'id',
+    // 只是为了把ID带过来
+    label: '主键ID',
+    component: 'Render',
+    show: false,
+  },
+#foreach ($column in $columns)
+#if($column.columnName != $pk.columnName
+    && $column.columnName != "tenant_id"
+    && $column.columnName != "revision"
+    && $column.columnName != "del_flag"
+    && $column.columnName != "created_at"
+    && $column.columnName != "created_by"
+    && $column.columnName != "updated_at"
+    && $column.columnName != "updated_by"
+    && $column.columnName != "remark"
+)
+  {
+    field: '$column.camelAttrName',
+    label: '$column.comments',
+    required:#if(!$column.nullable) true#else false#end,
+    component: 'Input',
+    componentProps: {},
+  },
+#end
+#end
+];

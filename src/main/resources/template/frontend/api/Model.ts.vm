@@ -1,0 +1,55 @@
+/**
+ * @model ${comments}
+ */
+
+/*
+ ---- REQUEST ----
+ */
+
+/**
+ * ${comments}-新增/编辑请求体
+ */
+export interface ${className}InsertOrUpdateForm {
+#foreach ($column in $columns)
+#if($column.columnName != $pk.columnName
+&& $column.columnName != "tenant_id"
+&& $column.columnName != "revision"
+&& $column.columnName != "del_flag"
+&& $column.columnName != "created_at"
+&& $column.columnName != "created_by"
+&& $column.columnName != "updated_at"
+&& $column.columnName != "updated_by"
+&& $column.columnName != "remark"
+)
+  /**
+   * $column.comments
+   */
+  $column.camelAttrName: string;
+
+#end
+#end
+}
+
+/*
+ ---- RESPONSE ----
+ */
+
+/**
+ * ${comments}-通用响应体
+ */
+export type ${className}ApiResult = ${className}InsertOrUpdateForm & {
+  /**
+   * 主键ID
+   */
+  id: string;
+
+  /**
+   * 创建时刻
+   */
+  createdAt: string;
+
+  /**
+   * 更新时刻
+   */
+  updatedAt: string;
+};

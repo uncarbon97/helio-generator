@@ -1,0 +1,46 @@
+package ${package}.${moduleName}.entity;
+
+import cc.uncarbon.framework.crud.entity.HelioBaseEntity;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.*;
+import lombok.experimental.Accessors;
+import lombok.experimental.SuperBuilder;
+import io.swagger.annotations.ApiModelProperty;
+import java.time.LocalDateTime;
+#if(${hasBigDecimal})
+import java.math.BigDecimal;
+#end
+
+
+/**
+ * ${comments}
+ * @author ${author}
+ */
+@EqualsAndHashCode(callSuper = true)
+@Accessors(chain = true)
+@SuperBuilder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@TableName(value = "${tableName}")
+public class ${className}Entity extends HelioBaseEntity<Long> {
+#foreach ($column in $columns)
+#if($column.columnName != $pk.columnName
+	&& $column.columnName != "tenant_id"
+	&& $column.columnName != "revision"
+	&& $column.columnName != "del_flag"
+	&& $column.columnName != "created_at"
+	&& $column.columnName != "created_by"
+	&& $column.columnName != "updated_at"
+	&& $column.columnName != "updated_by"
+	&& $column.columnName != "remark"
+)
+
+	@ApiModelProperty(value = "$column.comments")
+	@TableField(value = "$column.columnName")
+	private $column.attrType $column.camelAttrName;
+#end
+#end
+
+}

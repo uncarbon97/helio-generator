@@ -1,0 +1,44 @@
+package ${package}.${moduleName}.facade;
+
+import cc.uncarbon.framework.core.page.PageParam;
+import cc.uncarbon.framework.core.page.PageResult;
+import ${package}.${moduleName}.model.request.AdminInsertOrUpdate${className}DTO;
+import ${package}.${moduleName}.model.request.AdminList${className}DTO;
+import ${package}.${moduleName}.model.response.${className}BO;
+
+import java.util.List;
+
+
+/**
+ * ${comments}Facade接口
+ * @author ${author}
+ */
+public interface ${className}Facade {
+
+    /**
+     * 后台管理-分页列表
+     */
+    PageResult<${className}BO> adminList(PageParam pageParam, AdminList${className}DTO dto);
+
+    /**
+     * 通用-详情
+     */
+    ${className}BO getOneById(Long entityId);
+
+    /**
+     * 后台管理-添加
+     * @return 主键ID
+     */
+    Long adminInsert(AdminInsertOrUpdate${className}DTO dto);
+
+    /**
+     * 后台管理-编辑
+     */
+    void adminUpdate(AdminInsertOrUpdate${className}DTO dto);
+
+    /**
+     * 后台管理-删除
+     */
+    void adminDelete(List<Long> ids);
+
+}

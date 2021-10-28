@@ -1,0 +1,181 @@
+package ${package}.${moduleName}.service.impl;
+
+import cc.uncarbon.framework.core.constant.HelioConstant;
+import cc.uncarbon.framework.core.exception.BusinessException;
+import cc.uncarbon.framework.core.page.PageParam;
+import cc.uncarbon.framework.core.page.PageResult;
+import cc.uncarbon.framework.crud.service.impl.HelioBaseServiceImpl;
+import cc.uncarbon.module.sys.annotation.SysLog;
+import ${package}.sys.enums.SysErrorEnum;
+import ${package}.${moduleName}.entity.${className}Entity;
+import ${package}.${moduleName}.mapper.${className}Mapper;
+import ${package}.${moduleName}.model.request.AdminInsertOrUpdate${className}DTO;
+import ${package}.${moduleName}.model.request.AdminList${className}DTO;
+import ${package}.${moduleName}.model.response.${className}BO;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+/**
+ * ${comments}
+ * @author ${author}
+ */
+@Slf4j
+@Service
+public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper, ${className}Entity> {
+
+    /**
+     * 后台管理-分页列表
+     */
+    public PageResult<${className}BO> adminList(PageParam pageParam, AdminList${className}DTO dto) {
+        Page<${className}Entity> entityPage = this.page(
+                new Page<>(pageParam.getPageNum(), pageParam.getPageSize()),
+                new QueryWrapper<${className}Entity>()
+                        .lambda()
+#foreach ($column in $columns)
+#if($column.columnName != $pk.columnName
+&& $column.columnName != "tenant_id"
+&& $column.columnName != "revision"
+&& $column.columnName != "del_flag"
+&& $column.columnName != "created_at"
+&& $column.columnName != "created_by"
+&& $column.columnName != "updated_at"
+&& $column.columnName != "updated_by"
+&& $column.columnName != "remark"
+)
+                        // $column.comments
+#if($column.attrType == 'String')
+                        .like(StrUtil.isNotBlank(dto.get${column.pascalAttrName}()), ${className}Entity::get$column.pascalAttrName, StrUtil.cleanBlank(dto.get${column.pascalAttrName}()))
+#else
+                        .eq(ObjectUtil.isNotNull(dto.get${column.pascalAttrName}()), ${className}Entity::get$column.pascalAttrName, dto.get${column.pascalAttrName}())
+#end
+#end
+#end
+                        // 时间区间
+                        .between(ObjectUtil.isNotNull(dto.getBeginAt()) && ObjectUtil.isNotNull(dto.getEndAt()), ${className}Entity::getCreatedAt, dto.getBeginAt(), dto.getEndAt())
+                        // 排序
+                        .orderByDesc(${className}Entity::getCreatedAt)
+        );
+
+        return this.entityPage2BOPage(entityPage);
+    }
+
+    /**
+     * 通用-详情
+     */
+    public ${className}BO getOneById(Long entityId) {
+        ${className}Entity entity = this.getById(entityId);
+        SysErrorEnum.INVALID_ID.assertNotNull(entity);
+
+        return this.entity2BO(entity);
+    }
+
+    /**
+     * 后台管理-新增
+     */
+    @SysLog(value = "新增${comments}")
+    @Transactional(rollbackFor = Exception.class)
+    public Long adminInsert(AdminInsertOrUpdate${className}DTO dto) {
+        this.checkExist(dto);
+
+        dto.setId(null);
+        ${className}Entity entity = new ${className}Entity();
+        BeanUtil.copyProperties(dto, entity);
+
+        this.save(entity);
+
+        return entity.getId();
+    }
+
+    /**
+     * 后台管理-编辑
+     */
+    @SysLog(value = "编辑${comments}")
+    @Transactional(rollbackFor = Exception.class)
+    public void adminUpdate(AdminInsertOrUpdate${className}DTO dto) {
+        this.checkExist(dto);
+
+        ${className}Entity entity = new ${className}Entity();
+        BeanUtil.copyProperties(dto, entity);
+
+        this.updateById(entity);
+    }
+
+    /**
+     * 后台管理-删除
+     */
+    @SysLog(value = "删除${comments}")
+    @Transactional(rollbackFor = Exception.class)
+    public void adminDelete(List<Long> ids) {
+        this.removeByIds(ids);
+    }
+
+
+    /*
+    私有方法
+    ------------------------------------------------------------------------------------------------
+     */
+
+    private ${className}BO entity2BO(${className}Entity entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        ${className}BO bo = new ${className}BO();
+        BeanUtil.copyProperties(entity, bo);
+
+        // 可以在此处为BO填充字段
+
+        return bo;
+    }
+
+    private List<${className}BO> entityList2BOs(List<${className}Entity> entityList) {
+        // 深拷贝
+        List<${className}BO> ret = new ArrayList<>(entityList.size());
+        entityList.forEach(
+            entity -> ret.add(this.entity2BO(entity))
+        );
+
+        return ret;
+    }
+
+    private PageResult<${className}BO> entityPage2BOPage(Page<${className}Entity> entityPage) {
+        PageResult<${className}BO> ret = new PageResult<>();
+        BeanUtil.copyProperties(entityPage, ret);
+        ret.setRecords(this.entityList2BOs(entityPage.getRecords()));
+
+        return ret;
+    }
+
+    /**
+     * 检查是否已存在同名数据
+     * @param dto DTO
+     */
+    private void checkExist(AdminInsertOrUpdate${className}DTO dto) {
+        /*
+        可以根据自己业务需要，解禁这段代码，修改判断条件和文案
+
+        ${className}Entity existEntity = this.getOne(
+                new QueryWrapper<${className}Entity>()
+                        .select( " id ")
+                        .lambda()
+                        .eq(${className}Entity::getTitle, dto.getTitle())
+                        .last(HelioConstant.CRUD.SQL_LIMIT_1)
+        );
+
+        if (existEntity != null && !existEntity.getId().equals(dto.getId())) {
+            throw new BusinessException(400, "已存在相同${comments}，请重新输入");
+        }
+        */
+    }
+
+}

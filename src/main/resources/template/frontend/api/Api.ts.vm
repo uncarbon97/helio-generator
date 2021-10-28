@@ -1,0 +1,95 @@
+import { defHttp } from '/@/utils/http/axios';
+import { ErrorMessageMode } from '/@/utils/http/axios/types';
+import { ${className}ApiResult, ${className}InsertOrUpdateForm } from './model/${className}Model';
+
+enum Api {
+  REST = '/api/v1/${classname}s',
+}
+
+/**
+ * ${comments}-分页列表
+ */
+export const list${className}Api = (queryForm: any, mode: ErrorMessageMode = 'modal') => {
+  if (queryForm.timeRangePicker) {
+    queryForm['beginAt'] = queryForm.timeRangePicker[0];
+    queryForm['endAt'] = queryForm.timeRangePicker[1];
+  }
+
+  return defHttp.get<${className}ApiResult[]>(
+    {
+      url: Api.REST,
+      params: queryForm,
+    },
+    {
+      errorMessageMode: mode,
+    }
+  );
+};
+
+/**
+ * ${comments}-详情
+ */
+export const retrieve${className}Api = (id: string, mode: ErrorMessageMode = 'modal') => {
+  return defHttp.get<${className}ApiResult>(
+    {
+      url: Api.REST + '/' + id,
+    },
+    {
+      errorMessageMode: mode,
+    }
+  );
+};
+
+/**
+ * ${comments}-新增
+ */
+export const create${className}Api = (
+  insertForm: ${className}InsertOrUpdateForm,
+  mode: ErrorMessageMode = 'modal'
+) => {
+  return defHttp.post<void>(
+    {
+      url: Api.REST,
+      params: insertForm,
+    },
+    {
+      errorMessageMode: mode,
+    }
+  );
+};
+
+/**
+ * ${comments}-编辑
+ */
+export const update${className}Api = (
+  id: string,
+  updateForm: ${className}InsertOrUpdateForm,
+  mode: ErrorMessageMode = 'modal'
+) => {
+  return defHttp.put<void>(
+    {
+      url: Api.REST + '/' + id,
+      params: updateForm,
+    },
+    {
+      errorMessageMode: mode,
+    }
+  );
+};
+
+/**
+ * ${comments}-删除
+ */
+export const delete${className}Api = (ids: string[], mode: ErrorMessageMode = 'modal') => {
+  return defHttp.delete<void>(
+    {
+      url: Api.REST,
+      params: {
+        ids: ids,
+      },
+    },
+    {
+      errorMessageMode: mode,
+    }
+  );
+};
