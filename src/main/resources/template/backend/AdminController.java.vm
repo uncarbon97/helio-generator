@@ -33,7 +33,7 @@ import ${package}.${moduleName}.facade.${className}Facade;
 import ${package}.${moduleName}.model.request.AdminInsertOrUpdate${className}DTO;
 import ${package}.${moduleName}.model.request.AdminList${className}DTO;
 import ${package}.${moduleName}.model.response.${className}BO;
-import cc.uncarbon.module.util.AdminStpUtil;
+import ${package}.util.AdminStpUtil;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import io.swagger.annotations.Api;
