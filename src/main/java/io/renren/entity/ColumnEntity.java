@@ -29,6 +29,12 @@ public class ColumnEntity {
 	 */
 	private Boolean nullable;
 
+	/**
+	 * 字符串最大长度
+	 */
+	private String characterMaximumLength;
+
+
 	public String getColumnName() {
 		return columnName;
 	}
@@ -91,5 +97,13 @@ public class ColumnEntity {
 
 	public void setNullable(Boolean nullable) {
 		this.nullable = nullable;
+	}
+
+	public String getCharacterMaximumLength() {
+		return characterMaximumLength;
+	}
+
+	public void setCharacterMaximumLength(String characterMaximumLength) {
+		this.characterMaximumLength = characterMaximumLength;
 	}
 }

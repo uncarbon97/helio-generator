@@ -4,10 +4,10 @@ import cc.uncarbon.framework.core.constant.HelioConstant;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -15,11 +15,12 @@ import java.time.LocalDateTime;
 
 
 /**
- * 后台管理-分页列表${comments}
+ * 后台管理-分页列表${comments} DTO
+ *
  * @author ${author}
  */
 @Accessors(chain = true)
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

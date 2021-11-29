@@ -13,7 +13,6 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
-import org.apache.logging.log4j.util.ProcessIdUtil;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -121,7 +120,11 @@ public class GenUtils {
             String attrType = config.getString(columnEntity.getDataType(), columnToJava(columnEntity.getDataType()));
             columnEntity.setAttrType(attrType);
 
+            // 是否允许空值
             columnEntity.setNullable("YES".equalsIgnoreCase(column.getOrDefault("nullable", "YES")));
+
+            // 字符串最大长度
+            columnEntity.setCharacterMaximumLength(column.getOrDefault("characterMaximumLength", ""));
 
             if (!hasBigDecimal && "BigDecimal".equals(attrType)) {
                 hasBigDecimal = true;
@@ -308,7 +311,7 @@ public class GenUtils {
     public static String tableToJava(String tableName, String[] tablePrefixArray) {
         if (null != tablePrefixArray && tablePrefixArray.length > 0) {
             for (String tablePrefix : tablePrefixArray) {
-                  if (tableName.startsWith(tablePrefix)){
+                if (tableName.startsWith(tablePrefix)) {
                     tableName = tableName.replaceFirst(tablePrefix, "");
                 }
             }
@@ -346,7 +349,7 @@ public class GenUtils {
         String backendPathPrefix = "后端代码" + File.separator;
 
         if (template.contains("MongoChildrenEntity.java.vm")) {
-            return backendPathPrefix + "entity" + File.separator + "inner" + File.separator + currentTableName+ File.separator + splitInnerName(className)+ "InnerEntity.java";
+            return backendPathPrefix + "entity" + File.separator + "inner" + File.separator + currentTableName + File.separator + splitInnerName(className) + "InnerEntity.java";
         }
         if (template.contains("Entity.java.vm") || template.contains("MongoEntity.java.vm")) {
             return backendPathPrefix + "entity" + File.separator + className + "Entity.java";
@@ -391,7 +394,7 @@ public class GenUtils {
         /*
         前端代码(Vben Admin)
          */
-        String frontendPathPrefix =  "前端代码" + File.separator + "src" + File.separator;
+        String frontendPathPrefix = "前端代码" + File.separator + "src" + File.separator;
         if (template.contains("Api.ts.vm")) {
             return frontendPathPrefix + "api" + File.separator + moduleName + File.separator + className + "Api.ts";
         }
@@ -420,8 +423,8 @@ public class GenUtils {
         return null;
     }
 
-    private static String splitInnerName(String name){
-          name = name.replaceAll("\\.","_");
-          return name;
+    private static String splitInnerName(String name) {
+        name = name.replaceAll("\\.", "_");
+        return name;
     }
 }
