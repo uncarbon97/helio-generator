@@ -85,7 +85,7 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
     @SysLog(value = "新增${comments}")
     @Transactional(rollbackFor = Exception.class)
     public Long adminInsert(AdminInsertOrUpdate${className}DTO dto) {
-        this.checkExist(dto);
+        this.checkIfItExists(dto);
 
         dto.setId(null);
         ${className}Entity entity = new ${className}Entity();
@@ -102,7 +102,7 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
     @SysLog(value = "编辑${comments}")
     @Transactional(rollbackFor = Exception.class)
     public void adminUpdate(AdminInsertOrUpdate${className}DTO dto) {
-        this.checkExist(dto);
+        this.checkIfItExists(dto);
 
         ${className}Entity entity = new ${className}Entity();
         BeanUtil.copyProperties(dto, entity);
@@ -158,21 +158,22 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
 
     /**
      * 检查是否已存在同名数据
+     *
      * @param dto DTO
      */
-    private void checkExist(AdminInsertOrUpdate${className}DTO dto) {
+    private void checkIfItExists(AdminInsertOrUpdate${className}DTO dto) {
         /*
         可以根据自己业务需要，解禁这段代码，修改判断条件和文案
 
-        ${className}Entity existEntity = this.getOne(
+        ${className}Entity existingEntity = this.getOne(
                 new QueryWrapper<${className}Entity>()
-                        .select( " id ")
+                        .select(HelioConstant.CRUD.SQL_COLUMN_ID)
                         .lambda()
                         .eq(${className}Entity::getTitle, dto.getTitle())
                         .last(HelioConstant.CRUD.SQL_LIMIT_1)
         );
 
-        if (existEntity != null && !existEntity.getId().equals(dto.getId())) {
+        if (existingEntity != null && !existingEntity.getId().equals(dto.getId())) {
             throw new BusinessException(400, "已存在相同${comments}，请重新输入");
         }
         */
