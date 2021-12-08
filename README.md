@@ -5,7 +5,7 @@
 
 ## 它能做什么？
 1. 生成后端 Java 代码
-   1. 后台管理 Controller 层 REST 接口、分页列表查询DTO（及对应 swagger 注解）、新增/编辑DTO（及对应 swagger、validation 注解，其中 validation 注解仅对 MySQL 兼容性较好）、菜单 SQL
+   1. 后台管理 Controller 层 REST 接口、分页列表查询DTO（及对应 swagger 注解）、新增/编辑DTO（及对应 swagger、validation 注解）、菜单 SQL
    2. CRUD 需要的 Entity 、Mapper、Service(及分页列表条件筛选构造器) 三层结构代码
    3. 返回体 BO
    4. 【微服务版专有】 Facade 接口及对应的 FacadeImpl
