@@ -2,27 +2,30 @@ package ${package}.${moduleName}.model.request;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-
+import lombok.experimental.SuperBuilder;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 
 /**
- * 后台管理-新增/编辑${comments}
+ * 后台管理-新增/编辑${comments} DTO
+ *
  * @author ${author}
  */
 @Accessors(chain = true)
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class AdminInsertOrUpdate${className}DTO implements Serializable {
+
+    private static final long SerialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键ID", hidden = true, notes = "仅更新时使用")
     private Long id;
@@ -41,6 +44,7 @@ public class AdminInsertOrUpdate${className}DTO implements Serializable {
     @ApiModelProperty(value = "$column.comments"#if(!$column.nullable), required = true#end)
 #if(!$column.nullable)
 #if($column.attrType == 'String')
+    @Size(min = 1, max = $column.characterMaximumLength, message = "【$column.comments】长度须在 1 至 $column.characterMaximumLength 位之间")
     @NotBlank(message = "$column.comments不能为空")
 #else
     @NotNull(message = "$column.comments不能为空")

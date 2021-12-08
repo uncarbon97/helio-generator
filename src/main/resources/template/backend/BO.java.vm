@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -20,15 +20,18 @@ import java.math.BigDecimal;
 
 /**
  * ${comments}BO
+ *
  * @author ${author}
  */
 @ApiModel(value = "${comments}")
 @Accessors(chain = true)
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class ${className}BO implements Serializable {
+
+    private static final long SerialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键ID")
     private Long id;

@@ -10,7 +10,8 @@ import java.util.List;
 
 
 /**
- * ${comments}Facade接口
+ * ${comments} Facade 接口
+ *
  * @author ${author}
  */
 public interface ${className}Facade {
