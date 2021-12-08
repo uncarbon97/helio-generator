@@ -27,6 +27,7 @@ import java.util.List;
 
 /**
  * ${comments}
+ *
  * @author ${author}
  */
 @Slf4j
@@ -85,7 +86,7 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
     @SysLog(value = "新增${comments}")
     @Transactional(rollbackFor = Exception.class)
     public Long adminInsert(AdminInsertOrUpdate${className}DTO dto) {
-        this.checkIfItExists(dto);
+        this.checkExistence(dto);
 
         dto.setId(null);
         ${className}Entity entity = new ${className}Entity();
@@ -102,7 +103,7 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
     @SysLog(value = "编辑${comments}")
     @Transactional(rollbackFor = Exception.class)
     public void adminUpdate(AdminInsertOrUpdate${className}DTO dto) {
-        this.checkIfItExists(dto);
+        this.checkExistence(dto);
 
         ${className}Entity entity = new ${className}Entity();
         BeanUtil.copyProperties(dto, entity);
@@ -161,7 +162,7 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
      *
      * @param dto DTO
      */
-    private void checkIfItExists(AdminInsertOrUpdate${className}DTO dto) {
+    private void checkExistence(AdminInsertOrUpdate${className}DTO dto) {
         /*
         可以根据自己业务需要，解禁这段代码，修改判断条件和文案
 

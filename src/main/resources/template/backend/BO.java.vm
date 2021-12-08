@@ -31,6 +31,8 @@ import java.math.BigDecimal;
 @Data
 public class ${className}BO implements Serializable {
 
+    private static final long SerialVersionUID = 1L;
+
     @ApiModelProperty(value = "主键ID")
     private Long id;
 #foreach ($column in $columns)

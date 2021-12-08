@@ -8,26 +8,26 @@ renren:
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    # MySQL配置
+# MySQL配置
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/helio_boot?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: root
-    #oracle配置
-    #    driverClassName: oracle.jdbc.OracleDriver
-    #    url: jdbc:oracle:thin:@192.168.10.10:1521:xe
-    #    username: root
-    #    password: root
-    #SQLServer配置
-    #    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    #    url: jdbc:sqlserver://192.168.10.10:1433;DatabaseName=helio_generator
-    #    username: sa
-    #    password: 123456
-    #PostgreSQL配置
-  #    driverClassName: org.postgresql.Driver
-  #    url: jdbc:postgresql://192.168.10.10:5432/helio_generator
-  #    username: postgres
-  #    password: 123456
+# oracle配置
+#    driverClassName: oracle.jdbc.OracleDriver
+#    url: jdbc:oracle:thin:@192.168.10.10:1521:xe
+#    username: root
+#    password: root
+# SQLServer配置
+#    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+#    url: jdbc:sqlserver://192.168.10.10:1433;DatabaseName=helio_generator
+#    username: sa
+#    password: 123456
+# PostgreSQL配置
+#    driverClassName: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5432/helio_generator
+#    username: postgre
+#    password: helio
 
 
 

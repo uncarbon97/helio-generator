@@ -25,6 +25,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 public class AdminList${className}DTO implements Serializable {
+
+    private static final long SerialVersionUID = 1L;
+
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
     && $column.columnName != "tenant_id"

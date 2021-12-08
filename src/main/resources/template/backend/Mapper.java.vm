@@ -8,9 +8,10 @@ import ${package}.${moduleName}.entity.${className}Entity;
 
 /**
  * ${comments}
+ *
  * @author ${author}
  */
 @Mapper
 public interface ${className}Mapper extends BaseMapper<${className}Entity> {
-	
+
 }

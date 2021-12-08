@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 
 /**
  * ${comments}
+ *
  * @author ${author}
  */
 @EqualsAndHashCode(callSuper = true)
