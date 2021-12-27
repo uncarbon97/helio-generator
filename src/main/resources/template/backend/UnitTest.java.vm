@@ -1,0 +1,134 @@
+package ${package}.test;
+
+import cc.uncarbon.framework.core.constant.HelioConstant;
+import cc.uncarbon.framework.core.context.TenantContext;
+import cc.uncarbon.framework.core.context.UserContext;
+import cc.uncarbon.framework.core.context.UserContextHolder;
+import cc.uncarbon.framework.core.page.PageParam;
+import cc.uncarbon.framework.core.page.PageResult;
+import cn.hutool.core.collection.CollUtil;
+import ${package}.HelioBootApplication;
+import ${package}.${moduleName}.model.request.AdminInsertOrUpdate${className}DTO;
+import ${package}.${moduleName}.model.request.AdminList${className}DTO;
+import ${package}.${moduleName}.model.response.${className}BO;
+import ${package}.${moduleName}.service.${className}Service;
+import ${package}.module.sys.enums.UserTypeEnum;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+
+@Slf4j
+@SpringBootTest(classes = HelioBootApplication.class)
+public class ${className}UnitTest {
+
+    @Resource
+    private ${className}Service ${classname}Service;
+
+
+    /**
+     * 单元测试-初始化
+     */
+    @BeforeEach
+    public void init() {
+        // 可以在这里进行初始化操作, 如设置用户上下文等
+        UserContextHolder.setUserContext(
+                UserContext.builder()
+                        .userId(1L)
+                        .userName("admin")
+                        .userType(UserTypeEnum.ADMIN_USER)
+                        .relationalTenant(
+                                TenantContext.builder()
+                                        .tenantId(HelioConstant.CRUD.DEFAULT_TENANT_ID)
+                                        .tenantName(HelioConstant.CRUD.DEFAULT_TENANT_NAME)
+                                        .build()
+                        )
+                        .build()
+        );
+    }
+
+    /**
+     * 单元测试-分页列表
+     */
+    @Test
+    void testAdminList() {
+        PageResult<${className}BO> pageResult = ${className}Service.adminList(
+                new PageParam(1, 10),
+                AdminList${className}DTO.builder()
+
+                        .build()
+        );
+
+        log.info("\n\n\n分页列表成功 >> 结果={}", pageResult);
+    }
+
+    /**
+     * 单元测试-后台新增
+     */
+    @Test
+    void testAdminInsert() {
+        Long entityId = ${className}Service.adminInsert(
+                AdminInsert${className}DTO.builder()
+#foreach ($column in $columns)
+#if($column.columnName != $pk.columnName
+&& $column.columnName != "tenant_id"
+&& $column.columnName != "revision"
+&& $column.columnName != "del_flag"
+&& $column.columnName != "created_at"
+&& $column.columnName != "created_by"
+&& $column.columnName != "updated_at"
+&& $column.columnName != "updated_by"
+&& $column.columnName != "remark"
+)
+                        // ${column.comments}
+                        .${column.camelAttrName}(null)
+#end
+#end
+                        .build()
+        );
+
+        log.info("\n\n\n新增成功 >> 新主键ID={}", entityId);
+    }
+
+    /**
+     * 单元测试-后台更新
+     */
+    @Test
+    void testAdminUpdate() {
+        AdminInsert${className}DTO dto = AdminInsert${className}DTO.builder()
+#foreach ($column in $columns)
+#if($column.columnName != "tenant_id"
+&& $column.columnName != "revision"
+&& $column.columnName != "del_flag"
+&& $column.columnName != "created_at"
+&& $column.columnName != "created_by"
+&& $column.columnName != "updated_at"
+&& $column.columnName != "updated_by"
+&& $column.columnName != "remark"
+)
+                // ${column.comments}
+                .${column.camelAttrName}(null)
+#end
+#end
+                .build();
+        ${className}Service.adminUpdate(dto);
+
+        log.info("\n\n\n更新完成 >> dto={}", dto);
+    }
+
+    /**
+     * 单元测试-后台删除
+     */
+    @Test
+    void testAdminDelete() {
+        // 主键ID列表
+        ArrayList<Long> ids = CollUtil.newArrayList(1L, 2L, 3L);
+        ${className}Service.adminDelete(ids);
+
+        log.info("\n\n\n删除完成 >> ids={}", ids);
+    }
+}

@@ -28,19 +28,19 @@ import java.math.BigDecimal;
 public class ${className}Entity extends HelioBaseEntity<Long> {
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
-	&& $column.columnName != "tenant_id"
-	&& $column.columnName != "revision"
-	&& $column.columnName != "del_flag"
-	&& $column.columnName != "created_at"
-	&& $column.columnName != "created_by"
-	&& $column.columnName != "updated_at"
-	&& $column.columnName != "updated_by"
-	&& $column.columnName != "remark"
+&& $column.columnName != "tenant_id"
+&& $column.columnName != "revision"
+&& $column.columnName != "del_flag"
+&& $column.columnName != "created_at"
+&& $column.columnName != "created_by"
+&& $column.columnName != "updated_at"
+&& $column.columnName != "updated_by"
+&& $column.columnName != "remark"
 )
 
-	@ApiModelProperty(value = "$column.comments")
-	@TableField(value = "$column.columnName")
-	private $column.attrType $column.camelAttrName;
+    @ApiModelProperty(value = "$column.comments")
+    @TableField(value = "$column.columnName")
+    private $column.attrType $column.camelAttrName;
 #end
 #end
 
