@@ -6,11 +6,11 @@
 ## 它能做什么？
 1. 生成后端 Java 代码
    1. 后台管理 Controller 层 REST 接口、分页列表查询DTO（及对应 swagger 注解）、新增/编辑DTO（及对应 swagger、validation 注解）、菜单 SQL
-   2. CRUD 需要的 Entity 、Mapper、Service(及分页列表条件筛选构造器) 三层结构代码
+   2. CRUD 需要的 Entity 、Mapper、Service(及对应 Mybatis-Plus 条件构造) 三层结构代码
    3. 返回体 BO
    4. 单元测试
    5. 【微服务版专有】 Facade 接口及对应的 FacadeImpl
-2. 生成前端 Vue3 代码（皆为 TypeScript ）
+2. 生成前端 Vue3 代码（皆为 TypeScript）
    1. 自动指向后台管理 REST API
    2. 新增/编辑请求体、通用响应体
    3. 分页列表页、查看详情表单、新增/编辑表单等
