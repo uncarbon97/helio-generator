@@ -1,6 +1,7 @@
 package ${package}.${moduleName}.biz;
 
 import cc.uncarbon.framework.core.constant.HelioConstant;
+import cc.uncarbon.framework.core.exception.BusinessException;
 import cc.uncarbon.framework.core.page.PageParam;
 import cc.uncarbon.framework.core.page.PageResult;
 import lombok.extern.slf4j.Slf4j;
@@ -40,8 +41,8 @@ public class ${className}FacadeImpl implements ${className}Facade {
     }
 
     @Override
-    public ${className}BO getOneById(Long entityId) {
-        return ${classname}Service.getOneById(entityId);
+    public ${className}BO getOneById(Long entityId, boolean throwIfInvalidId) throws BusinessException {
+        return ${classname}Service.getOneById(entityId, throwIfInvalidId);
     }
 
     @Override

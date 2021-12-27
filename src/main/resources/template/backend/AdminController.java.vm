@@ -94,10 +94,10 @@ public class Admin${className}Controller {
     @GetMapping(value = "/{id}")
     public ApiResult<${className}BO> getById(@PathVariable Long id) {
 #if(${generateType} == 'boot')
-        return ApiResult.data(${classname}Service.getOneById(id));
+        return ApiResult.data(${classname}Service.getOneById(id, true));
 #end
 #if(${generateType} == 'cloud')
-        return ApiResult.data(${classname}Facade.getOneById(id));
+        return ApiResult.data(${classname}Facade.getOneById(id, true));
 #end
     }
 
