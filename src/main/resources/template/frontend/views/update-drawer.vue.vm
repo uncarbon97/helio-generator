@@ -11,14 +11,13 @@
   </BasicDrawer>
 </template>
 <script lang="ts">
-  import { computed, defineComponent, ref, unref } from 'vue';
-  import { BasicForm, useForm } from '/@/components/Form/index';
-  import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { insertOrUpdateFormSchema } from '/@/views/${moduleName}/${className}/data';
-  import { create${className}Api, update${className}Api } from '/@/api/${moduleName}/${className}Api';
+  import {computed, defineComponent, ref, unref} from 'vue';
+  import {BasicForm, useForm} from '/@/components/Form/index';
+  import {BasicDrawer, useDrawerInner} from '/@/components/Drawer';
+  import {insertOrUpdateFormSchema} from '/@/views/';
 
   export default defineComponent({
-    name: '${className}Drawer',
+    name: '${className}UpdateDrawer',
     components: { BasicDrawer, BasicForm },
     emits: ['success', 'register'],
     setup(_, { emit }) {

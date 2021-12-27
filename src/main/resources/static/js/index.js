@@ -9,28 +9,19 @@ $(window).on('resize', function() {
 
 
 var vm = new Vue({
-	el:'#rrapp',
+	el:'#app',
 	data:{
-		main:"main.html",
-        navTitle:"欢迎页"
+		main:"generator.html",
+        navTitle:"生成器"
 	},
     methods: {
-        donate: function () {
-            layer.open({
-                type: 2,
-                title: false,
-                area: ['806px', '467px'],
-                closeBtn: 1,
-                shadeClose: false,
-                content: ['http://cdn.renren.io/donate.jpg', 'no']
-            });
-        }
+
     }
 });
 
 //路由
 var router = new Router();
-var menus = ["main.html","generator.html"];
+var menus = ["generator.html"];
 routerList(router, menus);
 router.start();
 
