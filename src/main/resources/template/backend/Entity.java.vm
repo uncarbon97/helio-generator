@@ -35,7 +35,6 @@ public class ${className}Entity extends HelioBaseEntity<Long> {
 && $column.columnName != "created_by"
 && $column.columnName != "updated_at"
 && $column.columnName != "updated_by"
-&& $column.columnName != "remark"
 )
 
     @ApiModelProperty(value = "$column.comments")

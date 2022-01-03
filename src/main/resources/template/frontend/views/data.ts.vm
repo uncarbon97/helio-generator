@@ -14,7 +14,6 @@ export const columns: BasicColumn[] = [
     && $column.columnName != "created_by"
     && $column.columnName != "updated_at"
     && $column.columnName != "updated_by"
-    && $column.columnName != "remark"
 )
   {
     title: '$column.comments',
@@ -43,7 +42,6 @@ export const queryFormSchema: FormSchema[] = [
     && $column.columnName != "created_by"
     && $column.columnName != "updated_at"
     && $column.columnName != "updated_by"
-    && $column.columnName != "remark"
 )
   {
     field: '$column.camelAttrName',
@@ -69,7 +67,6 @@ export const retrieveDetailFormSchema: DescItem[] = [
     && $column.columnName != "created_by"
     && $column.columnName != "updated_at"
     && $column.columnName != "updated_by"
-    && $column.columnName != "remark"
 )
   {
     field: '$column.camelAttrName',
@@ -107,7 +104,6 @@ export const insertOrUpdateFormSchema: FormSchema[] = [
     && $column.columnName != "created_by"
     && $column.columnName != "updated_at"
     && $column.columnName != "updated_by"
-    && $column.columnName != "remark"
 )
   {
     field: '$column.camelAttrName',

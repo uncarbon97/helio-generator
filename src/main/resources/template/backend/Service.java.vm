@@ -51,7 +51,6 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
 && $column.columnName != "created_by"
 && $column.columnName != "updated_at"
 && $column.columnName != "updated_by"
-&& $column.columnName != "remark"
 )
                         // $column.comments
 #if($column.attrType == 'String')

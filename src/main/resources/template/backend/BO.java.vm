@@ -42,7 +42,6 @@ public class ${className}BO implements Serializable {
     && $column.columnName != "del_flag"
     && $column.columnName != "created_by"
     && $column.columnName != "updated_by"
-    && $column.columnName != "remark"
     )
 
     @ApiModelProperty(value = "$column.comments")
