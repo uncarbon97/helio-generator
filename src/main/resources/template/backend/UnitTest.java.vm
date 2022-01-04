@@ -12,7 +12,7 @@ import ${package}.${moduleName}.model.request.AdminInsertOrUpdate${className}DTO
 import ${package}.${moduleName}.model.request.AdminList${className}DTO;
 import ${package}.${moduleName}.model.response.${className}BO;
 import ${package}.${moduleName}.service.${className}Service;
-import ${package}.module.sys.enums.UserTypeEnum;
+import ${package}.sys.enums.UserTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
+//                      👇 这里需要改成响应启动类 👇
 @SpringBootTest(classes = HelioBootApplication.class)
 public class ${className}UnitTest {
 
