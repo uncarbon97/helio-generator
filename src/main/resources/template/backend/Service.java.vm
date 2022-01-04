@@ -173,8 +173,8 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
 
         ${className}Entity existingEntity = this.getOne(
                 new QueryWrapper<${className}Entity>()
-                        .select(HelioConstant.CRUD.SQL_COLUMN_ID)
                         .lambda()
+                        .select(${className}Entity::getId)
                         .eq(${className}Entity::getTitle, dto.getTitle())
                         .last(HelioConstant.CRUD.SQL_LIMIT_1)
         );
