@@ -6,7 +6,7 @@ import ${package}.${moduleName}.model.request.AdminInsertOrUpdate${className}DTO
 import ${package}.${moduleName}.model.request.AdminList${className}DTO;
 import ${package}.${moduleName}.model.response.${className}BO;
 
-import java.util.List;
+import java.util.Collection;
 
 
 /**
@@ -43,7 +43,8 @@ public interface ${className}Facade {
 
     /**
      * 后台管理-删除
+     * @param ids 主键IDs
      */
-    void adminDelete(List<Long> ids);
+    void adminDelete(Collection<Long> ids);
 
 }

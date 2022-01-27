@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
  *
  * @author ${author}
  */
-@ApiModel(value = "后台管理-分页列表${comments}入参")
+@ApiModel(value = "后台管理-分页列表${comments}-入参")
 @Accessors(chain = true)
 @SuperBuilder
 @AllArgsConstructor
