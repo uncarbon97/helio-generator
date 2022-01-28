@@ -1,5 +1,6 @@
 package ${package}.${moduleName}.model.request;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
  *
  * @author ${author}
  */
+@ApiModel(value = "后台管理-新增/编辑${comments}入参")
 @Accessors(chain = true)
 @SuperBuilder
 @AllArgsConstructor
@@ -38,7 +40,6 @@ public class AdminInsertOrUpdate${className}DTO implements Serializable {
     && $column.columnName != "created_by"
     && $column.columnName != "updated_at"
     && $column.columnName != "updated_by"
-    && $column.columnName != "remark"
 )
 
     @ApiModelProperty(value = "$column.comments"#if(!$column.nullable), required = true#end)

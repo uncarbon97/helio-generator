@@ -48,6 +48,7 @@ public class GenUtils {
         templates.add("template/backend/AdminInsertOrUpdateDTO.java.vm");
         templates.add("template/backend/BO.java.vm");
         templates.add("template/backend/sys_menu.sql.vm");
+        templates.add("template/backend/UnitTest.java.vm");
 
         if (Constant.GENERATE_TYPE_CLOUD.equals(generateType)) {
             templates.add("template/backend/Facade.java.vm");
@@ -389,6 +390,10 @@ public class GenUtils {
 
         if (template.contains("sys_menu.sql.vm")) {
             return backendPathPrefix + "后台管理菜单-" + className + ".sql";
+        }
+
+        if (template.contains("UnitTest.java.vm")) {
+            return backendPathPrefix + File.separator + className + "UnitTest.java";
         }
 
         /*

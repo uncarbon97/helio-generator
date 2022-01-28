@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collection;
 
 
 /**
@@ -51,7 +52,6 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
 && $column.columnName != "created_by"
 && $column.columnName != "updated_at"
 && $column.columnName != "updated_by"
-&& $column.columnName != "remark"
 )
                         // $column.comments
 #if($column.attrType == 'String')
@@ -72,10 +72,16 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
 
     /**
      * 通用-详情
+     *
+     * @param entityId 实体类主键ID
+     * @param throwIfInvalidId 是否在 ID 无效时抛出异常
+     * @return null or BO
      */
-    public ${className}BO getOneById(Long entityId) {
+    public ${className}BO getOneById(Long entityId, boolean throwIfInvalidId) throws BusinessException {
         ${className}Entity entity = this.getById(entityId);
-        SysErrorEnum.INVALID_ID.assertNotNull(entity);
+        if (throwIfInvalidId) {
+            SysErrorEnum.INVALID_ID.assertNotNull(entity);
+        }
 
         return this.entity2BO(entity);
     }
@@ -86,6 +92,7 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
     @SysLog(value = "新增${comments}")
     @Transactional(rollbackFor = Exception.class)
     public Long adminInsert(AdminInsertOrUpdate${className}DTO dto) {
+        log.info("[后台管理-新增${comments}] >> DTO={}", dto);
         this.checkExistence(dto);
 
         dto.setId(null);
@@ -103,6 +110,7 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
     @SysLog(value = "编辑${comments}")
     @Transactional(rollbackFor = Exception.class)
     public void adminUpdate(AdminInsertOrUpdate${className}DTO dto) {
+        log.info("[后台管理-编辑${comments}] >> DTO={}", dto);
         this.checkExistence(dto);
 
         ${className}Entity entity = new ${className}Entity();
@@ -116,7 +124,8 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
      */
     @SysLog(value = "删除${comments}")
     @Transactional(rollbackFor = Exception.class)
-    public void adminDelete(List<Long> ids) {
+    public void adminDelete(Collection<Long> ids) {
+        log.info("[后台管理-删除${comments}] >> ids={}", ids);
         this.removeByIds(ids);
     }
 
@@ -168,8 +177,8 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
 
         ${className}Entity existingEntity = this.getOne(
                 new QueryWrapper<${className}Entity>()
-                        .select(HelioConstant.CRUD.SQL_COLUMN_ID)
                         .lambda()
+                        .select(${className}Entity::getId)
                         .eq(${className}Entity::getTitle, dto.getTitle())
                         .last(HelioConstant.CRUD.SQL_LIMIT_1)
         );

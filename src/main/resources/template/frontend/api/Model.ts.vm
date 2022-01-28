@@ -19,7 +19,6 @@ export interface ${className}InsertOrUpdateForm {
 && $column.columnName != "created_by"
 && $column.columnName != "updated_at"
 && $column.columnName != "updated_by"
-&& $column.columnName != "remark"
 )
   /**
    * $column.comments
