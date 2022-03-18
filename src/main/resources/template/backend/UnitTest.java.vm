@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-//                      👇 这里需要改成响应启动类 👇
+//                      👇 这里需要改成相应启动类 👇
 @SpringBootTest(classes = HelioBootApplication.class)
 public class ${className}UnitTest {
 

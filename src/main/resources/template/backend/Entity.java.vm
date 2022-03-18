@@ -26,6 +26,9 @@ import java.math.BigDecimal;
 @Data
 @TableName(value = "${tableName}")
 public class ${className}Entity extends HelioBaseEntity<Long> {
+
+    private static final long serialVersionUID = 1L;
+
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
 && $column.columnName != "tenant_id"

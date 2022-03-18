@@ -373,7 +373,7 @@ public class GenUtils {
         }
 
         if (template.contains("AdminController.java.vm")) {
-            return backendPathPrefix + "Admin" + className + "Controller.java";
+            return backendPathPrefix + "web" + File.separator + "Admin" + className + "Controller.java";
         }
 
         if (template.contains("AdminListDTO.java.vm")) {
