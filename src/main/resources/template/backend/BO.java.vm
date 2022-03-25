@@ -47,7 +47,7 @@ public class ${className}BO implements Serializable {
     @ApiModelProperty(value = "$column.comments")
 #if($column.columnName == "created_at" || $column.columnName == "updated_at")
     @DateTimeFormat(pattern = HelioConstant.Jackson.DATE_TIME_FORMAT)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = HelioConstant.Jackson.DATE_TIME_FORMAT, timezone = HelioConstant.Jackson.TIME_ZONE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = HelioConstant.Jackson.DATE_TIME_FORMAT)
 #end
     private $column.attrType $column.camelAttrName;
 #end

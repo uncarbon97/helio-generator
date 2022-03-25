@@ -52,7 +52,7 @@ public interface ${className}Facade {
 
     /**
      * 后台管理-删除
-     * @param ids 主键IDs
+     * @param ids 主键ID集合
      */
     void adminDelete(Collection<Long> ids);
 

@@ -56,12 +56,12 @@ public class ${className}FacadeImpl implements ${className}Facade {
 
     @Override
     public void adminUpdate(AdminInsertOrUpdate${className}DTO dto) {
-            ${classname}Service.adminUpdate(dto);
+        ${classname}Service.adminUpdate(dto);
     }
 
     @Override
     public void adminDelete(Collection<Long> ids) {
-            ${classname}Service.adminDelete(ids);
+        ${classname}Service.adminDelete(ids);
     }
 
 }
