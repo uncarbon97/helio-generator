@@ -122,7 +122,7 @@ public class GenUtils {
             columnEntity.setAttrType(attrType);
 
             // 是否允许空值
-            columnEntity.setNullable("YES".equalsIgnoreCase(column.getOrDefault("nullable", "YES")));
+            columnEntity.setNullable("true".equalsIgnoreCase(column.getOrDefault("nullable", "true")));
 
             // 字符串最大长度
             columnEntity.setCharacterMaximumLength(column.getOrDefault("characterMaximumLength", ""));
