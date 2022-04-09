@@ -1,40 +1,41 @@
 -- 菜单
     INSERT INTO sys_menu (id, tenant_id, revision, del_flag, created_at, created_by, updated_at, updated_by,
                           title,
-                          parent_id, type, permission, icon, sort, status, component, external_link)
-    VALUES (${parentMenuId}, 0, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '${comments}管理', 1, 1,
-                             '${className}', 'ant-design:flag-outlined', 100, 1, '/${moduleName}/${className}/index', '');
+                          parent_id, type, permission, icon, sort, status, component)
+    VALUES (${parentMenuId}, NULL, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '${comments}管理', 1, 1,
+                             '${className}', 'ant-design:flag-outlined', 100, 1, '/${moduleName}/${className}/index');
+
 -- 子按钮
     INSERT INTO sys_menu (id, tenant_id, revision, del_flag, created_at, created_by, updated_at, updated_by,
                           title, parent_id,
-                          type, permission, icon, sort, status, external_link)
-    VALUES (${childMenuId1}, 0, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '查询', ${parentMenuId},
+                          type, permission, icon, sort, status)
+    VALUES (${childMenuId1}, NULL, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '查询', ${parentMenuId},
                              2,
-                             '${className}:retrieve', NULL, 1, 1, '');
+                             '${className}:retrieve', NULL, 1, 1);
 
     INSERT INTO sys_menu (id, tenant_id, revision, del_flag, created_at, created_by, updated_at, updated_by,
                           title, parent_id,
                           type,
                           permission, icon,
-                          sort, status, external_link)
-    VALUES (${childMenuId2}, 0, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '新增', ${parentMenuId},
+                          sort, status)
+    VALUES (${childMenuId2}, NULL, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '新增', ${parentMenuId},
                              2,
-                             '${className}:create', NULL, 2, 1, '');
+                             '${className}:create', NULL, 2, 1);
 
     INSERT INTO sys_menu (id, tenant_id, revision, del_flag, created_at, created_by, updated_at, updated_by,
                           title, parent_id,
                           type,
                           permission, icon,
-                          sort, status, external_link)
-    VALUES (${childMenuId3}, 0, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '删除', ${parentMenuId},
+                          sort, status)
+    VALUES (${childMenuId3}, NULL, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '删除', ${parentMenuId},
                              2,
-                             '${className}:delete', NULL, 3, 1, '');
+                             '${className}:delete', NULL, 3, 1);
 
     INSERT INTO sys_menu (id, tenant_id, revision, del_flag, created_at, created_by, updated_at, updated_by,
                           title, parent_id,
                           type,
                           permission, icon,
-                          sort, status, external_link)
-    VALUES (${childMenuId4}, 0, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '编辑', ${parentMenuId},
+                          sort, status)
+    VALUES (${childMenuId4}, NULL, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '编辑', ${parentMenuId},
                              2,
-                             '${className}:update', NULL, 4, 1, '');
+                             '${className}:update', NULL, 4, 1);

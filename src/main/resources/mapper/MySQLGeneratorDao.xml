@@ -17,9 +17,20 @@
 	</select>
 
 	<select id="queryColumns" resultType="map">
-		select column_name columnName, data_type dataType, column_comment columnComment, column_key columnKey, extra, is_nullable nullable
-		       , CONCAT(IFNULL(character_maximum_length, 255), '') AS characterMaximumLength
-		from information_schema.columns
- 			where table_name = #{tableName} and table_schema = (select database()) order by ordinal_position
+		SELECT
+			column_name columnName,
+			data_type dataType,
+			column_comment columnComment,
+			column_key columnKey,
+			extra,
+			(CASE WHEN is_nullable = 'YES' THEN 'true' ELSE 'false' END) AS nullable,
+			CONCAT( IFNULL( character_maximum_length, 255 ), '' ) AS characterMaximumLength
+		FROM
+			information_schema.COLUMNS
+		WHERE
+			table_name = #{tableName}
+		  AND table_schema = (SELECT DATABASE())
+		ORDER BY
+			ordinal_position
 	</select>
 </mapper>

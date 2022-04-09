@@ -4,16 +4,15 @@ import cc.uncarbon.framework.core.constant.HelioConstant;
 import cc.uncarbon.framework.core.exception.BusinessException;
 import cc.uncarbon.framework.core.page.PageParam;
 import cc.uncarbon.framework.core.page.PageResult;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.dubbo.config.annotation.DubboService;
-
 import ${package}.${moduleName}.facade.${className}Facade;
 import ${package}.${moduleName}.model.request.AdminInsertOrUpdate${className}DTO;
 import ${package}.${moduleName}.model.request.AdminList${className}DTO;
 import ${package}.${moduleName}.model.response.${className}BO;
 import ${package}.${moduleName}.service.${className}Service;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboService;
 
-import javax.annotation.Resource;
 import java.util.Collection;
 
 
@@ -29,10 +28,10 @@ import java.util.Collection;
         timeout = HelioConstant.Dubbo.TIMEOUT,
         retries = HelioConstant.Dubbo.RETRIES
 )
+@RequiredArgsConstructor
 public class ${className}FacadeImpl implements ${className}Facade {
 
-    @Resource
-    private ${className}Service ${classname}Service;
+    private final ${className}Service ${classname}Service;
 
 
     @Override
@@ -41,8 +40,13 @@ public class ${className}FacadeImpl implements ${className}Facade {
     }
 
     @Override
-    public ${className}BO getOneById(Long entityId, boolean throwIfInvalidId) throws BusinessException {
-        return ${classname}Service.getOneById(entityId, throwIfInvalidId);
+    public ${className}BO getOneById(Long id) {
+        return ${classname}Service.getOneById(id);
+    }
+
+    @Override
+    public ${className}BO getOneById(Long id, boolean throwIfInvalidId) throws BusinessException {
+        return ${classname}Service.getOneById(id, throwIfInvalidId);
     }
 
     @Override
@@ -52,12 +56,12 @@ public class ${className}FacadeImpl implements ${className}Facade {
 
     @Override
     public void adminUpdate(AdminInsertOrUpdate${className}DTO dto) {
-            ${classname}Service.adminUpdate(dto);
+        ${classname}Service.adminUpdate(dto);
     }
 
     @Override
     public void adminDelete(Collection<Long> ids) {
-            ${classname}Service.adminDelete(ids);
+        ${classname}Service.adminDelete(ids);
     }
 
 }

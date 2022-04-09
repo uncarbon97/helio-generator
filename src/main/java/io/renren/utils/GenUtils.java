@@ -122,7 +122,7 @@ public class GenUtils {
             columnEntity.setAttrType(attrType);
 
             // 是否允许空值
-            columnEntity.setNullable("YES".equalsIgnoreCase(column.getOrDefault("nullable", "YES")));
+            columnEntity.setNullable("true".equalsIgnoreCase(column.getOrDefault("nullable", "true")));
 
             // 字符串最大长度
             columnEntity.setCharacterMaximumLength(column.getOrDefault("characterMaximumLength", ""));
@@ -373,7 +373,7 @@ public class GenUtils {
         }
 
         if (template.contains("AdminController.java.vm")) {
-            return backendPathPrefix + "Admin" + className + "Controller.java";
+            return backendPathPrefix + "web" + File.separator + "Admin" + className + "Controller.java";
         }
 
         if (template.contains("AdminListDTO.java.vm")) {

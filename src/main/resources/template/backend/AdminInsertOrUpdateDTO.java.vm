@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
  *
  * @author ${author}
  */
-@ApiModel(value = "后台管理-新增/编辑${comments}入参")
+@ApiModel(value = "后台管理-新增/编辑${comments}-入参")
 @Accessors(chain = true)
 @SuperBuilder
 @AllArgsConstructor
@@ -27,7 +27,7 @@ import java.time.LocalDateTime;
 @Data
 public class AdminInsertOrUpdate${className}DTO implements Serializable {
 
-    private static final long SerialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键ID", hidden = true, notes = "仅更新时使用")
     private Long id;
@@ -45,7 +45,9 @@ public class AdminInsertOrUpdate${className}DTO implements Serializable {
     @ApiModelProperty(value = "$column.comments"#if(!$column.nullable), required = true#end)
 #if(!$column.nullable)
 #if($column.attrType == 'String')
+#if($column.characterMaximumLength > 0)
     @Size(min = 1, max = $column.characterMaximumLength, message = "【$column.comments】长度须在 1 至 $column.characterMaximumLength 位之间")
+#end
     @NotBlank(message = "$column.comments不能为空")
 #else
     @NotNull(message = "$column.comments不能为空")
