@@ -57,7 +57,7 @@ class ${className}UnitTest {
      */
     @Test
     void testAdminList() {
-        PageResult<${className}BO> pageResult = ${className}Service.adminList(
+        PageResult<${className}BO> pageResult = ${classname}Service.adminList(
                 new PageParam(1, 10),
                 AdminList${className}DTO.builder()
 
@@ -72,7 +72,7 @@ class ${className}UnitTest {
      */
     @Test
     void testAdminInsert() {
-        Long entityId = ${className}Service.adminInsert(
+        Long entityId = ${classname}Service.adminInsert(
                 AdminInsert${className}DTO.builder()
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
@@ -114,7 +114,7 @@ class ${className}UnitTest {
 #end
 #end
                 .build();
-        ${className}Service.adminUpdate(dto);
+        ${classname}Service.adminUpdate(dto);
 
         log.info("\n\n\n更新完成 >> dto={}", dto);
     }
@@ -126,7 +126,7 @@ class ${className}UnitTest {
     void testAdminDelete() {
         // 主键ID列表
         ArrayList<Long> ids = CollUtil.newArrayList(1L, 2L, 3L);
-        ${className}Service.adminDelete(ids);
+        ${classname}Service.adminDelete(ids);
 
         log.info("\n\n\n删除完成 >> ids={}", ids);
     }
