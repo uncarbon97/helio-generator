@@ -14,7 +14,7 @@
   import {computed, defineComponent, ref, unref} from 'vue';
   import {BasicForm, useForm} from '/@/components/Form/index';
   import {BasicDrawer, useDrawerInner} from '/@/components/Drawer';
-  import {insertOrUpdateFormSchema} from '.data';
+  import {insertOrUpdateFormSchema} from './data';
 
   export default defineComponent({
     name: '${className}UpdateDrawer',
