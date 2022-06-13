@@ -42,7 +42,7 @@ public class AdminList${className}DTO implements Serializable {
 )
 
     @ApiModelProperty(value = "$column.comments#if($column.attrType == 'String')(关键词)#end")
-    private $column.attrType $column.camelAttrName
+    private $column.attrType $column.camelAttrName;
 #end
 #end
 
