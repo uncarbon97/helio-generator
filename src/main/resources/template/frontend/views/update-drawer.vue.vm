@@ -32,6 +32,7 @@
         wrapperCol: {
           span: 24 - 4,
         },
+        baseColProps: { span: 24 },
         schemas: insertOrUpdateFormSchema,
         showActionButtonGroup: false,
       });
