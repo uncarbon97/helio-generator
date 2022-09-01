@@ -12,6 +12,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+#if(${hasBigDecimal})
+import java.math.BigDecimal;
+#end
+#if(${hasGenericStatusEnum})
+import cc.uncarbon.module.sys.enums.GenericStatusEnum;
+#end
 
 
 /**
@@ -19,7 +25,6 @@ import java.time.LocalDateTime;
  *
  * @author ${author}
  */
-@ApiModel(value = "后台管理-新增/编辑${comments}-入参")
 @Accessors(chain = true)
 @SuperBuilder
 @AllArgsConstructor

@@ -1,95 +1,66 @@
 import { defHttp } from '/@/utils/http/axios';
-import { ErrorMessageMode } from '/@/utils/http/axios/types';
 import { ${className}ApiResult, ${className}InsertOrUpdateForm } from './model/${className}Model';
 
 enum Api {
-  REST = '/api/v1/${classname}s',
+  REST = '/api/v1/${moduleName}/${classname}s',
 }
 
 /**
  * ${comments}-分页列表
  */
-export const list${className}Api = (queryForm: any, mode: ErrorMessageMode = 'modal') => {
-  if (queryForm.timeRangePicker) {
-    queryForm['beginAt'] = queryForm.timeRangePicker[0];
-    queryForm['endAt'] = queryForm.timeRangePicker[1];
+export const list${className}Api = (queryForm: any) => {
+  // 选择的是日期，补全时分秒部分
+  if (queryForm.beginAt) {
+    queryForm.beginAt += ' 00:00:00';
   }
 
-  return defHttp.get<${className}ApiResult[]>(
-    {
-      url: Api.REST,
-      params: queryForm,
-    },
-    {
-      errorMessageMode: mode,
-    }
-  );
+  if (queryForm.endAt) {
+    queryForm.endAt += ' 23:59:59';
+  }
+
+  return defHttp.get<${className}ApiResult[]>({
+    url: Api.REST,
+    params: queryForm,
+  });
 };
 
 /**
  * ${comments}-详情
  */
-export const retrieve${className}Api = (id: string, mode: ErrorMessageMode = 'modal') => {
-  return defHttp.get<${className}ApiResult>(
-    {
-      url: Api.REST + '/' + id,
-    },
-    {
-      errorMessageMode: mode,
-    }
-  );
+export const retrieve${className}Api = (id: string) => {
+  return defHttp.get<${className}ApiResult>({
+    url: `${Api.REST}/${id}`,
+  });
 };
 
 /**
  * ${comments}-新增
  */
-export const create${className}Api = (
-  insertForm: ${className}InsertOrUpdateForm,
-  mode: ErrorMessageMode = 'modal'
-) => {
-  return defHttp.post<void>(
-    {
-      url: Api.REST,
-      params: insertForm,
-    },
-    {
-      errorMessageMode: mode,
-    }
-  );
+export const create${className}Api = (insertForm: ${className}InsertOrUpdateForm) => {
+  return defHttp.post<void>({
+    url: Api.REST,
+    params: insertForm,
+  });
 };
 
 /**
  * ${comments}-编辑
  */
-export const update${className}Api = (
-  id: string,
-  updateForm: ${className}InsertOrUpdateForm,
-  mode: ErrorMessageMode = 'modal'
-) => {
-  return defHttp.put<void>(
-    {
-      url: Api.REST + '/' + id,
-      params: updateForm,
-    },
-    {
-      errorMessageMode: mode,
-    }
-  );
+export const update${className}Api = (id: string, updateForm: ${className}InsertOrUpdateForm) => {
+  return defHttp.put<void>({
+    url: `${Api.REST}/${id}`,
+    params: updateForm,
+  });
 };
 
 /**
  * ${comments}-删除
  */
-export const delete${className}Api = (ids: string[], mode: ErrorMessageMode = 'modal') => {
-  return defHttp.delete<void>(
-    {
-      url: Api.REST,
-      params: {
-        ids: ids,
-      },
+export const delete${className}Api = (ids: string[]) => {
+  return defHttp.delete<void>({
+    url: Api.REST,
+    params: {
+      ids: ids,
     },
-    {
-      errorMessageMode: mode,
-    }
-  );
+  });
 };

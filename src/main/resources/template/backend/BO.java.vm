@@ -16,6 +16,9 @@ import java.time.LocalDateTime;
 #if(${hasBigDecimal})
 import java.math.BigDecimal;
 #end
+#if(${hasGenericStatusEnum})
+import cc.uncarbon.module.sys.enums.GenericStatusEnum;
+#end
 
 
 /**
@@ -23,7 +26,6 @@ import java.math.BigDecimal;
  *
  * @author ${author}
  */
-@ApiModel(value = "${comments}")
 @Accessors(chain = true)
 @SuperBuilder
 @AllArgsConstructor

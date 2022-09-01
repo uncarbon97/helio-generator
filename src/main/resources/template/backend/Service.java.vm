@@ -46,6 +46,7 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
                 new Page<>(pageParam.getPageNum(), pageParam.getPageSize()),
                 new QueryWrapper<${className}Entity>()
                         .lambda()
+#if(${hasQueryFormSchema})
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
 && $column.columnName != "tenant_id"
@@ -61,6 +62,7 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
                         .like(StrUtil.isNotBlank(dto.get${column.pascalAttrName}()), ${className}Entity::get$column.pascalAttrName, StrUtil.cleanBlank(dto.get${column.pascalAttrName}()))
 #else
                         .eq(ObjectUtil.isNotNull(dto.get${column.pascalAttrName}()), ${className}Entity::get$column.pascalAttrName, dto.get${column.pascalAttrName}())
+#end
 #end
 #end
 #end

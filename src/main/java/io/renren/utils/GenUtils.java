@@ -87,12 +87,15 @@ public class GenUtils {
     public static void generatorCode(Map<String, String> table,
                                      List<Map<String, String>> columns,
                                      ZipOutputStream zip,
-                                     String generateType
+                                     String generateType,
+                                     String queryFormSchema
     ) {
         //配置信息
         Configuration config = getConfig();
         boolean hasBigDecimal = false;
         boolean hasList = false;
+        boolean hasGenericStatusEnum = false;
+        boolean hasQueryFormSchema = "checked".equals(queryFormSchema);
         //表信息
         TableEntity tableEntity = new TableEntity();
         tableEntity.setTableName(table.get("tableName"));
@@ -133,6 +136,11 @@ public class GenUtils {
             if (!hasList && "array".equals(columnEntity.getExtra())) {
                 hasList = true;
             }
+            if ("status".equalsIgnoreCase(attrName)) {
+                // Helio: 特别指定为 GenericStatusEnum 类型
+                hasGenericStatusEnum = true;
+                columnEntity.setAttrType("GenericStatusEnum");
+            }
             //是否主键
             if ("PRI".equalsIgnoreCase(column.get("columnKey")) && tableEntity.getPk() == null) {
                 tableEntity.setPk(columnEntity);
@@ -165,11 +173,13 @@ public class GenUtils {
         map.put("columns", tableEntity.getColumns());
         map.put("hasBigDecimal", hasBigDecimal);
         map.put("hasList", hasList);
+        map.put("hasGenericStatusEnum", hasGenericStatusEnum);
         map.put("mainPath", mainPath);
         map.put("package", config.getString("package"));
         map.put("moduleName", config.getString("moduleName"));
         map.put("author", config.getString("author"));
         map.put("generateType", generateType);
+        map.put("hasQueryFormSchema", hasQueryFormSchema);
 
         // 生成后台管理菜单主键ID
         Snowflake snowflake = IdUtil.getSnowflake(30L, 30L);
