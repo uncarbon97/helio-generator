@@ -4,9 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.renren</groupId>
 	<artifactId>helio-generator</artifactId>
-	<version>1.6.0</version>
 	<packaging>jar</packaging>
 	<description>基于renren-generator改造适配的代码生成器，可一键生成单体or微服务版的前、后端代码，减少无谓的重复劳动</description>
+
+	<version>1.7.0</version>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
