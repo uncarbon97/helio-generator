@@ -197,11 +197,12 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
      * @return BO 分页
      */
     private PageResult<${className}BO> entityPage2BOPage(Page<${className}Entity> entityPage) {
-        PageResult<${className}BO> ret = new PageResult<>();
-        BeanUtil.copyProperties(entityPage, ret);
-        ret.setRecords(this.entityList2BOs(entityPage.getRecords()));
-
-        return ret;
+        return new PageResult<${className}BO>()
+            .setCurrent(entityPage.getCurrent())
+            .setSize(entityPage.getSize())
+            .setTotal(entityPage.getTotal())
+            .setRecords(this.entityList2BOs(entityPage.getRecords()))
+            ;
     }
 
     /**
