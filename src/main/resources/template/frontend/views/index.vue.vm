@@ -2,25 +2,30 @@
   <div>
     <BasicTable @register="registerTable">
       <template #toolbar>
+        <!--    新增按钮    -->
         <a-button v-if="hasPermission('${className}:create')" type="primary" @click="handleInsert">
           新增
         </a-button>
       </template>
       <template #action="{ record }">
+        <!--   每行最右侧一列的工具栏   -->
         <TableAction
           :actions="[
             {
-              show: hasPermission('${className}:retrieve'),
+              tooltip: '详情',
+              ifShow: hasPermission('${className}:retrieve'),
               icon: 'ant-design:eye-outlined',
               onClick: handleRetrieveDetail.bind(null, record),
             },
             {
-              show: hasPermission('${className}:update'),
+              tooltip: '编辑',
+              ifShow: hasPermission('${className}:update'),
               icon: 'clarity:note-edit-line',
               onClick: handleUpdate.bind(null, record),
             },
             {
-              show: hasPermission('${className}:delete'),
+              tooltip: '删除',
+              ifShow: hasPermission('${className}:delete'),
               icon: 'ant-design:delete-outlined',
               color: 'error',
               popConfirm: {
@@ -32,7 +37,9 @@
         />
       </template>
     </BasicTable>
+    <!--  详情侧边抽屉  -->
     <${className}DetailDrawer @register="registerDetailDrawer" />
+    <!--  编辑侧边抽屉  -->
     <${className}UpdateDrawer @register="registerUpdateDrawer" @success="handleSuccess" />
   </div>
 </template>
@@ -59,7 +66,12 @@
         api: list${className}Api,
         columns,
         formConfig: {
-          labelWidth: 80,
+          /*
+          列表查询条件
+           */
+          // 输入框左侧标题的宽度
+          labelWidth: 100,
+          // 查询条件配置
           schemas: queryFormSchema,
         },
         useSearchForm: true,
@@ -75,16 +87,25 @@
         },
       });
 
+      /**
+       * 单击详情按钮事件
+       */
       function handleRetrieveDetail(record: Recordable) {
         openDetailDrawer(true, { record });
       }
 
+      /**
+       * 单击新增按钮事件
+       */
       function handleInsert() {
         openUpdateDrawer(true, {
           isUpdateView: false,
         });
       }
 
+      /**
+       * 单击编辑按钮事件
+       */
       function handleUpdate(record: Recordable) {
         openUpdateDrawer(true, {
           record,
@@ -92,11 +113,17 @@
         });
       }
 
+      /**
+       * 单击删除按钮事件
+       */
       async function handleDelete(record: Recordable) {
         await delete${className}Api([record.id]);
         await reload();
       }
 
+      /**
+       * 编辑成功后事件
+       */
       function handleSuccess() {
         reload();
       }

@@ -13,6 +13,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+#if(${hasBigDecimal})
+import java.math.BigDecimal;
+#end
+#if(${hasGenericStatusEnum})
+import cc.uncarbon.module.sys.enums.GenericStatusEnum;
+#end
 
 
 /**
@@ -20,7 +26,6 @@ import java.time.LocalDateTime;
  *
  * @author ${author}
  */
-@ApiModel(value = "后台管理-分页列表${comments}-入参")
 @Accessors(chain = true)
 @SuperBuilder
 @AllArgsConstructor
@@ -30,6 +35,7 @@ public class AdminList${className}DTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+#if(${hasQueryFormSchema})
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
     && $column.columnName != "tenant_id"
@@ -43,6 +49,7 @@ public class AdminList${className}DTO implements Serializable {
 
     @ApiModelProperty(value = "$column.comments#if($column.attrType == 'String')(关键词)#end")
     private $column.attrType $column.camelAttrName;
+#end
 #end
 #end
 

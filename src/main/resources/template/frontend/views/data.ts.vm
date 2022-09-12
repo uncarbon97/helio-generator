@@ -33,6 +33,7 @@ export const columns: BasicColumn[] = [
  * 查询条件
  */
 export const queryFormSchema: FormSchema[] = [
+#if(${hasQueryFormSchema})
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
     && $column.columnName != "tenant_id"
@@ -44,13 +45,26 @@ export const queryFormSchema: FormSchema[] = [
     && $column.columnName != "updated_by"
 )
   {
-    field: '$column.camelAttrName',
-    label: '$column.comments',
-    component: 'Input',
-    componentProps: {},
-    colProps: { span: 8 },
+      field: '$column.camelAttrName',
+      label: '$column.comments',
+      component: 'Input',
+      componentProps: {},
+      colProps: { span: 8 },
   },
 #end
+#end
+  {
+      field: '[beginAt, endAt]',
+      label: '创建时间区间',
+      component: 'RangePicker',
+      componentProps: {
+          valueFormat: 'YYYY-MM-DD',
+          placeholder: ['开始时间', '结束时间'],
+          // 不显示时分秒部分
+          showTime: false,
+      },
+      colProps: { span: 8 },
+  },
 #end
 ];
 

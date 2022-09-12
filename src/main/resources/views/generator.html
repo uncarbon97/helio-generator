@@ -25,8 +25,12 @@
 		</div>
 		<a class="btn btn-default" @click="query">查询</a>
 		<a class="btn btn-primary" @click="generator"><i class="fa fa-file-code-o"></i>&nbsp;生成代码</a>
+	</div>
+	<div id="generate-options">
+		<div style="height: 10px" data-note="PLACEHOLDER"></div>
 
-		<div id="generate-type">
+		<div>
+			脚手架版本：
 			<label>
 				<input name="generate-type" type="radio" v-model="q.generateType" value="boot" />
 				生成单体Boot版
@@ -38,6 +42,14 @@
 			</label>
 		</div>
 
+		<div>
+			其他选项：
+			<label>
+				<input name="generate-option-queryFormSchema" type="checkbox"
+					   v-model="q.queryFormSchema" value="checked" />
+				生成分页列表查询条件
+			</label>
+		</div>
 	</div>
     <table id="jqGrid"></table>
     <div id="jqGridPager"></div>
@@ -45,4 +57,14 @@
 
 <script src="js/generator.js"></script>
 </body>
+
+<style>
+	#generate-options {
+		min-width: 100%;
+		max-width: 100%;
+		width: 100%;
+		padding-left: 50px;
+		padding-bottom: 20px;
+	}
+</style>
 </html>

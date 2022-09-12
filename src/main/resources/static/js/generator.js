@@ -41,6 +41,7 @@ var vm = new Vue({
 		q:{
 			tableName: null,
             generateType: 'boot',
+            queryFormSchema: 'checked',
 		}
 	},
 	methods: {
@@ -55,7 +56,10 @@ var vm = new Vue({
             if(tableNames == null){
                 return ;
             }
-            location.href = "sys/generator/code?tables=" + tableNames.join() + '&generateType=' + vm.q.generateType;
+            location.href = "sys/generator/code?tables=" + tableNames.join()
+                + '&generateType=' + vm.q.generateType
+                + '&queryFormSchema=' + vm.q.queryFormSchema
+            ;
 		}
 	}
 });

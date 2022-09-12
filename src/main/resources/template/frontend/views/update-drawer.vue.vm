@@ -7,15 +7,15 @@
     width="40%"
     @ok="handleSubmit"
   >
-    <BasicForm @register="registerForm"/>
+    <BasicForm @register="registerForm" />
   </BasicDrawer>
 </template>
 <script lang="ts">
-  import {computed, defineComponent, ref, unref} from 'vue';
-  import {BasicForm, useForm} from '/@/components/Form/index';
-  import {BasicDrawer, useDrawerInner} from '/@/components/Drawer';
+  import { computed, defineComponent, ref, unref } from 'vue';
+  import { BasicForm, useForm } from '/@/components/Form/index';
+  import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { update${className}Api, create${className}Api } from '/@/api/${moduleName}/${className}Api';
-  import {insertOrUpdateFormSchema} from './data';
+  import { insertOrUpdateFormSchema } from './data';
 
   export default defineComponent({
     name: '${className}UpdateDrawer',
@@ -37,7 +37,7 @@
         showActionButtonGroup: false,
       });
 
-      const [registerDrawer, { setDrawerProps , closeDrawer }] = useDrawerInner(async (data) => {
+      const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
         resetFields();
         setDrawerProps({ confirmLoading: false });
         isUpdateView.value = !!data?.isUpdateView;
@@ -56,6 +56,7 @@
 
       async function handleSubmit() {
         try {
+          // values 的字段定义见 ./data.ts 的 insertOrUpdateFormSchema
           const values = await validate();
           setDrawerProps({ confirmLoading: true });
 

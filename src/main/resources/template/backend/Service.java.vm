@@ -13,6 +13,7 @@ import ${package}.${moduleName}.model.request.AdminInsertOrUpdate${className}DTO
 import ${package}.${moduleName}.model.request.AdminList${className}DTO;
 import ${package}.${moduleName}.model.response.${className}BO;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -46,6 +47,7 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
                 new Page<>(pageParam.getPageNum(), pageParam.getPageSize()),
                 new QueryWrapper<${className}Entity>()
                         .lambda()
+#if(${hasQueryFormSchema})
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
 && $column.columnName != "tenant_id"
@@ -61,6 +63,7 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
                         .like(StrUtil.isNotBlank(dto.get${column.pascalAttrName}()), ${className}Entity::get$column.pascalAttrName, StrUtil.cleanBlank(dto.get${column.pascalAttrName}()))
 #else
                         .eq(ObjectUtil.isNotNull(dto.get${column.pascalAttrName}()), ${className}Entity::get$column.pascalAttrName, dto.get${column.pascalAttrName}())
+#end
 #end
 #end
 #end
@@ -195,11 +198,12 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
      * @return BO 分页
      */
     private PageResult<${className}BO> entityPage2BOPage(Page<${className}Entity> entityPage) {
-        PageResult<${className}BO> ret = new PageResult<>();
-        BeanUtil.copyProperties(entityPage, ret);
-        ret.setRecords(this.entityList2BOs(entityPage.getRecords()));
-
-        return ret;
+        return new PageResult<${className}BO>()
+            .setCurrent(entityPage.getCurrent())
+            .setSize(entityPage.getSize())
+            .setTotal(entityPage.getTotal())
+            .setRecords(this.entityList2BOs(entityPage.getRecords()))
+            ;
     }
 
     /**
