@@ -95,7 +95,7 @@ public class GenUtils {
         boolean hasBigDecimal = false;
         boolean hasList = false;
         boolean hasGenericStatusEnum = false;
-        boolean hasQueryFormSchema = "checked".equals(queryFormSchema);
+        boolean hasQueryFormSchema = "true".equals(queryFormSchema);
         //表信息
         TableEntity tableEntity = new TableEntity();
         tableEntity.setTableName(table.get("tableName"));
