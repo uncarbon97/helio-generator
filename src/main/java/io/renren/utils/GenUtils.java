@@ -1,7 +1,7 @@
 package io.renren.utils;
 
-import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.LocalDateTimeUtil;
 import io.renren.config.MongoManager;
 import io.renren.entity.ColumnEntity;
 import io.renren.entity.TableEntity;
@@ -182,13 +182,12 @@ public class GenUtils {
         map.put("hasQueryFormSchema", hasQueryFormSchema);
 
         // 生成后台管理菜单主键ID
-        Snowflake snowflake = IdUtil.getSnowflake(30L, 30L);
-        long snowflakeId = snowflake.nextId();
-        map.put("parentMenuId", snowflakeId);
-        map.put("childMenuId1", snowflakeId + 1);
-        map.put("childMenuId2", snowflakeId + 2);
-        map.put("childMenuId3", snowflakeId + 3);
-        map.put("childMenuId4", snowflakeId + 4);
+        long menuId = Long.parseLong(LocalDateTimeUtil.format(LocalDateTimeUtil.now(), DatePattern.PURE_DATETIME_MS_FORMATTER));
+        map.put("parentMenuId", menuId);
+        map.put("childMenuId1", menuId + 1);
+        map.put("childMenuId2", menuId + 2);
+        map.put("childMenuId3", menuId + 3);
+        map.put("childMenuId4", menuId + 4);
 
         VelocityContext context = new VelocityContext(map);
 
