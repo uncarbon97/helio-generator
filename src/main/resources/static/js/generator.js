@@ -41,7 +41,8 @@ var vm = new Vue({
 		q:{
 			tableName: null,
             generateType: 'boot',
-            queryFormSchema: 'checked',
+            queryFormSchema: true,
+            serviceAndImpl: false,
 		}
 	},
 	methods: {
@@ -58,7 +59,9 @@ var vm = new Vue({
             }
             location.href = "sys/generator/code?tables=" + tableNames.join()
                 + '&generateType=' + vm.q.generateType
-                + '&queryFormSchema=' + vm.q.queryFormSchema
+                // 借助 !! 操作符转换为 boolean 型
+                + '&queryFormSchema=' + !!vm.q.queryFormSchema
+                + '&serviceAndImpl=' + !!vm.q.serviceAndImpl
             ;
 		}
 	}

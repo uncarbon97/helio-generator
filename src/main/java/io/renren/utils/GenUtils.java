@@ -7,6 +7,7 @@ import io.renren.entity.ColumnEntity;
 import io.renren.entity.TableEntity;
 import io.renren.entity.mongo.MongoDefinition;
 import io.renren.entity.mongo.MongoGeneratorEntity;
+import io.renren.model.request.GenerateOptionsDTO;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -35,14 +36,14 @@ public class GenUtils {
 
     private static String currentTableName;
 
-    public static List<String> getTemplates(String generateType) {
+    public static List<String> getTemplates(GenerateOptionsDTO dto) {
         List<String> templates = new ArrayList<>();
         /*
         后端
          */
         templates.add("template/backend/Entity.java.vm");
         templates.add("template/backend/Mapper.java.vm");
-        templates.add("template/backend/Service.java.vm");
+        templates.add("template/backend/ServiceImpl.java.vm");
         templates.add("template/backend/AdminController.java.vm");
         templates.add("template/backend/AdminListDTO.java.vm");
         templates.add("template/backend/AdminInsertOrUpdateDTO.java.vm");
@@ -50,9 +51,13 @@ public class GenUtils {
         templates.add("template/backend/sys_menu.sql.vm");
         templates.add("template/backend/UnitTest.java.vm");
 
-        if (Constant.GENERATE_TYPE_CLOUD.equals(generateType)) {
+        if (Constant.GENERATE_TYPE_CLOUD.equals(dto.getGenerateType())) {
             templates.add("template/backend/Facade.java.vm");
             templates.add("template/backend/FacadeImpl.java.vm");
+        }
+
+        if (dto.getServiceAndImpl()) {
+            templates.add("template/backend/ServiceInterface.java.vm");
         }
 
         /*
@@ -87,15 +92,15 @@ public class GenUtils {
     public static void generatorCode(Map<String, String> table,
                                      List<Map<String, String>> columns,
                                      ZipOutputStream zip,
-                                     String generateType,
-                                     String queryFormSchema
+                                     GenerateOptionsDTO dto
     ) {
         //配置信息
         Configuration config = getConfig();
         boolean hasBigDecimal = false;
         boolean hasList = false;
         boolean hasGenericStatusEnum = false;
-        boolean hasQueryFormSchema = "true".equals(queryFormSchema);
+        boolean queryFormSchemaFlag = dto.getQueryFormSchema();
+        boolean serviceAndImplFlag = dto.getServiceAndImpl();
         //表信息
         TableEntity tableEntity = new TableEntity();
         tableEntity.setTableName(table.get("tableName"));
@@ -178,8 +183,9 @@ public class GenUtils {
         map.put("package", config.getString("package"));
         map.put("moduleName", config.getString("moduleName"));
         map.put("author", config.getString("author"));
-        map.put("generateType", generateType);
-        map.put("hasQueryFormSchema", hasQueryFormSchema);
+        map.put("generateType", dto.getGenerateType());
+        map.put("queryFormSchemaFlag", queryFormSchemaFlag);
+        map.put("serviceAndImplFlag", serviceAndImplFlag);
 
         // 生成后台管理菜单主键ID
         long menuId = Long.parseLong(LocalDateTimeUtil.format(LocalDateTimeUtil.now(), DatePattern.PURE_DATETIME_MS_FORMATTER));
@@ -192,7 +198,7 @@ public class GenUtils {
         VelocityContext context = new VelocityContext(map);
 
         //获取模板列表
-        List<String> templates = getTemplates(generateType);
+        List<String> templates = getTemplates(dto);
         for (String template : templates) {
             //渲染模板
             StringWriter sw = new StringWriter();
@@ -201,7 +207,17 @@ public class GenUtils {
 
             try {
                 //添加到zip
-                zip.putNextEntry(new ZipEntry(getFileName(template, tableEntity.getClassName(), config.getString("package"), config.getString("moduleName"))));
+                zip.putNextEntry(
+                        new ZipEntry(
+                                getFileName(
+                                        template,
+                                        tableEntity.getClassName(),
+                                        config.getString("package"),
+                                        config.getString("moduleName"),
+                                        dto
+                                )
+                        )
+                );
                 IOUtils.write(sw.toString(), zip, "UTF-8");
                 IOUtils.closeQuietly(sw);
                 zip.closeEntry();
@@ -297,7 +313,16 @@ public class GenUtils {
             tpl.merge(context, sw);
             try {
                 //添加到zip
-                zip.putNextEntry(new ZipEntry(getFileName(template, tableEntity.getClassName(), config.getString("package"), config.getString("moduleName"))));
+                zip.putNextEntry(
+                        new ZipEntry(
+                                getFileName(template,
+                                        tableEntity.getClassName(),
+                                        config.getString("package"),
+                                        config.getString("moduleName"),
+                                        new GenerateOptionsDTO()
+                                )
+                        )
+                );
                 IOUtils.write(sw.toString(), zip, "UTF-8");
                 IOUtils.closeQuietly(sw);
                 zip.closeEntry();
@@ -343,7 +368,8 @@ public class GenUtils {
     /**
      * 获取文件名
      */
-    public static String getFileName(String template, String className, String packageName, String moduleName) {
+    public static String getFileName(String template, String className, String packageName, String moduleName,
+                                     GenerateOptionsDTO dto) {
         /*
         多级文件夹，如src/main/cc/uncarbon/module/
         若需要可以自行加上
@@ -369,8 +395,17 @@ public class GenUtils {
             return backendPathPrefix + "mapper" + File.separator + className + "Mapper.java";
         }
 
-        if (template.contains("Service.java.vm")) {
+        if (template.contains("ServiceInterface.java.vm")) {
             return backendPathPrefix + "service" + File.separator + className + "Service.java";
+        }
+
+        if (template.contains("ServiceImpl.java.vm")) {
+            if (dto.getServiceAndImpl()) {
+                // 新建 impl 目录，以及文件名以 Impl 结尾
+                return backendPathPrefix + "service" + File.separator + "impl" + File.separator + className + "ServiceImpl.java";
+            } else {
+                return backendPathPrefix + "service" + File.separator + className + "Service.java";
+            }
         }
 
         if (template.contains("Facade.java.vm")) {

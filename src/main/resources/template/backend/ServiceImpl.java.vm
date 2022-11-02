@@ -1,4 +1,8 @@
+#if(${serviceAndImplFlag})
 package ${package}.${moduleName}.service.impl;
+#else
+package ${package}.${moduleName}.service;
+#end
 
 import cc.uncarbon.framework.core.constant.HelioConstant;
 import cc.uncarbon.framework.core.exception.BusinessException;
@@ -12,6 +16,9 @@ import ${package}.${moduleName}.mapper.${className}Mapper;
 import ${package}.${moduleName}.model.request.AdminInsertOrUpdate${className}DTO;
 import ${package}.${moduleName}.model.request.AdminList${className}DTO;
 import ${package}.${moduleName}.model.response.${className}BO;
+#if(${serviceAndImplFlag})
+import ${package}.${moduleName}.service.${className}Service;
+#end
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
@@ -37,7 +44,11 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+#if(${serviceAndImplFlag})
+public class ${className}ServiceImpl extends HelioBaseServiceImpl<${className}Mapper, ${className}Entity> implements ${className}Service {
+#else
 public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper, ${className}Entity> {
+#end
 
     /**
      * 后台管理-分页列表
@@ -47,7 +58,7 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
                 new Page<>(pageParam.getPageNum(), pageParam.getPageSize()),
                 new QueryWrapper<${className}Entity>()
                         .lambda()
-#if(${hasQueryFormSchema})
+#if(${queryFormSchemaFlag})
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
 && $column.columnName != "tenant_id"

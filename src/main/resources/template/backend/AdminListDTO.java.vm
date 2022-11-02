@@ -35,7 +35,7 @@ public class AdminList${className}DTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-#if(${hasQueryFormSchema})
+#if(${queryFormSchemaFlag})
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
     && $column.columnName != "tenant_id"
