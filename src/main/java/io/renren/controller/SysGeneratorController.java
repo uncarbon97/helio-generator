@@ -8,6 +8,7 @@
 
 package io.renren.controller;
 
+import io.renren.model.request.GenerateOptionsDTO;
 import io.renren.service.SysGeneratorService;
 import io.renren.utils.PageUtils;
 import io.renren.utils.Query;
@@ -50,11 +51,10 @@ public class SysGeneratorController {
 	 */
 	@RequestMapping("/code")
 	public void code(String tables,
-					 String generateType,
-					 String queryFormSchema,
+					 GenerateOptionsDTO dto,
 					 HttpServletResponse response
 	) throws IOException{
-		byte[] data = sysGeneratorService.generatorCode(tables.split(","), generateType, queryFormSchema);
+		byte[] data = sysGeneratorService.generatorCode(tables.split(","), dto);
 
 		response.reset();
         response.setHeader("Content-Disposition", "attachment; filename=\"" + tables + ".zip\"");

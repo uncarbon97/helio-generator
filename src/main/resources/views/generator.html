@@ -45,9 +45,12 @@
 		<div>
 			其他选项：
 			<label>
-				<input name="generate-option-queryFormSchema" type="checkbox"
-					   v-model="q.queryFormSchema" value="checked" />
+				<input name="generate-option-queryFormSchema" type="checkbox" v-model="q.queryFormSchema"/>
 				生成分页列表查询条件
+			</label>
+			<label>
+				<input name="generate-option-serviceAndImpl" type="checkbox" v-model="q.serviceAndImpl"/>
+				按Service+Impl范式生成（默认仅Impl）
 			</label>
 		</div>
 	</div>

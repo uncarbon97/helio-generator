@@ -33,7 +33,7 @@ export const columns: BasicColumn[] = [
  * 查询条件
  */
 export const queryFormSchema: FormSchema[] = [
-#if(${hasQueryFormSchema})
+#if(${queryFormSchemaFlag})
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
     && $column.columnName != "tenant_id"
