@@ -9,7 +9,6 @@ import cc.uncarbon.framework.core.exception.BusinessException;
 import cc.uncarbon.framework.core.page.PageParam;
 import cc.uncarbon.framework.core.page.PageResult;
 import cc.uncarbon.framework.crud.service.impl.HelioBaseServiceImpl;
-import ${package}.sys.annotation.SysLog;
 import ${package}.sys.enums.SysErrorEnum;
 import ${package}.${moduleName}.entity.${className}Entity;
 import ${package}.${moduleName}.mapper.${className}Mapper;
@@ -53,6 +52,9 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
     /**
      * 后台管理-分页列表
      */
+#if(${serviceAndImplFlag})
+    @Override
+#end
     public PageResult<${className}BO> adminList(PageParam pageParam, AdminList${className}DTO dto) {
         Page<${className}Entity> entityPage = this.page(
                 new Page<>(pageParam.getPageNum(), pageParam.getPageSize()),
@@ -93,6 +95,9 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
      * @param id 主键ID
      * @return null or BO
      */
+#if(${serviceAndImplFlag})
+    @Override
+#end
     public ${className}BO getOneById(Long id) {
         return this.getOneById(id, false);
     }
@@ -104,6 +109,9 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
      * @param throwIfInvalidId 是否在 ID 无效时抛出异常
      * @return null or BO
      */
+#if(${serviceAndImplFlag})
+    @Override
+#end
     public ${className}BO getOneById(Long id, boolean throwIfInvalidId) throws BusinessException {
         ${className}Entity entity = this.getById(id);
         if (throwIfInvalidId) {
@@ -116,7 +124,9 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
     /**
      * 后台管理-新增
      */
-    @SysLog(value = "新增${comments}")
+#if(${serviceAndImplFlag})
+    @Override
+#end
     @Transactional(rollbackFor = Exception.class)
     public Long adminInsert(AdminInsertOrUpdate${className}DTO dto) {
         log.info("[后台管理-新增${comments}] >> DTO={}", dto);
@@ -134,7 +144,9 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
     /**
      * 后台管理-编辑
      */
-    @SysLog(value = "编辑${comments}")
+#if(${serviceAndImplFlag})
+    @Override
+#end
     @Transactional(rollbackFor = Exception.class)
     public void adminUpdate(AdminInsertOrUpdate${className}DTO dto) {
         log.info("[后台管理-编辑${comments}] >> DTO={}", dto);
@@ -149,7 +161,9 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
     /**
      * 后台管理-删除
      */
-    @SysLog(value = "删除${comments}")
+#if(${serviceAndImplFlag})
+    @Override
+#end
     @Transactional(rollbackFor = Exception.class)
     public void adminDelete(Collection<Long> ids) {
         log.info("[后台管理-删除${comments}] >> ids={}", ids);
