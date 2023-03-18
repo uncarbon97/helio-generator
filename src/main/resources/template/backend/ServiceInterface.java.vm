@@ -16,8 +16,6 @@ import java.util.Collection;
 
 /**
  * ${comments}
- *
- * @author ${author}
  */
 public interface ${className}Service#if(${serviceAndImplFlag}) extends HelioBaseService<BookClassifiedEntity>#end {
 

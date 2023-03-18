@@ -18,7 +18,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -40,7 +39,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -49,18 +47,16 @@ import javax.validation.Valid;
 
 /**
  * 后台管理-${comments}管理接口
- *
- * @author ${author}
  */
 @RequiredArgsConstructor
 @SaCheckLogin(type = AdminStpUtil.TYPE)
 @Slf4j
 @Api(value = "${comments}管理接口", tags = {"${comments}管理接口"})
 #if(${generateType} == 'boot')
-@RequestMapping(SysConstant.SYS_MODULE_CONTEXT_PATH + HelioConstant.Version.HTTP_API_VERSION_V1 + "/${moduleName}/${classname}s")
+@RequestMapping(SysConstant.SYS_MODULE_CONTEXT_PATH + HelioConstant.Version.HTTP_API_VERSION_V1 + "/${moduleName}/${kebabCaseClassName}s")
 #end
 #if(${generateType} == 'cloud')
-@RequestMapping(HelioConstant.Version.HTTP_API_VERSION_V1 + "/${moduleName}/${classname}s")
+@RequestMapping(HelioConstant.Version.HTTP_API_VERSION_V1 + "/${moduleName}/${kebabCaseClassName}s")
 #end
 @RestController
 public class Admin${className}Controller {
@@ -78,7 +74,7 @@ public class Admin${className}Controller {
 
 
     @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.RETRIEVE)
-    @ApiOperation(value = "分页列表", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "分页列表")
     @GetMapping
     public ApiResult<PageResult<${className}BO>> list(PageParam pageParam, AdminList${className}DTO dto) {
 #if(${generateType} == 'boot')
@@ -90,7 +86,7 @@ public class Admin${className}Controller {
     }
 
     @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.RETRIEVE)
-    @ApiOperation(value = "详情", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "详情")
     @GetMapping(value = "/{id}")
     public ApiResult<${className}BO> getById(@PathVariable Long id) {
 #if(${generateType} == 'boot')
@@ -102,7 +98,7 @@ public class Admin${className}Controller {
     }
 
     @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.CREATE)
-    @ApiOperation(value = "新增", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "新增")
     @PostMapping
     public ApiResult<?> insert(@RequestBody @Valid AdminInsertOrUpdate${className}DTO dto) {
 #if(${generateType} == 'boot')
@@ -116,7 +112,7 @@ public class Admin${className}Controller {
     }
 
     @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.UPDATE)
-    @ApiOperation(value = "编辑", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "编辑")
     @PutMapping(value = "/{id}")
     public ApiResult<?> update(@PathVariable Long id, @RequestBody @Valid AdminInsertOrUpdate${className}DTO dto) {
         dto.setId(id);
@@ -131,7 +127,7 @@ public class Admin${className}Controller {
     }
 
     @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.DELETE)
-    @ApiOperation(value = "删除", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "删除")
     @DeleteMapping
     public ApiResult<?> delete(@RequestBody @Valid IdsDTO<Long> dto) {
 #if(${generateType} == 'boot')

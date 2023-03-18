@@ -23,8 +23,6 @@ import cc.uncarbon.module.sys.enums.GenericStatusEnum;
 
 /**
  * ${comments} BO
- *
- * @author ${author}
  */
 @Accessors(chain = true)
 @SuperBuilder

@@ -37,8 +37,6 @@ import java.util.List;
 
 /**
  * ${comments}
- *
- * @author ${author}
  */
 @Slf4j
 @Service

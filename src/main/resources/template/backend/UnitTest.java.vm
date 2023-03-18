@@ -41,15 +41,15 @@ class ${className}UnitTest {
                 UserContext.builder()
                         .userId(1L)
                         .userName("admin")
-                        .userType(UserTypeEnum.ADMIN_USER)
-                        .relationalTenant(
-                                TenantContext.builder()
-                                        .tenantId(HelioConstant.CRUD.DEFAULT_TENANT_ID)
-                                        .tenantName(HelioConstant.CRUD.DEFAULT_TENANT_NAME)
-                                        .build()
-                        )
                         .build()
         );
+
+        // 指定租户
+        /*TenantContextHolder.setTenantContext(
+                new TenantContext()
+                        .setTenantId()
+                        .setTenantName()
+        );*/
     }
 
     /**
@@ -73,7 +73,7 @@ class ${className}UnitTest {
     @Test
     void testAdminInsert() {
         Long entityId = ${classname}Service.adminInsert(
-                AdminInsert${className}DTO.builder()
+                AdminInsertOrUpdate${className}DTO.builder()
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
 && $column.columnName != "tenant_id"
@@ -99,7 +99,7 @@ class ${className}UnitTest {
      */
     @Test
     void testAdminUpdate() {
-        AdminInsert${className}DTO dto = AdminInsert${className}DTO.builder()
+        AdminInsertOrUpdate${className}DTO dto = AdminInsert${className}DTO.builder()
 #foreach ($column in $columns)
 #if($column.columnName != "tenant_id"
 && $column.columnName != "revision"

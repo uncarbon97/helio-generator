@@ -23,8 +23,6 @@ import cc.uncarbon.module.sys.enums.GenericStatusEnum;
 
 /**
  * 后台管理-分页列表${comments} DTO
- *
- * @author ${author}
  */
 @Accessors(chain = true)
 @SuperBuilder

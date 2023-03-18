@@ -12,8 +12,6 @@ import java.util.Collection;
 
 /**
  * ${comments} Facade 接口
- *
- * @author ${author}
  */
 public interface ${className}Facade {
 

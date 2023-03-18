@@ -2,6 +2,7 @@ package io.renren.utils;
 
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.text.NamingCase;
 import io.renren.config.MongoManager;
 import io.renren.entity.ColumnEntity;
 import io.renren.entity.TableEntity;
@@ -182,10 +183,11 @@ public class GenUtils {
         map.put("mainPath", mainPath);
         map.put("package", config.getString("package"));
         map.put("moduleName", config.getString("moduleName"));
-        map.put("author", config.getString("author"));
         map.put("generateType", dto.getGenerateType());
         map.put("queryFormSchemaFlag", queryFormSchemaFlag);
         map.put("serviceAndImplFlag", serviceAndImplFlag);
+        // className 的 kebab-case 形式
+        map.put("kebabCaseClassName", NamingCase.toKebabCase(tableEntity.getClassName()));
 
         // 生成后台管理菜单主键ID
         long menuId = Long.parseLong(LocalDateTimeUtil.format(LocalDateTimeUtil.now(), DatePattern.PURE_DATETIME_MS_FORMATTER));
