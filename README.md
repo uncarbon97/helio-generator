@@ -19,7 +19,7 @@
 
 1. 从 GitHub 或 Gitee 克隆项目源码，到自己的电脑上
 2. 找到`resources/application.yml`，修改里面的数据库`数据库类型、连接地址、账号、密码`等
-3. 找到`resources/generator.properties`，修改里面的`包名、模块名、作者`等
+3. 找到`resources/generator.properties`，修改里面的`包名、模块名`等
 4. 找到`src/main/java/io/renren/GeneratorApplication.java`，运行项目
 5. 浏览器访问 http://127.0.0.1:6688 ，就能看到代码生成器页面了
 

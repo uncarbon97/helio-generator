@@ -53,10 +53,10 @@ import javax.validation.Valid;
 @Slf4j
 @Api(value = "${comments}管理接口", tags = {"${comments}管理接口"})
 #if(${generateType} == 'boot')
-@RequestMapping(SysConstant.SYS_MODULE_CONTEXT_PATH + HelioConstant.Version.HTTP_API_VERSION_V1 + "/${moduleName}/${kebabCaseClassName}s")
+@RequestMapping(SysConstant.SYS_MODULE_CONTEXT_PATH + HelioConstant.Version.HTTP_API_VERSION_V1)
 #end
 #if(${generateType} == 'cloud')
-@RequestMapping(HelioConstant.Version.HTTP_API_VERSION_V1 + "/${moduleName}/${kebabCaseClassName}s")
+@RequestMapping(HelioConstant.Version.HTTP_API_VERSION_V1)
 #end
 @RestController
 public class Admin${className}Controller {
@@ -75,7 +75,7 @@ public class Admin${className}Controller {
 
     @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.RETRIEVE)
     @ApiOperation(value = "分页列表")
-    @GetMapping
+    @GetMapping("/${moduleName}/${kebabCaseClassName}s")
     public ApiResult<PageResult<${className}BO>> list(PageParam pageParam, AdminList${className}DTO dto) {
 #if(${generateType} == 'boot')
         return ApiResult.data(${classname}Service.adminList(pageParam, dto));
@@ -87,7 +87,7 @@ public class Admin${className}Controller {
 
     @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.RETRIEVE)
     @ApiOperation(value = "详情")
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/${moduleName}/${kebabCaseClassName}s/{id}")
     public ApiResult<${className}BO> getById(@PathVariable Long id) {
 #if(${generateType} == 'boot')
         return ApiResult.data(${classname}Service.getOneById(id, true));
@@ -99,7 +99,7 @@ public class Admin${className}Controller {
 
     @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.CREATE)
     @ApiOperation(value = "新增")
-    @PostMapping
+    @PostMapping("/${moduleName}/${kebabCaseClassName}s")
     public ApiResult<?> insert(@RequestBody @Valid AdminInsertOrUpdate${className}DTO dto) {
 #if(${generateType} == 'boot')
         ${classname}Service.adminInsert(dto);
@@ -113,7 +113,7 @@ public class Admin${className}Controller {
 
     @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.UPDATE)
     @ApiOperation(value = "编辑")
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/${moduleName}/${kebabCaseClassName}s/{id}")
     public ApiResult<?> update(@PathVariable Long id, @RequestBody @Valid AdminInsertOrUpdate${className}DTO dto) {
         dto.setId(id);
 #if(${generateType} == 'boot')
@@ -128,7 +128,7 @@ public class Admin${className}Controller {
 
     @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.DELETE)
     @ApiOperation(value = "删除")
-    @DeleteMapping
+    @DeleteMapping("/${moduleName}/${kebabCaseClassName}s")
     public ApiResult<?> delete(@RequestBody @Valid IdsDTO<Long> dto) {
 #if(${generateType} == 'boot')
         ${classname}Service.adminDelete(dto.getIds());

@@ -17,7 +17,7 @@ import java.util.Collection;
 /**
  * ${comments}
  */
-public interface ${className}Service#if(${serviceAndImplFlag}) extends HelioBaseService<BookClassifiedEntity>#end {
+public interface ${className}Service#if(${serviceAndImplFlag}) extends HelioBaseService<${className}Entity>#end {
 
     /**
      * 后台管理-分页列表

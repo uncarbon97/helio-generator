@@ -1,4 +1,4 @@
-package ${package}.${moduleName}.dao;
+package ${package}.${moduleName}.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
