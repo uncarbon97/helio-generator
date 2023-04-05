@@ -3,6 +3,8 @@
 ## 项目说明
 基于 [renren-generator](https://gitee.com/renrenio/renren-generator) 改造适配的代码生成器，可一键生成单体or微服务版的前、后端代码，减少无谓的重复劳动
 
+[更新记录](CHANGELOG.md)
+
 ## 它能做什么？
 1. 生成后端 Java 代码
    1. 后台管理 Controller 层 REST 接口、分页列表查询DTO（及对应 swagger 注解）、新增/编辑DTO（及对应 swagger、validation 注解）、菜单 SQL

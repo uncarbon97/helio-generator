@@ -2,7 +2,7 @@ import { defHttp } from '/@/utils/http/axios';
 import { ${className}ApiResult, ${className}InsertOrUpdateForm } from './model/${className}Model';
 
 enum Api {
-  REST = '/api/v1/${moduleName}/${classname}s',
+  REST = '/api/v1/${kebabCaseClassName}s',
 }
 
 /**
