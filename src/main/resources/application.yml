@@ -5,6 +5,8 @@ server:
 databaseArch: mysql
 
 spring:
+  application:
+    name: helio-generator
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
 # MySQL配置

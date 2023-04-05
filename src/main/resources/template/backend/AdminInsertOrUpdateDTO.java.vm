@@ -11,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 #if(${hasBigDecimal})
 import java.math.BigDecimal;
@@ -28,7 +29,7 @@ import cc.uncarbon.module.sys.enums.GenericStatusEnum;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class AdminInsertOrUpdate${className}DTO implements Serializable {
+public class Admin${className}InsertOrUpdateDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

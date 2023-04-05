@@ -423,11 +423,11 @@ public class GenUtils {
         }
 
         if (template.contains("AdminListDTO.java.vm")) {
-            return backendPathPrefix + "model" + File.separator + "request" + File.separator + "AdminList" + className + "DTO.java";
+            return backendPathPrefix + "model" + File.separator + "request" + File.separator + "Admin" + className + "ListDTO.java";
         }
 
         if (template.contains("AdminInsertOrUpdateDTO.java.vm")) {
-            return backendPathPrefix + "model" + File.separator + "request" + File.separator + "AdminInsertOrUpdate" + className + "DTO.java";
+            return backendPathPrefix + "model" + File.separator + "request" + File.separator + "Admin" + className + "InsertOrUpdateDTO.java";
         }
 
         if (template.contains("BO.java.vm")) {

@@ -8,8 +8,8 @@ import cc.uncarbon.framework.core.page.PageParam;
 import cc.uncarbon.framework.core.page.PageResult;
 import cn.hutool.core.collection.CollUtil;
 import ${package}.HelioBootApplication;
-import ${package}.${moduleName}.model.request.AdminInsertOrUpdate${className}DTO;
-import ${package}.${moduleName}.model.request.AdminList${className}DTO;
+import ${package}.${moduleName}.model.request.Admin${className}InsertOrUpdateDTO;
+import ${package}.${moduleName}.model.request.Admin${className}ListDTO;
 import ${package}.${moduleName}.model.response.${className}BO;
 import ${package}.${moduleName}.service.${className}Service;
 import ${package}.sys.enums.UserTypeEnum;
@@ -59,7 +59,7 @@ class ${className}UnitTest {
     void testAdminList() {
         PageResult<${className}BO> pageResult = ${classname}Service.adminList(
                 new PageParam(1, 10),
-                AdminList${className}DTO.builder()
+                Admin${className}ListDTO.builder()
 
                         .build()
         );
@@ -73,7 +73,7 @@ class ${className}UnitTest {
     @Test
     void testAdminInsert() {
         Long entityId = ${classname}Service.adminInsert(
-                AdminInsertOrUpdate${className}DTO.builder()
+                Admin${className}InsertOrUpdateDTO.builder()
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
 && $column.columnName != "tenant_id"
@@ -99,7 +99,7 @@ class ${className}UnitTest {
      */
     @Test
     void testAdminUpdate() {
-        AdminInsertOrUpdate${className}DTO dto = AdminInsert${className}DTO.builder()
+        Admin${className}InsertOrUpdateDTO dto = AdminInsert${className}DTO.builder()
 #foreach ($column in $columns)
 #if($column.columnName != "tenant_id"
 && $column.columnName != "revision"

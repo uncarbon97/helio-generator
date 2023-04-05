@@ -5,8 +5,8 @@ import cc.uncarbon.framework.core.exception.BusinessException;
 import cc.uncarbon.framework.core.page.PageParam;
 import cc.uncarbon.framework.core.page.PageResult;
 import ${package}.${moduleName}.facade.${className}Facade;
-import ${package}.${moduleName}.model.request.AdminInsertOrUpdate${className}DTO;
-import ${package}.${moduleName}.model.request.AdminList${className}DTO;
+import ${package}.${moduleName}.model.request.Admin${className}InsertOrUpdateDTO;
+import ${package}.${moduleName}.model.request.Admin${className}ListDTO;
 import ${package}.${moduleName}.model.response.${className}BO;
 import ${package}.${moduleName}.service.${className}Service;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class ${className}FacadeImpl implements ${className}Facade {
 
 
     @Override
-    public PageResult<${className}BO> adminList(PageParam pageParam, AdminList${className}DTO dto) {
+    public PageResult<${className}BO> adminList(PageParam pageParam, Admin${className}ListDTO dto) {
         return ${classname}Service.adminList(pageParam, dto);
     }
 
@@ -48,12 +48,12 @@ public class ${className}FacadeImpl implements ${className}Facade {
     }
 
     @Override
-    public Long adminInsert(AdminInsertOrUpdate${className}DTO dto) {
+    public Long adminInsert(Admin${className}InsertOrUpdateDTO dto) {
         return ${classname}Service.adminInsert(dto);
     }
 
     @Override
-    public void adminUpdate(AdminInsertOrUpdate${className}DTO dto) {
+    public void adminUpdate(Admin${className}InsertOrUpdateDTO dto) {
         ${classname}Service.adminUpdate(dto);
     }
 

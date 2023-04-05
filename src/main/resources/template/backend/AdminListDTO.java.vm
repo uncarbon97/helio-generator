@@ -12,6 +12,7 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 #if(${hasBigDecimal})
 import java.math.BigDecimal;
@@ -29,7 +30,7 @@ import cc.uncarbon.module.sys.enums.GenericStatusEnum;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class AdminList${className}DTO implements Serializable {
+public class Admin${className}ListDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

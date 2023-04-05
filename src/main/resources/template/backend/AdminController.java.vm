@@ -7,8 +7,8 @@ import cc.uncarbon.framework.core.page.PageResult;
 import cc.uncarbon.framework.web.model.request.IdsDTO;
 import cc.uncarbon.framework.web.model.response.ApiResult;
 import ${package}.sys.constant.SysConstant;
-import ${package}.${moduleName}.model.request.AdminInsertOrUpdate${className}DTO;
-import ${package}.${moduleName}.model.request.AdminList${className}DTO;
+import ${package}.${moduleName}.model.request.Admin${className}InsertOrUpdateDTO;
+import ${package}.${moduleName}.model.request.Admin${className}ListDTO;
 import ${package}.${moduleName}.model.response.${className}BO;
 import ${package}.${moduleName}.service.${className}Service;
 import ${package}.sys.util.AdminStpUtil;
@@ -29,8 +29,8 @@ import cc.uncarbon.framework.core.page.PageResult;
 import cc.uncarbon.framework.web.model.request.IdsDTO;
 import cc.uncarbon.framework.web.model.response.ApiResult;
 import ${package}.${moduleName}.facade.${className}Facade;
-import ${package}.${moduleName}.model.request.AdminInsertOrUpdate${className}DTO;
-import ${package}.${moduleName}.model.request.AdminList${className}DTO;
+import ${package}.${moduleName}.model.request.Admin${className}InsertOrUpdateDTO;
+import ${package}.${moduleName}.model.request.Admin${className}ListDTO;
 import ${package}.${moduleName}.model.response.${className}BO;
 import ${package}.util.AdminStpUtil;
 import cn.dev33.satoken.annotation.SaCheckLogin;
@@ -75,8 +75,8 @@ public class Admin${className}Controller {
 
     @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.RETRIEVE)
     @ApiOperation(value = "分页列表")
-    @GetMapping("/${moduleName}/${kebabCaseClassName}s")
-    public ApiResult<PageResult<${className}BO>> list(PageParam pageParam, AdminList${className}DTO dto) {
+    @GetMapping("/${kebabCaseClassName}s")
+    public ApiResult<PageResult<${className}BO>> list(PageParam pageParam, Admin${className}ListDTO dto) {
 #if(${generateType} == 'boot')
         return ApiResult.data(${classname}Service.adminList(pageParam, dto));
 #end
@@ -87,7 +87,7 @@ public class Admin${className}Controller {
 
     @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.RETRIEVE)
     @ApiOperation(value = "详情")
-    @GetMapping(value = "/${moduleName}/${kebabCaseClassName}s/{id}")
+    @GetMapping(value = "/${kebabCaseClassName}s/{id}")
     public ApiResult<${className}BO> getById(@PathVariable Long id) {
 #if(${generateType} == 'boot')
         return ApiResult.data(${classname}Service.getOneById(id, true));
@@ -99,8 +99,8 @@ public class Admin${className}Controller {
 
     @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.CREATE)
     @ApiOperation(value = "新增")
-    @PostMapping("/${moduleName}/${kebabCaseClassName}s")
-    public ApiResult<?> insert(@RequestBody @Valid AdminInsertOrUpdate${className}DTO dto) {
+    @PostMapping("/${kebabCaseClassName}s")
+    public ApiResult<?> insert(@RequestBody @Valid Admin${className}InsertOrUpdateDTO dto) {
 #if(${generateType} == 'boot')
         ${classname}Service.adminInsert(dto);
 #end
@@ -113,8 +113,8 @@ public class Admin${className}Controller {
 
     @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.UPDATE)
     @ApiOperation(value = "编辑")
-    @PutMapping(value = "/${moduleName}/${kebabCaseClassName}s/{id}")
-    public ApiResult<?> update(@PathVariable Long id, @RequestBody @Valid AdminInsertOrUpdate${className}DTO dto) {
+    @PutMapping(value = "/${kebabCaseClassName}s/{id}")
+    public ApiResult<?> update(@PathVariable Long id, @RequestBody @Valid Admin${className}InsertOrUpdateDTO dto) {
         dto.setId(id);
 #if(${generateType} == 'boot')
         ${classname}Service.adminUpdate(dto);
@@ -128,7 +128,7 @@ public class Admin${className}Controller {
 
     @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.DELETE)
     @ApiOperation(value = "删除")
-    @DeleteMapping("/${moduleName}/${kebabCaseClassName}s")
+    @DeleteMapping("/${kebabCaseClassName}s")
     public ApiResult<?> delete(@RequestBody @Valid IdsDTO<Long> dto) {
 #if(${generateType} == 'boot')
         ${classname}Service.adminDelete(dto.getIds());
