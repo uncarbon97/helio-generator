@@ -19,6 +19,16 @@ public class GenerateOptionsDTO implements Serializable {
      */
     private Boolean serviceAndImpl;
 
+    /**
+     * _flag结尾或is_开头的字段，默认使用YesOrNoEnum枚举
+     */
+    private Boolean useYesOrNoEnum;
+
+    /**
+     * status结尾的字段，默认使用EnabledStatusEnum枚举
+     */
+    private Boolean useEnabledStatusEnum;
+
 
     public String getGenerateType() {
         return generateType;
@@ -42,5 +52,21 @@ public class GenerateOptionsDTO implements Serializable {
 
     public void setServiceAndImpl(Boolean serviceAndImpl) {
         this.serviceAndImpl = serviceAndImpl;
+    }
+
+    public Boolean getUseYesOrNoEnum() {
+        return useYesOrNoEnum;
+    }
+
+    public void setUseYesOrNoEnum(Boolean useYesOrNoEnum) {
+        this.useYesOrNoEnum = useYesOrNoEnum;
+    }
+
+    public Boolean getUseEnabledStatusEnum() {
+        return useEnabledStatusEnum;
+    }
+
+    public void setUseEnabledStatusEnum(Boolean useEnabledStatusEnum) {
+        this.useEnabledStatusEnum = useEnabledStatusEnum;
     }
 }

@@ -16,8 +16,11 @@ import java.time.LocalDateTime;
 #if(${hasBigDecimal})
 import java.math.BigDecimal;
 #end
-#if(${hasGenericStatusEnum})
-import cc.uncarbon.module.sys.enums.GenericStatusEnum;
+#if(${useYesOrNoEnum})
+import cc.uncarbon.framework.crud.enums.YesOrNoEnum;
+#end
+#if(${useEnabledStatusEnum})
+import cc.uncarbon.framework.crud.enums.EnabledStatusEnum;
 #end
 
 

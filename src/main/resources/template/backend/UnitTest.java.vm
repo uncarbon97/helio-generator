@@ -12,7 +12,6 @@ import ${package}.${moduleName}.model.request.Admin${className}InsertOrUpdateDTO
 import ${package}.${moduleName}.model.request.Admin${className}ListDTO;
 import ${package}.${moduleName}.model.response.${className}BO;
 import ${package}.${moduleName}.service.${className}Service;
-import ${package}.sys.enums.UserTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

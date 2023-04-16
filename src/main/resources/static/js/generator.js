@@ -43,6 +43,8 @@ var vm = new Vue({
             generateType: 'boot',
             queryFormSchema: true,
             serviceAndImpl: false,
+            useYesOrNoEnum: true,
+            useEnabledStatusEnum: true,
 		}
 	},
 	methods: {
@@ -62,6 +64,8 @@ var vm = new Vue({
                 // 借助 !! 操作符转换为 boolean 型
                 + '&queryFormSchema=' + !!vm.q.queryFormSchema
                 + '&serviceAndImpl=' + !!vm.q.serviceAndImpl
+                + '&useYesOrNoEnum=' + !!vm.q.useYesOrNoEnum
+                + '&useEnabledStatusEnum=' + !!vm.q.useEnabledStatusEnum
             ;
 		}
 	}

@@ -53,10 +53,10 @@ import javax.validation.Valid;
 @Slf4j
 @Api(value = "${comments}管理接口", tags = {"${comments}管理接口"})
 #if(${generateType} == 'boot')
-@RequestMapping(SysConstant.SYS_MODULE_CONTEXT_PATH + HelioConstant.Version.HTTP_API_VERSION_V1)
+@RequestMapping(SysConstant.SYS_MODULE_CONTEXT_PATH + "/api/v1")
 #end
 #if(${generateType} == 'cloud')
-@RequestMapping(HelioConstant.Version.HTTP_API_VERSION_V1)
+@RequestMapping("/api/v1")
 #end
 @RestController
 public class Admin${className}Controller {

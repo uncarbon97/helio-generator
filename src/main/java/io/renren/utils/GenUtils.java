@@ -3,6 +3,7 @@ package io.renren.utils;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.text.NamingCase;
+import cn.hutool.core.util.StrUtil;
 import io.renren.config.MongoManager;
 import io.renren.entity.ColumnEntity;
 import io.renren.entity.TableEntity;
@@ -99,9 +100,12 @@ public class GenUtils {
         Configuration config = getConfig();
         boolean hasBigDecimal = false;
         boolean hasList = false;
-        boolean hasGenericStatusEnum = false;
+
+        // configured from dto
         boolean queryFormSchemaFlag = dto.getQueryFormSchema();
         boolean serviceAndImplFlag = dto.getServiceAndImpl();
+        boolean useYesOrNoEnum = dto.getUseYesOrNoEnum();
+        boolean useEnabledStatusEnum = dto.getUseEnabledStatusEnum();
         //表信息
         TableEntity tableEntity = new TableEntity();
         tableEntity.setTableName(table.get("tableName"));
@@ -115,8 +119,10 @@ public class GenUtils {
         List<ColumnEntity> columsList = new ArrayList<>();
         for (Map<String, String> column : columns) {
 
+            // 表中字段名
+            String tableColumnName = column.get("columnName");
             ColumnEntity columnEntity = new ColumnEntity();
-            columnEntity.setColumnName(column.get("columnName"));
+            columnEntity.setColumnName(tableColumnName);
             columnEntity.setDataType(column.get("dataType"));
             columnEntity.setComments(column.get("columnComment"));
             columnEntity.setExtra(column.get("extra"));
@@ -142,10 +148,18 @@ public class GenUtils {
             if (!hasList && "array".equals(columnEntity.getExtra())) {
                 hasList = true;
             }
-            if ("status".equalsIgnoreCase(attrName)) {
-                // Helio: 特别指定为 GenericStatusEnum 类型
-                hasGenericStatusEnum = true;
-                columnEntity.setAttrType("GenericStatusEnum");
+            if (useYesOrNoEnum) {
+                if (StrUtil.endWithIgnoreCase(tableColumnName, "_flag")
+                        || StrUtil.startWithIgnoreCase(tableColumnName, "is_")
+                ) {
+                    columnEntity.setAttrType("YesOrNoEnum");
+                }
+            }
+            if (
+                    useEnabledStatusEnum
+                    && StrUtil.endWithIgnoreCase(tableColumnName, "status")
+            ) {
+                columnEntity.setAttrType("EnabledStatusEnum");
             }
             //是否主键
             if ("PRI".equalsIgnoreCase(column.get("columnKey")) && tableEntity.getPk() == null) {
@@ -179,13 +193,16 @@ public class GenUtils {
         map.put("columns", tableEntity.getColumns());
         map.put("hasBigDecimal", hasBigDecimal);
         map.put("hasList", hasList);
-        map.put("hasGenericStatusEnum", hasGenericStatusEnum);
         map.put("mainPath", mainPath);
         map.put("package", config.getString("package"));
         map.put("moduleName", config.getString("moduleName"));
         map.put("generateType", dto.getGenerateType());
+
+        // configured from dto
         map.put("queryFormSchemaFlag", queryFormSchemaFlag);
         map.put("serviceAndImplFlag", serviceAndImplFlag);
+        map.put("useYesOrNoEnum", useYesOrNoEnum);
+        map.put("useEnabledStatusEnum", useEnabledStatusEnum);
         // className 的 kebab-case 形式
         map.put("kebabCaseClassName", NamingCase.toKebabCase(tableEntity.getClassName()));
 
