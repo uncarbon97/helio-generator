@@ -30,7 +30,7 @@ public interface ${className}Service#if(${serviceAndImplFlag}) extends HelioBase
      * @param id 主键ID
      * @return null or BO
      */
-     ${className}BO getOneById(Long id);
+    ${className}BO getOneById(Long id);
 
     /**
      * 根据 ID 取详情
