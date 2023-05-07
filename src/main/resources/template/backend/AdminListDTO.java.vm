@@ -12,26 +12,28 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 #if(${hasBigDecimal})
 import java.math.BigDecimal;
 #end
-#if(${hasGenericStatusEnum})
-import cc.uncarbon.module.sys.enums.GenericStatusEnum;
+#if(${useYesOrNoEnum})
+import cc.uncarbon.framework.crud.enums.YesOrNoEnum;
+#end
+#if(${useEnabledStatusEnum})
+import cc.uncarbon.framework.crud.enums.EnabledStatusEnum;
 #end
 
 
 /**
  * 后台管理-分页列表${comments} DTO
- *
- * @author ${author}
  */
 @Accessors(chain = true)
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class AdminList${className}DTO implements Serializable {
+public class Admin${className}ListDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

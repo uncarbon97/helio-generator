@@ -7,8 +7,8 @@ import cc.uncarbon.framework.core.page.PageResult;
 import cc.uncarbon.framework.crud.service.HelioBaseService;
 import ${package}.${moduleName}.entity.${className}Entity;
 #end
-import ${package}.${moduleName}.model.request.AdminInsertOrUpdate${className}DTO;
-import ${package}.${moduleName}.model.request.AdminList${className}DTO;
+import ${package}.${moduleName}.model.request.Admin${className}InsertOrUpdateDTO;
+import ${package}.${moduleName}.model.request.Admin${className}ListDTO;
 import ${package}.${moduleName}.model.response.${className}BO;
 
 import java.util.Collection;
@@ -16,15 +16,13 @@ import java.util.Collection;
 
 /**
  * ${comments}
- *
- * @author ${author}
  */
-public interface ${className}Service#if(${serviceAndImplFlag}) extends HelioBaseService<BookClassifiedEntity>#end {
+public interface ${className}Service#if(${serviceAndImplFlag}) extends HelioBaseService<${className}Entity>#end {
 
     /**
      * 后台管理-分页列表
      */
-    PageResult<${className}BO> adminList(PageParam pageParam, AdminList${className}DTO dto);
+    PageResult<${className}BO> adminList(PageParam pageParam, Admin${className}ListDTO dto);
 
     /**
      * 根据 ID 取详情
@@ -32,7 +30,7 @@ public interface ${className}Service#if(${serviceAndImplFlag}) extends HelioBase
      * @param id 主键ID
      * @return null or BO
      */
-     ${className}BO getOneById(Long id);
+    ${className}BO getOneById(Long id);
 
     /**
      * 根据 ID 取详情
@@ -44,15 +42,15 @@ public interface ${className}Service#if(${serviceAndImplFlag}) extends HelioBase
     ${className}BO getOneById(Long id, boolean throwIfInvalidId) throws BusinessException;
 
     /**
-     * 后台管理-添加
+     * 后台管理-新增
      * @return 主键ID
      */
-    Long adminInsert(AdminInsertOrUpdate${className}DTO dto);
+    Long adminInsert(Admin${className}InsertOrUpdateDTO dto);
 
     /**
      * 后台管理-编辑
      */
-    void adminUpdate(AdminInsertOrUpdate${className}DTO dto);
+    void adminUpdate(Admin${className}InsertOrUpdateDTO dto);
 
     /**
      * 后台管理-删除

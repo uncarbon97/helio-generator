@@ -52,6 +52,14 @@
 				<input name="generate-option-serviceAndImpl" type="checkbox" v-model="q.serviceAndImpl"/>
 				按Service+Impl范式生成（默认仅Impl）
 			</label>
+			<label>
+				<input name="generate-option-useYesOrNoEnum" type="checkbox" v-model="q.useYesOrNoEnum"/>
+				_flag结尾或is_开头的字段，默认使用YesOrNoEnum枚举
+			</label>
+			<label>
+				<input name="generate-option-useEnabledStatusEnum" type="checkbox" v-model="q.useEnabledStatusEnum"/>
+				status结尾的字段，默认使用EnabledStatusEnum枚举
+			</label>
 		</div>
 	</div>
     <table id="jqGrid"></table>

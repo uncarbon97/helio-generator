@@ -14,7 +14,7 @@
   import { computed, defineComponent, ref, unref } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { update${className}Api, create${className}Api } from '/@/api/${moduleName}/${className}Api';
+  import { update${className}Api, insert${className}Api } from '/@/api/${moduleName}/${className}Api';
   import { insertOrUpdateFormSchema } from './data';
 
   export default defineComponent({
@@ -63,7 +63,7 @@
           if (recordId) {
             await update${className}Api(recordId, values);
           } else {
-            await create${className}Api(values);
+            await insert${className}Api(values);
           }
 
           closeDrawer();

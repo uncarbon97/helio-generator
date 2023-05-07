@@ -8,11 +8,10 @@ import cc.uncarbon.framework.core.page.PageParam;
 import cc.uncarbon.framework.core.page.PageResult;
 import cn.hutool.core.collection.CollUtil;
 import ${package}.HelioBootApplication;
-import ${package}.${moduleName}.model.request.AdminInsertOrUpdate${className}DTO;
-import ${package}.${moduleName}.model.request.AdminList${className}DTO;
+import ${package}.${moduleName}.model.request.Admin${className}InsertOrUpdateDTO;
+import ${package}.${moduleName}.model.request.Admin${className}ListDTO;
 import ${package}.${moduleName}.model.response.${className}BO;
 import ${package}.${moduleName}.service.${className}Service;
-import ${package}.sys.enums.UserTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,15 +40,15 @@ class ${className}UnitTest {
                 UserContext.builder()
                         .userId(1L)
                         .userName("admin")
-                        .userType(UserTypeEnum.ADMIN_USER)
-                        .relationalTenant(
-                                TenantContext.builder()
-                                        .tenantId(HelioConstant.CRUD.DEFAULT_TENANT_ID)
-                                        .tenantName(HelioConstant.CRUD.DEFAULT_TENANT_NAME)
-                                        .build()
-                        )
                         .build()
         );
+
+        // 指定租户
+        /*TenantContextHolder.setTenantContext(
+                new TenantContext()
+                        .setTenantId()
+                        .setTenantName()
+        );*/
     }
 
     /**
@@ -59,7 +58,7 @@ class ${className}UnitTest {
     void testAdminList() {
         PageResult<${className}BO> pageResult = ${classname}Service.adminList(
                 new PageParam(1, 10),
-                AdminList${className}DTO.builder()
+                Admin${className}ListDTO.builder()
 
                         .build()
         );
@@ -73,7 +72,7 @@ class ${className}UnitTest {
     @Test
     void testAdminInsert() {
         Long entityId = ${classname}Service.adminInsert(
-                AdminInsert${className}DTO.builder()
+                Admin${className}InsertOrUpdateDTO.builder()
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
 && $column.columnName != "tenant_id"
@@ -99,7 +98,7 @@ class ${className}UnitTest {
      */
     @Test
     void testAdminUpdate() {
-        AdminInsert${className}DTO dto = AdminInsert${className}DTO.builder()
+        Admin${className}InsertOrUpdateDTO dto = AdminInsert${className}DTO.builder()
 #foreach ($column in $columns)
 #if($column.columnName != "tenant_id"
 && $column.columnName != "revision"

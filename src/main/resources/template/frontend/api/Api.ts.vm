@@ -2,7 +2,7 @@ import { defHttp } from '/@/utils/http/axios';
 import { ${className}ApiResult, ${className}InsertOrUpdateForm } from './model/${className}Model';
 
 enum Api {
-  REST = '/api/v1/${moduleName}/${classname}s',
+  REST = '/api/v1/${kebabCaseClassName}s',
 }
 
 /**
@@ -36,7 +36,7 @@ export const retrieve${className}Api = (id: string) => {
 /**
  * ${comments}-新增
  */
-export const create${className}Api = (insertForm: ${className}InsertOrUpdateForm) => {
+export const insert${className}Api = (insertForm: ${className}InsertOrUpdateForm) => {
   return defHttp.post<void>({
     url: Api.REST,
     params: insertForm,
