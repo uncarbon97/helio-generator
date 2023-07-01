@@ -185,7 +185,13 @@ public class GenUtils {
         // 封装模板数据
         Map<String, Object> map = new HashMap<>();
         map.put("tableName", tableEntity.getTableName());
-        map.put("comments", tableEntity.getComments());
+
+        // Helio: 如果最后一个字为“表”，则去除
+        String tableComments = tableEntity.getComments();
+        if (StrUtil.endWith(tableComments, "表")) {
+            tableComments = StrUtil.subBefore(tableComments, "表", true);
+        }
+        map.put("comments", tableComments);
         map.put("pk", tableEntity.getPk());
         map.put("className", tableEntity.getClassName());
         map.put("classname", tableEntity.getClassname());
@@ -308,7 +314,13 @@ public class GenUtils {
         //封装模板数据
         Map<String, Object> map = new HashMap<>();
         map.put("tableName", tableEntity.getTableName());
-        map.put("comments", tableEntity.getComments());
+
+        // Helio: 如果最后一个字为“表”，则去除
+        String tableComments = tableEntity.getComments();
+        if (StrUtil.endWith(tableComments, "表")) {
+            tableComments = StrUtil.subBefore(tableComments, "表", true);
+        }
+        map.put("comments", tableComments);
         map.put("pk", tableEntity.getPk());
         map.put("className", tableEntity.getClassName());
         map.put("classname", tableEntity.getClassname());

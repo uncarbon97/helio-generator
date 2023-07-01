@@ -9,7 +9,7 @@
     INSERT INTO sys_menu (id, tenant_id, revision, del_flag, created_at, created_by, updated_at, updated_by,
                           title, parent_id,
                           type, permission, icon, sort, status)
-    VALUES (${childMenuId1}, NULL, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '查询', ${parentMenuId},
+    VALUES (${childMenuId1}, NULL, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '查询${comments}', ${parentMenuId},
                              2,
                              '${className}:retrieve', NULL, 1, 1);
 
@@ -18,7 +18,7 @@
                           type,
                           permission, icon,
                           sort, status)
-    VALUES (${childMenuId2}, NULL, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '新增', ${parentMenuId},
+    VALUES (${childMenuId2}, NULL, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '新增${comments}', ${parentMenuId},
                              2,
                              '${className}:create', NULL, 2, 1);
 
@@ -27,7 +27,7 @@
                           type,
                           permission, icon,
                           sort, status)
-    VALUES (${childMenuId3}, NULL, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '编辑', ${parentMenuId},
+    VALUES (${childMenuId3}, NULL, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '编辑${comments}', ${parentMenuId},
                              2,
                              '${className}:update', NULL, 4, 1);
 
@@ -36,7 +36,7 @@
                           type,
                           permission, icon,
                           sort, status)
-    VALUES (${childMenuId4}, NULL, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '删除', ${parentMenuId},
+    VALUES (${childMenuId4}, NULL, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '删除${comments}', ${parentMenuId},
                              2,
                              '${className}:delete', NULL, 3, 1);
 
