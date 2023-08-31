@@ -2,7 +2,6 @@ package ${package}.${moduleName}.model.response;
 
 import cc.uncarbon.framework.core.constant.HelioConstant;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,10 +17,10 @@ import java.time.LocalDateTime;
 import java.math.BigDecimal;
 #end
 #if(${useYesOrNoEnum})
-import cc.uncarbon.framework.crud.enums.YesOrNoEnum;
+import cc.uncarbon.framework.core.enums.YesOrNoEnum;
 #end
 #if(${useEnabledStatusEnum})
-import cc.uncarbon.framework.crud.enums.EnabledStatusEnum;
+import cc.uncarbon.framework.core.enums.EnabledStatusEnum;
 #end
 
 
