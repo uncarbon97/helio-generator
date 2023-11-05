@@ -62,6 +62,10 @@ public class GenUtils {
             templates.add("template/backend/ServiceInterface.java.vm");
         }
 
+        if (dto.getMybatisXML()) {
+            templates.add("template/backend/Mapper.xml.vm");
+        }
+
         /*
         前端(Vben Admin)
          */
@@ -104,6 +108,7 @@ public class GenUtils {
         // configured from dto
         boolean queryFormSchemaFlag = dto.getQueryFormSchema();
         boolean serviceAndImplFlag = dto.getServiceAndImpl();
+        boolean serviceInterfaceNoExtends = dto.getServiceInterfaceNoExtends();
         boolean useYesOrNoEnum = dto.getUseYesOrNoEnum();
         boolean useEnabledStatusEnum = dto.getUseEnabledStatusEnum();
         //表信息
@@ -207,6 +212,7 @@ public class GenUtils {
         // configured from dto
         map.put("queryFormSchemaFlag", queryFormSchemaFlag);
         map.put("serviceAndImplFlag", serviceAndImplFlag);
+        map.put("serviceInterfaceNoExtends", serviceInterfaceNoExtends);
         map.put("useYesOrNoEnum", useYesOrNoEnum);
         map.put("useEnabledStatusEnum", useEnabledStatusEnum);
         // className 的 kebab-case 形式
@@ -401,66 +407,72 @@ public class GenUtils {
      */
     public static String getFileName(String template, String className, String packageName, String moduleName,
                                      GenerateOptionsDTO dto) {
+        // 路径分隔符
+        final String pathSeparator = File.separator;
         /*
         多级文件夹，如src/main/cc/uncarbon/module/
         若需要可以自行加上
          */
-        String packagePath = File.separator + "main" + File.separator + "java" + File.separator;
+        String packagePath = pathSeparator + "main" + pathSeparator + "java" + pathSeparator;
         if (StringUtils.isNotBlank(packageName)) {
-            packagePath += packageName.replace(".", File.separator) + File.separator + moduleName + File.separator;
+            packagePath += packageName.replace(".", pathSeparator) + pathSeparator + moduleName + pathSeparator;
         }
 
         /*
         后端代码
          */
-        String backendPathPrefix = "后端代码" + File.separator;
+        String backendPathPrefix = "后端代码" + pathSeparator;
 
         if (template.contains("MongoChildrenEntity.java.vm")) {
-            return backendPathPrefix + "entity" + File.separator + "inner" + File.separator + currentTableName + File.separator + splitInnerName(className) + "InnerEntity.java";
+            return backendPathPrefix + "entity" + pathSeparator + "inner" + pathSeparator + currentTableName + pathSeparator + splitInnerName(className) + "InnerEntity.java";
         }
         if (template.contains("Entity.java.vm") || template.contains("MongoEntity.java.vm")) {
-            return backendPathPrefix + "entity" + File.separator + className + "Entity.java";
+            return backendPathPrefix + "entity" + pathSeparator + className + "Entity.java";
         }
 
         if (template.contains("Mapper.java.vm")) {
-            return backendPathPrefix + "mapper" + File.separator + className + "Mapper.java";
+            return backendPathPrefix + "mapper" + pathSeparator + className + "Mapper.java";
+        }
+
+        if (template.contains("Mapper.xml.vm")) {
+            return backendPathPrefix + "mapper" + pathSeparator + "xml" + pathSeparator + className + "Mapper.xml";
         }
 
         if (template.contains("ServiceInterface.java.vm")) {
-            return backendPathPrefix + "service" + File.separator + className + "Service.java";
+            return backendPathPrefix + "service" + pathSeparator + className + "Service.java";
         }
 
         if (template.contains("ServiceImpl.java.vm")) {
             if (dto.getServiceAndImpl()) {
                 // 新建 impl 目录，以及文件名以 Impl 结尾
-                return backendPathPrefix + "service" + File.separator + "impl" + File.separator + className + "ServiceImpl.java";
+                return backendPathPrefix + "service" + pathSeparator + "impl" + pathSeparator + className + "ServiceImpl.java";
             } else {
-                return backendPathPrefix + "service" + File.separator + className + "Service.java";
+                return backendPathPrefix + "service" + pathSeparator + className + "Service.java";
             }
         }
 
         if (template.contains("Facade.java.vm")) {
-            return backendPathPrefix + "facade" + File.separator + className + "Facade.java";
+            return backendPathPrefix + "facade" + pathSeparator + className + "Facade.java";
         }
 
         if (template.contains("FacadeImpl.java.vm")) {
-            return backendPathPrefix + "biz" + File.separator + className + "FacadeImpl.java";
+            return backendPathPrefix + "biz" + pathSeparator + className + "FacadeImpl.java";
         }
 
         if (template.contains("AdminController.java.vm")) {
-            return backendPathPrefix + "web" + File.separator + "Admin" + className + "Controller.java";
+            return backendPathPrefix + "web" + pathSeparator + moduleName + pathSeparator + "Admin" + className + "Controller.java";
         }
 
         if (template.contains("AdminListDTO.java.vm")) {
-            return backendPathPrefix + "model" + File.separator + "request" + File.separator + "Admin" + className + "ListDTO.java";
+            return backendPathPrefix + "model" + pathSeparator + "request" + pathSeparator + "Admin" + className + "ListDTO.java";
         }
 
         if (template.contains("AdminInsertOrUpdateDTO.java.vm")) {
-            return backendPathPrefix + "model" + File.separator + "request" + File.separator + "Admin" + className + "InsertOrUpdateDTO.java";
+            return backendPathPrefix + "model" + pathSeparator + "request" + pathSeparator + "Admin" + className + "InsertOrUpdateDTO.java";
         }
 
         if (template.contains("BO.java.vm")) {
-            return backendPathPrefix + "model" + File.separator + "response" + File.separator + className + "BO.java";
+            return backendPathPrefix + "model" + pathSeparator + "response" + pathSeparator + className + "BO.java";
         }
 
         if (template.contains("sys_menu.sql.vm")) {
@@ -468,35 +480,35 @@ public class GenUtils {
         }
 
         if (template.contains("UnitTest.java.vm")) {
-            return backendPathPrefix + File.separator + className + "UnitTest.java";
+            return backendPathPrefix + pathSeparator + className + "UnitTest.java";
         }
 
         /*
         前端代码(Vben Admin)
          */
-        String frontendPathPrefix = "前端代码" + File.separator + "src" + File.separator;
+        String frontendPathPrefix = "前端代码" + pathSeparator + "src" + pathSeparator;
         if (template.contains("Api.ts.vm")) {
-            return frontendPathPrefix + "api" + File.separator + moduleName + File.separator + className + "Api.ts";
+            return frontendPathPrefix + "api" + pathSeparator + moduleName + pathSeparator + className + "Api.ts";
         }
 
         if (template.contains("Model.ts.vm")) {
-            return frontendPathPrefix + "api" + File.separator + moduleName + File.separator + "model" + File.separator + className + "Model.ts";
+            return frontendPathPrefix + "api" + pathSeparator + moduleName + pathSeparator + "model" + pathSeparator + className + "Model.ts";
         }
 
         if (template.contains("data.ts.vm")) {
-            return frontendPathPrefix + "views" + File.separator + moduleName + File.separator + className + File.separator + "data.ts";
+            return frontendPathPrefix + "views" + pathSeparator + moduleName + pathSeparator + className + pathSeparator + "data.ts";
         }
 
         if (template.contains("detail-drawer.vue.vm")) {
-            return frontendPathPrefix + "views" + File.separator + moduleName + File.separator + className + File.separator + "detail-drawer.vue";
+            return frontendPathPrefix + "views" + pathSeparator + moduleName + pathSeparator + className + pathSeparator + "detail-drawer.vue";
         }
 
         if (template.contains("update-drawer.vue.vm")) {
-            return frontendPathPrefix + "views" + File.separator + moduleName + File.separator + className + File.separator + "update-drawer.vue";
+            return frontendPathPrefix + "views" + pathSeparator + moduleName + pathSeparator + className + pathSeparator + "update-drawer.vue";
         }
 
         if (template.contains("index.vue.vm")) {
-            return frontendPathPrefix + "views" + File.separator + moduleName + File.separator + className + File.separator + "index.vue";
+            return frontendPathPrefix + "views" + pathSeparator + moduleName + pathSeparator + className + pathSeparator + "index.vue";
         }
 
 

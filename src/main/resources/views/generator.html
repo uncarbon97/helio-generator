@@ -44,22 +44,34 @@
 
 		<div>
 			其他选项：
-			<label>
-				<input name="generate-option-queryFormSchema" type="checkbox" v-model="q.queryFormSchema"/>
-				生成分页列表查询条件
-			</label>
-			<label>
-				<input name="generate-option-serviceAndImpl" type="checkbox" v-model="q.serviceAndImpl"/>
-				按Service+Impl范式生成（默认仅Impl）
-			</label>
-			<label>
-				<input name="generate-option-useYesOrNoEnum" type="checkbox" v-model="q.useYesOrNoEnum"/>
-				_flag结尾或is_开头的字段，默认使用YesOrNoEnum枚举
-			</label>
-			<label>
-				<input name="generate-option-useEnabledStatusEnum" type="checkbox" v-model="q.useEnabledStatusEnum"/>
-				status结尾的字段，默认使用EnabledStatusEnum枚举
-			</label>
+			<div class="next-line">
+				<label>
+					<input name="generate-option-queryFormSchema" type="checkbox" v-model="q.queryFormSchema"/>
+					生成分页列表查询条件
+				</label>
+				<label>
+					<input name="generate-option-serviceAndImpl" type="checkbox" v-model="q.serviceAndImpl"/>
+					按Service+Impl范式生成（默认仅Impl）
+				</label>
+				<label>
+					<input name="generate-option-serviceInterfaceNoExtends" type="checkbox" v-model="q.serviceInterfaceNoExtends" :disabled="!q.serviceAndImpl"/>
+					Service接口不继承HelioBaseService（接口不继承Mybatis-Plus预置的增删改查方法，Impl依旧继承）
+				</label>
+				<label>
+					<input name="generate-option-mybatisXML" type="checkbox" v-model="q.mybatisXML"/>
+					生成配套Mapper.xml
+				</label>
+			</div>
+			<div class="next-line">
+				<label>
+					<input name="generate-option-useYesOrNoEnum" type="checkbox" v-model="q.useYesOrNoEnum"/>
+					对_flag结尾或is_开头的字段，Java代码使用YesOrNoEnum枚举
+				</label>
+				<label>
+					<input name="generate-option-useEnabledStatusEnum" type="checkbox" v-model="q.useEnabledStatusEnum"/>
+					对status结尾的字段，Java代码使用EnabledStatusEnum枚举
+				</label>
+			</div>
 		</div>
 	</div>
     <table id="jqGrid"></table>
@@ -76,6 +88,10 @@
 		width: 100%;
 		padding-left: 50px;
 		padding-bottom: 20px;
+	}
+	#generate-options label {
+		margin-right: 12px;
+		margin-bottom: 12px;
 	}
 </style>
 </html>

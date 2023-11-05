@@ -20,12 +20,22 @@ public class GenerateOptionsDTO implements Serializable {
     private Boolean serviceAndImpl;
 
     /**
-     * _flag结尾或is_开头的字段，默认使用YesOrNoEnum枚举
+     * Service接口不继承HelioBaseService
+     */
+    private Boolean serviceInterfaceNoExtends;
+
+    /**
+     * 生成配套Mapper.xml
+     */
+    private Boolean mybatisXML;
+
+    /**
+     * 对_flag结尾或is_开头的字段，Java代码使用YesOrNoEnum枚举
      */
     private Boolean useYesOrNoEnum;
 
     /**
-     * status结尾的字段，默认使用EnabledStatusEnum枚举
+     * 对status结尾的字段，Java代码使用EnabledStatusEnum枚举
      */
     private Boolean useEnabledStatusEnum;
 
@@ -52,6 +62,22 @@ public class GenerateOptionsDTO implements Serializable {
 
     public void setServiceAndImpl(Boolean serviceAndImpl) {
         this.serviceAndImpl = serviceAndImpl;
+    }
+
+    public Boolean getServiceInterfaceNoExtends() {
+        return serviceInterfaceNoExtends;
+    }
+
+    public void setServiceInterfaceNoExtends(Boolean serviceInterfaceNoExtends) {
+        this.serviceInterfaceNoExtends = serviceInterfaceNoExtends;
+    }
+
+    public Boolean getMybatisXML() {
+        return mybatisXML;
+    }
+
+    public void setMybatisXML(Boolean mybatisXML) {
+        this.mybatisXML = mybatisXML;
     }
 
     public Boolean getUseYesOrNoEnum() {
