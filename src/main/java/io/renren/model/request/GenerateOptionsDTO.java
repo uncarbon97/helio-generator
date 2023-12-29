@@ -20,11 +20,6 @@ public class GenerateOptionsDTO implements Serializable {
     private Boolean serviceAndImpl;
 
     /**
-     * Service接口不继承HelioBaseService
-     */
-    private Boolean serviceInterfaceNoExtends;
-
-    /**
      * 生成配套Mapper.xml
      */
     private Boolean mybatisXML;
@@ -62,14 +57,6 @@ public class GenerateOptionsDTO implements Serializable {
 
     public void setServiceAndImpl(Boolean serviceAndImpl) {
         this.serviceAndImpl = serviceAndImpl;
-    }
-
-    public Boolean getServiceInterfaceNoExtends() {
-        return serviceInterfaceNoExtends;
-    }
-
-    public void setServiceInterfaceNoExtends(Boolean serviceInterfaceNoExtends) {
-        this.serviceInterfaceNoExtends = serviceInterfaceNoExtends;
     }
 
     public Boolean getMybatisXML() {

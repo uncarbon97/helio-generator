@@ -54,10 +54,6 @@
 					按Service+Impl范式生成（默认仅Impl）
 				</label>
 				<label>
-					<input name="generate-option-serviceInterfaceNoExtends" type="checkbox" v-model="q.serviceInterfaceNoExtends" :disabled="!q.serviceAndImpl"/>
-					Service接口不继承HelioBaseService（接口不继承Mybatis-Plus预置的增删改查方法，Impl依旧继承）
-				</label>
-				<label>
 					<input name="generate-option-mybatisXML" type="checkbox" v-model="q.mybatisXML"/>
 					生成配套Mapper.xml
 				</label>

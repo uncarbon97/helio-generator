@@ -108,7 +108,6 @@ public class GenUtils {
         // configured from dto
         boolean queryFormSchemaFlag = dto.getQueryFormSchema();
         boolean serviceAndImplFlag = dto.getServiceAndImpl();
-        boolean serviceInterfaceNoExtends = dto.getServiceInterfaceNoExtends();
         boolean useYesOrNoEnum = dto.getUseYesOrNoEnum();
         boolean useEnabledStatusEnum = dto.getUseEnabledStatusEnum();
         //表信息
@@ -212,7 +211,6 @@ public class GenUtils {
         // configured from dto
         map.put("queryFormSchemaFlag", queryFormSchemaFlag);
         map.put("serviceAndImplFlag", serviceAndImplFlag);
-        map.put("serviceInterfaceNoExtends", serviceInterfaceNoExtends);
         map.put("useYesOrNoEnum", useYesOrNoEnum);
         map.put("useEnabledStatusEnum", useEnabledStatusEnum);
         // className 的 kebab-case 形式

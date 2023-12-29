@@ -21,9 +21,9 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
 //                      👇 这里需要改成相应启动类 👇
 @SpringBootTest(classes = HelioBootApplication.class)
+@Slf4j
 class ${className}UnitTest {
 
     @Resource

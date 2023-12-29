@@ -12,9 +12,9 @@
 </template>
 <script lang="ts">
   import { computed, defineComponent, ref, unref } from 'vue';
-  import { BasicForm, useForm } from '/@/components/Form/index';
-  import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { update${className}Api, insert${className}Api } from '/@/api/${moduleName}/${className}Api';
+  import { BasicForm, useForm } from '@/components/Form/index';
+  import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
+  import { update${className}Api, insert${className}Api } from '@/api/${moduleName}/${className}Api';
   import { insertOrUpdateFormSchema } from './data';
 
   export default defineComponent({
