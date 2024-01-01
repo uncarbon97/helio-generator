@@ -49,9 +49,7 @@ import javax.validation.Valid;
 /**
  * 后台管理-${comments}管理接口
  */
-@RequiredArgsConstructor
 @SaCheckLogin(type = AdminStpUtil.TYPE)
-@Slf4j
 @Api(value = "${comments}管理接口", tags = {"${comments}管理接口"})
 #if(${generateType} == 'boot')
 @RequestMapping(AdminApiConstant.HTTP_API_URL_PREFIX + "/api/v1")
@@ -59,7 +57,9 @@ import javax.validation.Valid;
 #if(${generateType} == 'cloud')
 @RequestMapping("/api/v1")
 #end
+@RequiredArgsConstructor
 @RestController
+@Slf4j
 public class Admin${className}Controller {
 
     // 功能权限串前缀
@@ -67,6 +67,9 @@ public class Admin${className}Controller {
 
 #if(${generateType} == 'boot')
     private final ${className}Service ${classname}Service;
+#end
+#if(${generateType} == 'boot-multi')
+    private final ${className}Facade ${classname}Facade;
 #end
 #if(${generateType} == 'cloud')
     @DubboReference(version = HelioConstant.Version.DUBBO_VERSION_V1, validation = HelioConstant.Dubbo.ENABLE_VALIDATION)

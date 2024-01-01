@@ -8,7 +8,6 @@ import cc.uncarbon.framework.core.constant.HelioConstant;
 import cc.uncarbon.framework.core.exception.BusinessException;
 import cc.uncarbon.framework.core.page.PageParam;
 import cc.uncarbon.framework.core.page.PageResult;
-import cc.uncarbon.framework.crud.service.impl.HelioBaseServiceImpl;
 import ${package}.${moduleName}.entity.${className}Entity;
 import ${package}.${moduleName}.mapper.${className}Mapper;
 import ${package}.${moduleName}.model.request.Admin${className}InsertOrUpdateDTO;
@@ -19,7 +18,7 @@ import ${package}.${moduleName}.service.${className}Service;
 #end
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -37,14 +36,17 @@ import java.util.List;
 /**
  * ${comments}
  */
-@Slf4j
-@Service
 @RequiredArgsConstructor
+@Service
+@Slf4j
 #if(${serviceAndImplFlag})
-public class ${className}ServiceImpl extends HelioBaseServiceImpl<${className}Mapper, ${className}Entity> implements ${className}Service {
+public class ${className}ServiceImpl implements ${className}Service {
 #else
-public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper, ${className}Entity> {
+public class ${className}Service {
 #end
+
+    private final ${className}Mapper ${classname}Mapper;
+
 
     /**
      * 后台管理-分页列表
@@ -53,7 +55,7 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
     @Override
 #end
     public PageResult<${className}BO> adminList(PageParam pageParam, Admin${className}ListDTO dto) {
-        Page<${className}Entity> entityPage = this.page(
+        Page<${className}Entity> entityPage = ${classname}Mapper.selectPage(
                 new Page<>(pageParam.getPageNum(), pageParam.getPageSize()),
                 new QueryWrapper<${className}Entity>()
                         .lambda()
@@ -70,7 +72,7 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
 )
                         // $column.comments
 #if($column.attrType == 'String')
-                        .like(StrUtil.isNotBlank(dto.get${column.pascalAttrName}()), ${className}Entity::get$column.pascalAttrName, StrUtil.cleanBlank(dto.get${column.pascalAttrName}()))
+                        .like(CharSequenceUtil.isNotBlank(dto.get${column.pascalAttrName}()), ${className}Entity::get$column.pascalAttrName, CharSequenceUtil.cleanBlank(dto.get${column.pascalAttrName}()))
 #else
                         .eq(ObjectUtil.isNotNull(dto.get${column.pascalAttrName}()), ${className}Entity::get$column.pascalAttrName, dto.get${column.pascalAttrName}())
 #end
@@ -110,7 +112,7 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
     @Override
 #end
     public ${className}BO getOneById(Long id, boolean throwIfInvalidId) throws BusinessException {
-        ${className}Entity entity = this.getById(id);
+        ${className}Entity entity = ${classname}Mapper.selectById(id);
         if (throwIfInvalidId && entity == null) {
             throw new BusinessException(400, "无效${comments}ID");
         }
@@ -133,7 +135,7 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
         ${className}Entity entity = new ${className}Entity();
         BeanUtil.copyProperties(dto, entity);
 
-        this.save(entity);
+        ${classname}Mapper.insert(entity);
 
         return entity.getId();
     }
@@ -152,7 +154,7 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
         ${className}Entity entity = new ${className}Entity();
         BeanUtil.copyProperties(dto, entity);
 
-        this.updateById(entity);
+        ${classname}Mapper.updateById(entity);
     }
 
     /**
@@ -164,7 +166,7 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
     @Transactional(rollbackFor = Exception.class)
     public void adminDelete(Collection<Long> ids) {
         log.info("[后台管理-${comments}-删除] >> ids={}", ids);
-        this.removeByIds(ids);
+        ${classname}Mapper.deleteBatchIds(ids);
     }
 
 
@@ -237,7 +239,7 @@ public class ${className}Service extends HelioBaseServiceImpl<${className}Mapper
         /*
         可以根据自己业务需要，解禁这段代码，修改判断条件和文案
 
-        ${className}Entity existingEntity = this.getOne(
+        ${className}Entity existingEntity = ${classname}Mapper.selectOne(
                 new QueryWrapper<${className}Entity>()
                         .lambda()
                         .select(${className}Entity::getId)

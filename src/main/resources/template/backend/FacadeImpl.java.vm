@@ -19,14 +19,14 @@ import java.util.Collection;
 /**
  * ${comments} Facade 接口实现类
  */
-@Slf4j
-@DubboService(
-        version = HelioConstant.Version.DUBBO_VERSION_V1,
-        validation = HelioConstant.Dubbo.ENABLE_VALIDATION,
-        timeout = HelioConstant.Dubbo.TIMEOUT,
-        retries = HelioConstant.Dubbo.RETRIES
-)
 @RequiredArgsConstructor
+@DubboService(
+    version = HelioConstant.Version.DUBBO_VERSION_V1,
+    validation = HelioConstant.Dubbo.ENABLE_VALIDATION,
+    timeout = HelioConstant.Dubbo.TIMEOUT,
+    retries = HelioConstant.Dubbo.RETRIES
+)
+@Slf4j
 public class ${className}FacadeImpl implements ${className}Facade {
 
     private final ${className}Service ${classname}Service;

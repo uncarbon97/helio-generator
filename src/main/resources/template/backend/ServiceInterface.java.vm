@@ -3,10 +3,6 @@ package ${package}.${moduleName}.service;
 import cc.uncarbon.framework.core.exception.BusinessException;
 import cc.uncarbon.framework.core.page.PageParam;
 import cc.uncarbon.framework.core.page.PageResult;
-#if(${serviceAndImplFlag} && !${serviceInterfaceNoExtends})
-import cc.uncarbon.framework.crud.service.HelioBaseService;
-import ${package}.${moduleName}.entity.${className}Entity;
-#end
 import ${package}.${moduleName}.model.request.Admin${className}InsertOrUpdateDTO;
 import ${package}.${moduleName}.model.request.Admin${className}ListDTO;
 import ${package}.${moduleName}.model.response.${className}BO;
@@ -17,7 +13,7 @@ import java.util.Collection;
 /**
  * ${comments}
  */
-public interface ${className}Service#if(${serviceAndImplFlag} && !${serviceInterfaceNoExtends}) extends HelioBaseService<${className}Entity>#end {
+public interface ${className}Service {
 
     /**
      * 后台管理-分页列表
