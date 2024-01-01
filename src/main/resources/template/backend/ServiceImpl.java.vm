@@ -8,7 +8,6 @@ import cc.uncarbon.framework.core.constant.HelioConstant;
 import cc.uncarbon.framework.core.exception.BusinessException;
 import cc.uncarbon.framework.core.page.PageParam;
 import cc.uncarbon.framework.core.page.PageResult;
-import cc.uncarbon.framework.crud.service.impl.HelioBaseServiceImpl;
 import ${package}.${moduleName}.entity.${className}Entity;
 import ${package}.${moduleName}.mapper.${className}Mapper;
 import ${package}.${moduleName}.model.request.Admin${className}InsertOrUpdateDTO;
@@ -19,7 +18,7 @@ import ${package}.${moduleName}.service.${className}Service;
 #end
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -73,7 +72,7 @@ public class ${className}Service {
 )
                         // $column.comments
 #if($column.attrType == 'String')
-                        .like(StrUtil.isNotBlank(dto.get${column.pascalAttrName}()), ${className}Entity::get$column.pascalAttrName, StrUtil.cleanBlank(dto.get${column.pascalAttrName}()))
+                        .like(CharSequenceUtil.isNotBlank(dto.get${column.pascalAttrName}()), ${className}Entity::get$column.pascalAttrName, CharSequenceUtil.cleanBlank(dto.get${column.pascalAttrName}()))
 #else
                         .eq(ObjectUtil.isNotNull(dto.get${column.pascalAttrName}()), ${className}Entity::get$column.pascalAttrName, dto.get${column.pascalAttrName}())
 #end
