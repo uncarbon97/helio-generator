@@ -49,18 +49,18 @@ public class Admin${className}InsertOrUpdateDTO implements Serializable {
 )
 
     @ApiModelProperty(value = "$column.comments"#if(!$column.nullable), required = true#end)
+#if($column.attrType == 'String' && $column.characterMaximumLength != 0)
+    @Size(max = $column.characterMaximumLength, message = "【$column.comments】最长${column.characterMaximumLength}位")
+#end
 #if(!$column.nullable)
 #if($column.attrType == 'String')
-#if($column.characterMaximumLength != 0)
-    @Size(min = 1, max = $column.characterMaximumLength, message = "【$column.comments】长度须在 1 至 $column.characterMaximumLength 位之间")
-#end
     @NotBlank(message = "$column.comments不能为空")
 #else
     @NotNull(message = "$column.comments不能为空")
 #end
 #end
-    private $column.attrType $column.camelAttrName;
 #end
+    private $column.attrType $column.camelAttrName;
 #end
 
 }

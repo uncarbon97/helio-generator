@@ -1,5 +1,5 @@
-import { BasicColumn, FormSchema } from '@/components/Table';
-import { DescItem } from '@/components/Description';
+import {BasicColumn, FormSchema} from '@/components/Table';
+import {DescItem} from '@/components/Description';
 
 /**
  * 表格列
@@ -107,7 +107,7 @@ export const insertOrUpdateFormSchema: FormSchema[] = [
     // 只是为了把ID带过来
     label: '主键ID',
     component: 'Render',
-    show: false,
+    ifShow: false,
   },
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
