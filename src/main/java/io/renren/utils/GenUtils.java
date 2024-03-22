@@ -206,15 +206,16 @@ public class GenUtils {
         map.put("mainPath", mainPath);
         map.put("package", config.getString("package"));
         map.put("moduleName", config.getString("moduleName"));
-        map.put("generateType", dto.getGenerateType());
+        // className 的 kebab-case 形式
+        map.put("kebabCaseClassName", NamingCase.toKebabCase(tableEntity.getClassName()));
 
         // configured from dto
+        map.put("generateType", dto.getGenerateType());
+        map.put("helioFrameworkVersion", dto.getHelioFrameworkVersion());
         map.put("queryFormSchemaFlag", queryFormSchemaFlag);
         map.put("serviceAndImplFlag", serviceAndImplFlag);
         map.put("useYesOrNoEnum", useYesOrNoEnum);
         map.put("useEnabledStatusEnum", useEnabledStatusEnum);
-        // className 的 kebab-case 形式
-        map.put("kebabCaseClassName", NamingCase.toKebabCase(tableEntity.getClassName()));
 
         // 生成后台管理菜单主键ID
         long menuId = Long.parseLong(LocalDateTimeUtil.format(LocalDateTimeUtil.now(), DatePattern.PURE_DATETIME_MS_FORMATTER));

@@ -6,7 +6,15 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
+#if(${helioFrameworkVersion} == 'v2')
+import io.swagger.v3.oas.annotations.media.Schema;
+#end
+#if(${helioFrameworkVersion} == 'v1')
 import io.swagger.annotations.ApiModelProperty;
+#end
+#if(${helioFrameworkVersion} == 'v2')
+import java.io.Serial;
+#end
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 #if(${hasBigDecimal})
@@ -32,6 +40,9 @@ import cc.uncarbon.framework.core.enums.EnabledStatusEnum;
 @TableName(value = "${tableName}")
 public class ${className}Entity extends HelioBaseEntity<Long> {
 
+#if(${helioFrameworkVersion} == 'v2')
+    @Serial
+#end
     private static final long serialVersionUID = 1L;
 
 #foreach ($column in $columns)
@@ -45,7 +56,12 @@ public class ${className}Entity extends HelioBaseEntity<Long> {
 && $column.columnName != "updated_by"
 )
 
+#if(${helioFrameworkVersion} == 'v2')
+    @Schema(description = "$column.comments")
+#end
+#if(${helioFrameworkVersion} == 'v1')
     @ApiModelProperty(value = "$column.comments")
+#end
     @TableField(value = "$column.columnName")
     private $column.attrType $column.camelAttrName;
 #end

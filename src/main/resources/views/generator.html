@@ -30,15 +30,28 @@
 		<div style="height: 10px" data-note="PLACEHOLDER"></div>
 
 		<div>
-			脚手架版本：
+			脚手架架构：
 			<label>
 				<input name="generate-type" type="radio" v-model="q.generateType" value="boot" />
-				生成单体Boot版
+				单体Boot版
 			</label>
 
 			<label>
 				<input name="generate-type-cloud" type="radio" v-model="q.generateType" value="cloud" />
-				生成微服务Cloud版
+				微服务Cloud版
+			</label>
+		</div>
+
+		<div>
+			脚手架版本：
+			<label>
+				<input name="helio-framework-version-v2" type="radio" v-model="q.helioFrameworkVersion" value="v2" />
+				2.x(Spring Boot 3、SpringDoc、jakarta.*)
+			</label>
+
+			<label>
+				<input name="helio-framework-version-v1" type="radio" v-model="q.helioFrameworkVersion" value="v1" />
+				1.x(Spring Boot 2、SpringFox、javax.*)
 			</label>
 		</div>
 

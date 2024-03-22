@@ -5,9 +5,14 @@ import java.io.Serializable;
 public class GenerateOptionsDTO implements Serializable {
 
     /**
-     * 脚手架版本：单体or微服务
+     * 脚手架架构：单体or微服务
      */
     private String generateType;
+
+    /**
+     * 脚手架版本：v2 or v1
+     */
+    private String helioFrameworkVersion;
 
     /**
      * 生成分页列表查询条件
@@ -41,6 +46,14 @@ public class GenerateOptionsDTO implements Serializable {
 
     public void setGenerateType(String generateType) {
         this.generateType = generateType;
+    }
+
+    public String getHelioFrameworkVersion() {
+        return helioFrameworkVersion;
+    }
+
+    public void setHelioFrameworkVersion(String helioFrameworkVersion) {
+        this.helioFrameworkVersion = helioFrameworkVersion;
     }
 
     public Boolean getQueryFormSchema() {

@@ -1,14 +1,29 @@
 package ${package}.${moduleName}.model.request;
 
+#if(${helioFrameworkVersion} == 'v2')
+import io.swagger.v3.oas.annotations.media.Schema;
+#end
+#if(${helioFrameworkVersion} == 'v1')
 import io.swagger.annotations.ApiModelProperty;
+#end
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
+#if(${helioFrameworkVersion} == 'v2')
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+#end
+#if(${helioFrameworkVersion} == 'v1')
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+#end
+#if(${helioFrameworkVersion} == 'v2')
+import java.io.Serial;
+#end
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -33,9 +48,18 @@ import cc.uncarbon.framework.core.enums.EnabledStatusEnum;
 @Data
 public class Admin${className}InsertOrUpdateDTO implements Serializable {
 
+#if(${helioFrameworkVersion} == 'v2')
+    @Serial
+#end
     private static final long serialVersionUID = 1L;
 
+
+#if(${helioFrameworkVersion} == 'v2')
+    @Schema(description = "主键ID", hidden = true, title = "仅更新时使用")
+#end
+#if(${helioFrameworkVersion} == 'v1')
     @ApiModelProperty(value = "主键ID", hidden = true, notes = "仅更新时使用")
+#end
     private Long id;
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
@@ -48,7 +72,12 @@ public class Admin${className}InsertOrUpdateDTO implements Serializable {
     && $column.columnName != "updated_by"
 )
 
+#if(${helioFrameworkVersion} == 'v2')
+    @Schema(description = "$column.comments"#if(!$column.nullable), requiredMode = Schema.RequiredMode.REQUIRED#end)
+#end
+#if(${helioFrameworkVersion} == 'v1')
     @ApiModelProperty(value = "$column.comments"#if(!$column.nullable), required = true#end)
+#end
 #if($column.attrType == 'String' && $column.characterMaximumLength != 0)
     @Size(max = $column.characterMaximumLength, message = "【$column.comments】最长${column.characterMaximumLength}位")
 #end
@@ -59,8 +88,8 @@ public class Admin${className}InsertOrUpdateDTO implements Serializable {
     @NotNull(message = "$column.comments不能为空")
 #end
 #end
-#end
     private $column.attrType $column.camelAttrName;
+#end
 #end
 
 }

@@ -41,6 +41,7 @@ var vm = new Vue({
 		q:{
 			tableName: null,
             generateType: 'boot',
+            helioFrameworkVersion: 'v2',
             queryFormSchema: true,
             serviceAndImpl: false,
             mybatisXML: false,
@@ -62,6 +63,7 @@ var vm = new Vue({
             }
             location.href = "sys/generator/code?tables=" + tableNames.join()
                 + '&generateType=' + vm.q.generateType
+                + '&helioFrameworkVersion=' + vm.q.helioFrameworkVersion
                 // 借助 !! 操作符转换为 boolean 型
                 + '&queryFormSchema=' + !!vm.q.queryFormSchema
                 + '&serviceAndImpl=' + !!vm.q.serviceAndImpl
