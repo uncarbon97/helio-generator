@@ -14,13 +14,19 @@ import ${package}.${moduleName}.model.response.${className}BO;
 import ${package}.${moduleName}.service.${className}Service;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
+#if(${helioFrameworkVersion} == 'v2')
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
+#end
+#if(${helioFrameworkVersion} == 'v1')
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import javax.validation.Valid;
+#end
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 #end
 #if(${generateType} == 'cloud')
 import cc.uncarbon.framework.core.constant.HelioConstant;
@@ -35,14 +41,20 @@ import ${package}.${moduleName}.model.request.Admin${className}ListDTO;
 import ${package}.${moduleName}.model.response.${className}BO;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
+#if(${helioFrameworkVersion} == 'v2')
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
+#end
+#if(${helioFrameworkVersion} == 'v1')
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import javax.validation.Valid;
+#end
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 #end
 
 
@@ -50,7 +62,12 @@ import javax.validation.Valid;
  * 后台管理-${comments}管理接口
  */
 @SaCheckLogin(type = AdminStpUtil.TYPE)
+#if(${helioFrameworkVersion} == 'v2')
+@Tag(name = "${comments}管理接口")
+#end
+#if(${helioFrameworkVersion} == 'v1')
 @Api(value = "${comments}管理接口", tags = {"${comments}管理接口"})
+#end
 #if(${generateType} == 'boot')
 @RequestMapping(AdminApiConstant.HTTP_API_URL_PREFIX + "/api/v1")
 #end
@@ -78,7 +95,12 @@ public class Admin${className}Controller {
 
 
     @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.RETRIEVE)
+#if(${helioFrameworkVersion} == 'v2')
+    @Operation(summary = "分页列表")
+#end
+#if(${helioFrameworkVersion} == 'v1')
     @ApiOperation(value = "分页列表")
+#end
     @GetMapping("/${kebabCaseClassName}s")
     public ApiResult<PageResult<${className}BO>> list(PageParam pageParam, Admin${className}ListDTO dto) {
 #if(${generateType} == 'boot')
@@ -90,7 +112,12 @@ public class Admin${className}Controller {
     }
 
     @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.RETRIEVE)
+#if(${helioFrameworkVersion} == 'v2')
+    @Operation(summary = "详情")
+#end
+#if(${helioFrameworkVersion} == 'v1')
     @ApiOperation(value = "详情")
+#end
     @GetMapping(value = "/${kebabCaseClassName}s/{id}")
     public ApiResult<${className}BO> getById(@PathVariable Long id) {
 #if(${generateType} == 'boot')
@@ -102,23 +129,32 @@ public class Admin${className}Controller {
     }
 
     @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.CREATE)
+#if(${helioFrameworkVersion} == 'v2')
+    @Operation(summary = "新增")
+#end
+#if(${helioFrameworkVersion} == 'v1')
     @ApiOperation(value = "新增")
+#end
     @PostMapping("/${kebabCaseClassName}s")
-    public ApiResult<?> insert(@RequestBody @Valid Admin${className}InsertOrUpdateDTO dto) {
+    public ApiResult<Void> insert(@RequestBody @Valid Admin${className}InsertOrUpdateDTO dto) {
 #if(${generateType} == 'boot')
         ${classname}Service.adminInsert(dto);
 #end
 #if(${generateType} == 'cloud')
         ${classname}Facade.adminInsert(dto);
 #end
-
         return ApiResult.success();
     }
 
     @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.UPDATE)
+#if(${helioFrameworkVersion} == 'v2')
+    @Operation(summary = "编辑")
+#end
+#if(${helioFrameworkVersion} == 'v1')
     @ApiOperation(value = "编辑")
+#end
     @PutMapping(value = "/${kebabCaseClassName}s/{id}")
-    public ApiResult<?> update(@PathVariable Long id, @RequestBody @Valid Admin${className}InsertOrUpdateDTO dto) {
+    public ApiResult<Void> update(@PathVariable Long id, @RequestBody @Valid Admin${className}InsertOrUpdateDTO dto) {
         dto.setId(id);
 #if(${generateType} == 'boot')
         ${classname}Service.adminUpdate(dto);
@@ -126,21 +162,24 @@ public class Admin${className}Controller {
 #if(${generateType} == 'cloud')
         ${classname}Facade.adminUpdate(dto);
 #end
-
         return ApiResult.success();
     }
 
     @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.DELETE)
+#if(${helioFrameworkVersion} == 'v2')
+    @Operation(summary = "删除")
+#end
+#if(${helioFrameworkVersion} == 'v1')
     @ApiOperation(value = "删除")
+#end
     @DeleteMapping("/${kebabCaseClassName}s")
-    public ApiResult<?> delete(@RequestBody @Valid IdsDTO<Long> dto) {
+    public ApiResult<Void> delete(@RequestBody @Valid IdsDTO<Long> dto) {
 #if(${generateType} == 'boot')
         ${classname}Service.adminDelete(dto.getIds());
 #end
 #if(${generateType} == 'cloud')
         ${classname}Facade.adminDelete(dto.getIds());
 #end
-
         return ApiResult.success();
     }
 

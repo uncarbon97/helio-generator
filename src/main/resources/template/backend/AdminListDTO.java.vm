@@ -2,14 +2,21 @@ package ${package}.${moduleName}.model.request;
 
 import cc.uncarbon.framework.core.constant.HelioConstant;
 import com.fasterxml.jackson.annotation.JsonFormat;
+#if(${helioFrameworkVersion} == 'v2')
+import io.swagger.v3.oas.annotations.media.Schema;
+#end
+#if(${helioFrameworkVersion} == 'v1')
 import io.swagger.annotations.ApiModelProperty;
+#end
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
-
+#if(${helioFrameworkVersion} == 'v2')
+import java.io.Serial;
+#end
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,6 +41,9 @@ import cc.uncarbon.framework.core.enums.EnabledStatusEnum;
 @Data
 public class Admin${className}ListDTO implements Serializable {
 
+#if(${helioFrameworkVersion} == 'v2')
+    @Serial
+#end
     private static final long serialVersionUID = 1L;
 
 #if(${queryFormSchemaFlag})
@@ -48,18 +58,33 @@ public class Admin${className}ListDTO implements Serializable {
     && $column.columnName != "updated_by"
 )
 
+#if(${helioFrameworkVersion} == 'v2')
+    @Schema(description = "$column.comments#if($column.attrType == 'String')(关键词)#end")
+#end
+#if(${helioFrameworkVersion} == 'v1')
     @ApiModelProperty(value = "$column.comments#if($column.attrType == 'String')(关键词)#end")
+#end
     private $column.attrType $column.camelAttrName;
 #end
 #end
 #end
 
+#if(${helioFrameworkVersion} == 'v2')
+    @Schema(description = "时间区间起")
+#end
+#if(${helioFrameworkVersion} == 'v1')
     @ApiModelProperty(value = "时间区间起")
+#end
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = HelioConstant.Jackson.DATE_TIME_FORMAT)
     @DateTimeFormat(pattern = HelioConstant.Jackson.DATE_TIME_FORMAT)
     private LocalDateTime beginAt;
 
+#if(${helioFrameworkVersion} == 'v2')
+    @Schema(description = "时间区间止")
+#end
+#if(${helioFrameworkVersion} == 'v1')
     @ApiModelProperty(value = "时间区间止")
+#end
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = HelioConstant.Jackson.DATE_TIME_FORMAT)
     @DateTimeFormat(pattern = HelioConstant.Jackson.DATE_TIME_FORMAT)
     private LocalDateTime endAt;
