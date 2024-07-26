@@ -14,7 +14,7 @@
 import {ref, computed, unref} from 'vue';
 import {BasicForm, useForm} from '@/components/Form';
 import {BasicDrawer, useDrawerInner} from '@/components/Drawer';
-import {insertOrUpdateFormSchema} from '@/views/${moduleName}/${className}/data';
+import {insertOrUpdateFormSchema} from './data';
 import {insert${className}Api, update${className}Api} from '@/api/${moduleName}/${className}Api';
 
 const isUpdateView = ref(true);

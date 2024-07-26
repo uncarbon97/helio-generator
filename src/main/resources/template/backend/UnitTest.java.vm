@@ -13,11 +13,11 @@ import ${package}.${moduleName}.model.request.Admin${className}ListDTO;
 import ${package}.${moduleName}.model.response.${className}BO;
 import ${package}.${moduleName}.service.${className}Service;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.annotation.Resource;
+#if(${helioFrameworkVersion} == 'v2')import jakarta.annotation.Resource;#end
+#if(${helioFrameworkVersion} == 'v1')import javax.annotation.Resource;#end
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +33,8 @@ class ${className}UnitTest {
     /**
      * 单元测试-初始化
      */
-    @BeforeEach
-    public void init() {
+    @BeforeAll
+    public static void init() {
         // 可以在这里进行初始化操作, 如设置用户上下文等
         UserContextHolder.setUserContext(
                 UserContext.builder()
@@ -54,6 +54,7 @@ class ${className}UnitTest {
     /**
      * 单元测试-分页列表
      */
+    // 在测试方法上追加 @org.junit.jupiter.api.Order 注解可以控制单元测试的执行顺序
     @Test
     void testAdminList() {
         PageResult<${className}BO> pageResult = ${classname}Service.adminList(
@@ -98,7 +99,7 @@ class ${className}UnitTest {
      */
     @Test
     void testAdminUpdate() {
-        Admin${className}InsertOrUpdateDTO dto = AdminInsert${className}DTO.builder()
+        Admin${className}InsertOrUpdateDTO dto = Admin${className}InsertOrUpdateDTO.builder()
 #foreach ($column in $columns)
 #if($column.columnName != "tenant_id"
 && $column.columnName != "revision"
@@ -124,7 +125,7 @@ class ${className}UnitTest {
     @Test
     void testAdminDelete() {
         // 主键ID列表
-        ArrayList<Long> ids = CollUtil.newArrayList(1L, 2L, 3L);
+        List<Long> ids = CollUtil.newArrayList(1L, 2L, 3L);
         ${classname}Service.adminDelete(ids);
 
         log.info("\n\n\n删除完成 >> ids={}", ids);
