@@ -12,9 +12,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 #if(${helioFrameworkVersion} == 'v1')
 import io.swagger.annotations.ApiModelProperty;
 #end
-#if(${helioFrameworkVersion} == 'v2')
-import java.io.Serial;
-#end
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 #if(${hasBigDecimal})
@@ -39,12 +36,6 @@ import cc.uncarbon.framework.core.enums.EnabledStatusEnum;
 @Data
 @TableName(value = "${tableName}")
 public class ${className}Entity extends HelioBaseEntity<Long> {
-
-#if(${helioFrameworkVersion} == 'v2')
-    @Serial
-#end
-    private static final long serialVersionUID = 1L;
-
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
 && $column.columnName != "tenant_id"

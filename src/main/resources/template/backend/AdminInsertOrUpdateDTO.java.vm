@@ -21,9 +21,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 #end
-#if(${helioFrameworkVersion} == 'v2')
-import java.io.Serial;
-#end
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -47,12 +44,6 @@ import cc.uncarbon.framework.core.enums.EnabledStatusEnum;
 @NoArgsConstructor
 @Data
 public class Admin${className}InsertOrUpdateDTO implements Serializable {
-
-#if(${helioFrameworkVersion} == 'v2')
-    @Serial
-#end
-    private static final long serialVersionUID = 1L;
-
 
 #if(${helioFrameworkVersion} == 'v2')
     @Schema(description = "主键ID", hidden = true, title = "仅更新时使用")
