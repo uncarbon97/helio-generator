@@ -39,10 +39,10 @@ import cc.uncarbon.framework.core.enums.EnabledStatusEnum;
 public class ${className}BO implements Serializable {
 
 #if(${helioFrameworkVersion} == 'v2')
-    @Schema(description = "主键ID", hidden = true, title = "仅更新时使用")
+    @Schema(description = "主键ID")
 #end
 #if(${helioFrameworkVersion} == 'v1')
-    @ApiModelProperty(value = "主键ID", hidden = true, notes = "仅更新时使用")
+    @ApiModelProperty(value = "主键ID")
 #end
     private Long id;
 #foreach ($column in $columns)

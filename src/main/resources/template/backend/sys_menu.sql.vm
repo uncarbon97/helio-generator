@@ -29,7 +29,7 @@
                           sort, status)
     VALUES (${childMenuId3}, NULL, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '编辑${comments}', ${parentMenuId},
                              2,
-                             '${className}:update', NULL, 4, 1);
+                             '${className}:update', NULL, 3, 1);
 
     INSERT INTO sys_menu (id, tenant_id, revision, del_flag, created_at, created_by, updated_at, updated_by,
                           title, parent_id,
@@ -38,5 +38,5 @@
                           sort, status)
     VALUES (${childMenuId4}, NULL, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '删除${comments}', ${parentMenuId},
                              2,
-                             '${className}:delete', NULL, 3, 1);
+                             '${className}:delete', NULL, 4, 1);
 
