@@ -1,6 +1,6 @@
 package io.renren.model.setting;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
@@ -8,22 +8,12 @@ public class GeneratorSettings implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String mainPath = "cc.uncarbon";
-
-    @JSONField(name = "package")
+    @JsonProperty(value = "package")
     private String packageName = "cc.uncarbon.module";
 
     private String moduleName = "sys";
 
     private String tablePrefix = "tb_";
-
-    public String getMainPath() {
-        return mainPath;
-    }
-
-    public void setMainPath(String mainPath) {
-        this.mainPath = mainPath;
-    }
 
     public String getPackageName() {
         return packageName;

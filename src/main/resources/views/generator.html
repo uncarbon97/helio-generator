@@ -1,127 +1,200 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-<title>代码生成器</title>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<link rel="stylesheet" href="css/font-awesome.min.css">
-<link rel="stylesheet" href="plugins/jqgrid/ui.jqgrid-bootstrap.css">
-<link rel="stylesheet" href="css/main.css">
-<script src="libs/jquery.min.js"></script>
-<script src="plugins/layer/layer.js"></script>
-<script src="libs/bootstrap.min.js"></script>
-<script src="libs/vue.min.js"></script>
-<script src="plugins/jqgrid/grid.locale-cn.js"></script>
-<script src="plugins/jqgrid/jquery.jqGrid.min.js"></script>
-<script src="js/common.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Helio 代码生成器</title>
+  <link rel="stylesheet" href="css/tailwind.css">
+  <script defer src="libs/alpine.min.js"></script>
 </head>
-<body>
-<div id="app">
-	<div class="grid-btn">
-		<div class="form-group col-sm-2">
-			<input type="text" class="form-control" v-model="q.tableName" @keyup.enter="query" placeholder="表名">
-		</div>
-		<a class="btn btn-default" @click="query">查询</a>
-		<a class="btn btn-primary" @click="generator"><i class="fa fa-file-code-o"></i>&nbsp;生成代码</a>
-	</div>
-	<div id="generate-options">
-		<div style="height: 10px" data-note="PLACEHOLDER"></div>
+<body class="bg-gray-50 text-gray-900 antialiased" x-data="generator">
 
-		<div>
-			<b>生成器设置</b>（保存后立即生效，无需重启）
-			<div class="next-line">
-				<label>mainPath:
-					<input type="text" v-model="q.mainPath" style="width:140px;" />
-				</label>
-				<label>package:
-					<input type="text" v-model="q.package" style="width:200px;" />
-				</label>
-				<label>moduleName:
-					<input type="text" v-model="q.moduleName" style="width:100px;" />
-				</label>
-				<label>tablePrefix:
-					<input type="text" v-model="q.tablePrefix" style="width:100px;" />
-				</label>
-				<a class="btn btn-success btn-sm" @click="saveSettings"><i class="fa fa-save"></i>&nbsp;保存设置</a>
-			</div>
-		</div>
+  <!-- 顶部栏 -->
+  <header class="border-b border-gray-200 bg-white">
+    <div class="mx-auto max-w-7xl px-6 flex items-center justify-between h-14">
+      <div class="flex items-center gap-2">
+        <span class="text-lg font-bold tracking-tight">Helio</span>
+        <span class="text-sm text-gray-500">代码生成器</span>
+      </div>
+      <div class="flex items-center gap-4 text-sm">
+        <a href="https://gitee.com/uncarbon97" target="_blank" class="text-gray-500 hover:text-gray-900 transition">Gitee</a>
+        <a href="https://github.com/uncarbon97" target="_blank" class="text-gray-500 hover:text-gray-900 transition">GitHub</a>
+      </div>
+    </div>
+  </header>
 
-		<hr style="margin: 10px 0;" />
+  <main class="mx-auto max-w-7xl px-6 py-8">
 
-		<div>
-			脚手架架构：
-			<label>
-				<input name="generate-type" type="radio" v-model="q.generateType" value="boot" />
-				单体Boot版
-			</label>
+    <!-- 生成选项区域 -->
+    <div class="space-y-6">
 
-			<label>
-				<input name="generate-type-cloud" type="radio" v-model="q.generateType" value="cloud" />
-				微服务Cloud版
-			</label>
-		</div>
+      <!-- 生成器设置 -->
+      <section class="bg-white rounded-lg border border-gray-200 p-6">
+        <h3 class="text-sm font-semibold mb-4">生成器设置 <span class="font-normal text-gray-400">（保存后立即生效，无需重启）</span></h3>
+        <div class="flex flex-wrap items-end gap-4">
+          <label class="flex flex-col gap-1">
+            <span class="text-xs text-gray-500">package</span>
+            <input type="text" x-model="settings.package" class="h-9 w-56 px-3 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="text-xs text-gray-500">moduleName</span>
+            <input type="text" x-model="settings.moduleName" class="h-9 w-36 px-3 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="text-xs text-gray-500">tablePrefix</span>
+            <input type="text" x-model="settings.tablePrefix" class="h-9 w-36 px-3 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          </label>
+          <button @click="saveSettings" class="h-9 px-4 rounded-md bg-green-600 text-white text-sm font-medium hover:bg-green-700 transition">保存设置</button>
+        </div>
+      </section>
 
-		<div>
-			脚手架版本：
-			<label>
-				<input name="helio-framework-version-v2" type="radio" v-model="q.helioFrameworkVersion" value="v2" />
-				2.x(Spring Boot 3、SpringDoc、jakarta.*)
-			</label>
+      <!-- 脚手架架构 -->
+      <section class="bg-white rounded-lg border border-gray-200 p-6">
+        <h3 class="text-sm font-semibold mb-4">脚手架架构</h3>
+        <div class="flex gap-6">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="radio" x-model="options.generateType" value="boot" class="text-blue-600">
+            <span class="text-sm">单体 Boot 版</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="radio" x-model="options.generateType" value="cloud" class="text-blue-600">
+            <span class="text-sm">微服务 Cloud 版</span>
+          </label>
+        </div>
+      </section>
 
-			<label>
-				<input name="helio-framework-version-v1" type="radio" v-model="q.helioFrameworkVersion" value="v1" />
-				1.x(Spring Boot 2、SpringFox、javax.*)
-			</label>
-		</div>
+      <!-- 脚手架版本 -->
+      <section class="bg-white rounded-lg border border-gray-200 p-6">
+        <h3 class="text-sm font-semibold mb-4">脚手架版本</h3>
+        <div class="flex gap-6">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="radio" x-model="options.helioFrameworkVersion" value="v2" class="text-blue-600">
+            <span class="text-sm">2.x（Spring Boot 3、SpringDoc、jakarta.*）</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="radio" x-model="options.helioFrameworkVersion" value="v1" class="text-blue-600">
+            <span class="text-sm">1.x（Spring Boot 2、SpringFox、javax.*）</span>
+          </label>
+        </div>
+      </section>
 
-		<div>
-			其他选项：
-			<div class="next-line">
-				<label>
-					<input name="generate-option-queryFormSchema" type="checkbox" v-model="q.queryFormSchema"/>
-					生成分页列表查询条件
-				</label>
-				<label>
-					<input name="generate-option-serviceAndImpl" type="checkbox" v-model="q.serviceAndImpl"/>
-					按Service+Impl范式生成（默认仅Impl）
-				</label>
-				<label>
-					<input name="generate-option-mybatisXML" type="checkbox" v-model="q.mybatisXML"/>
-					生成配套Mapper.xml
-				</label>
-			</div>
-			<div class="next-line">
-				<label>
-					<input name="generate-option-useYesOrNoEnum" type="checkbox" v-model="q.useYesOrNoEnum"/>
-					对_flag结尾或is_开头的字段，Java代码使用YesOrNoEnum枚举
-				</label>
-				<label>
-					<input name="generate-option-useEnabledStatusEnum" type="checkbox" v-model="q.useEnabledStatusEnum"/>
-					对status结尾的字段，Java代码使用EnabledStatusEnum枚举
-				</label>
-			</div>
-		</div>
-	</div>
-    <table id="jqGrid"></table>
-    <div id="jqGridPager"></div>
-</div>
+      <!-- 其他选项 -->
+      <section class="bg-white rounded-lg border border-gray-200 p-6">
+        <h3 class="text-sm font-semibold mb-4">其他选项</h3>
+        <div class="flex flex-wrap gap-x-6 gap-y-3">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" x-model="options.queryFormSchema" class="rounded border-gray-300 text-blue-600">
+            <span class="text-sm">生成分页列表查询条件</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" x-model="options.serviceAndImpl" class="rounded border-gray-300 text-blue-600">
+            <span class="text-sm">按 Service+Impl 范式生成（默认仅 Impl）</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" x-model="options.mybatisXML" class="rounded border-gray-300 text-blue-600">
+            <span class="text-sm">生成配套 Mapper.xml</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" x-model="options.useYesOrNoEnum" class="rounded border-gray-300 text-blue-600">
+            <span class="text-sm">对 _flag 结尾或 is_ 开头的字段，Java 代码使用 YesOrNoEnum 枚举</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" x-model="options.useEnabledStatusEnum" class="rounded border-gray-300 text-blue-600">
+            <span class="text-sm">对 status 结尾的字段，Java 代码使用 EnabledStatusEnum 枚举</span>
+          </label>
+        </div>
+      </section>
+    </div>
 
-<script src="js/generator.js"></script>
+    <!-- 搜索栏 -->
+    <div class="flex items-center gap-3 mb-6">
+      <input
+        type="text"
+        x-model="searchTableName"
+        @keydown.enter="query"
+        placeholder="搜索表名..."
+        class="flex-1 max-w-xs h-9 px-3 rounded-md border border-gray-300 bg-white text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      >
+      <button @click="query" class="h-9 px-4 rounded-md bg-white border border-gray-300 text-sm font-medium hover:bg-gray-50 transition">查询</button>
+      <button @click="generate" class="h-9 px-4 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition">生成代码</button>
+    </div>
+
+    <!-- 表格 -->
+    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden mb-6">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-gray-200 bg-gray-50/80">
+            <th class="w-10 px-4 py-2.5 text-left">
+              <input type="checkbox" x-model="selectAll" @change="toggleSelectAll" class="rounded border-gray-300">
+            </th>
+            <th class="px-4 py-2.5 text-left font-medium text-gray-600">表名</th>
+            <th class="px-4 py-2.5 text-left font-medium text-gray-600 w-24">Engine</th>
+            <th class="px-4 py-2.5 text-left font-medium text-gray-600">表备注</th>
+            <th class="px-4 py-2.5 text-left font-medium text-gray-600 w-40">创建时间</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template x-for="row in tableData" :key="row.tableName">
+            <tr class="border-b border-gray-100 last:border-0 hover:bg-gray-50/50 transition">
+              <td class="px-4 py-2.5">
+                <input type="checkbox" :value="row.tableName" x-model="selectedTables" class="rounded border-gray-300">
+              </td>
+              <td class="px-4 py-2.5 font-mono text-xs" x-text="row.tableName"></td>
+              <td class="px-4 py-2.5 text-gray-500" x-text="row.engine"></td>
+              <td class="px-4 py-2.5" x-text="row.tableComment"></td>
+              <td class="px-4 py-2.5 text-gray-500" x-text="row.createTime"></td>
+            </tr>
+          </template>
+          <tr x-show="tableData.length === 0">
+            <td colspan="5" class="px-4 py-12 text-center text-gray-400">暂无数据</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 分页 -->
+    <div class="flex items-center justify-between mb-10 text-sm text-gray-600">
+      <div class="flex items-center gap-2">
+        <span>每页</span>
+        <select x-model.number="pageSize" @change="loadData" class="h-8 px-2 rounded-md border border-gray-300 bg-white text-sm">
+          <option value="10">10</option>
+          <option value="30">30</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="200">200</option>
+        </select>
+        <span>条</span>
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="mr-3" x-text="'共 ' + totalCount + ' 条'"></span>
+        <template x-for="p in pageNumbers" :key="p">
+          <button
+            @click="goToPage(p)"
+            :class="p === currentPage ? 'bg-blue-600 text-white' : 'bg-white border border-gray-300 hover:bg-gray-50'"
+            class="h-8 min-w-[2rem] px-2 rounded-md text-sm transition"
+            x-text="p === '...' ? '...' : p"
+            :disabled="p === '...'"
+          ></button>
+        </template>
+      </div>
+    </div>
+
+    <!-- Toast 通知 -->
+    <div
+      x-show="toast.show"
+      x-transition:enter="transition ease-out duration-200"
+      x-transition:enter-start="opacity-0 translate-y-2"
+      x-transition:enter-end="opacity-100 translate-y-0"
+      x-transition:leave="transition ease-in duration-150"
+      x-transition:leave-start="opacity-100 translate-y-0"
+      x-transition:leave-end="opacity-0 translate-y-2"
+      class="fixed bottom-6 right-6 px-4 py-2.5 rounded-lg shadow-lg text-sm text-white"
+      :class="toast.type === 'success' ? 'bg-green-600' : 'bg-red-500'"
+      x-text="toast.message"
+    ></div>
+
+  </main>
+
+  <script src="js/generator.js"></script>
 </body>
-
-<style>
-	#generate-options {
-		min-width: 100%;
-		max-width: 100%;
-		width: 100%;
-		padding-left: 50px;
-		padding-bottom: 20px;
-	}
-	#generate-options label {
-		margin-right: 12px;
-		margin-bottom: 12px;
-	}
-</style>
 </html>

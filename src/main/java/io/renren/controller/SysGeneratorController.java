@@ -30,18 +30,22 @@ import java.util.Map;
  * @author Mark sunlightcs@gmail.com
  */
 @Controller
-@RequestMapping("/sys/generator")
 public class SysGeneratorController {
     @Autowired
     private SysGeneratorService sysGeneratorService;
     @Autowired
     private GeneratorSettingsService generatorSettingsService;
 
+    @GetMapping("/")
+    public String index() {
+        return "generator.html";
+    }
+
     /**
      * 列表
      */
     @ResponseBody
-    @RequestMapping("/list")
+    @RequestMapping("/sys/generator/list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils pageUtil = sysGeneratorService.queryList(new Query(params));
 
@@ -51,7 +55,7 @@ public class SysGeneratorController {
     /**
      * 生成代码
      */
-    @RequestMapping("/code")
+    @RequestMapping("/sys/generator/code")
     public void code(String tables, GenerateOptionsRequest request, HttpServletResponse response) throws IOException {
         byte[] data = sysGeneratorService.generatorCode(tables.split(","), request);
 
@@ -67,7 +71,7 @@ public class SysGeneratorController {
      * 获取生成器设置
      */
     @ResponseBody
-    @GetMapping("/settings")
+    @GetMapping("/sys/generator/settings")
     public R getSettings() {
         GeneratorSettings settings = generatorSettingsService.getSettings();
         return R.ok().put("settings", settings);
@@ -77,7 +81,7 @@ public class SysGeneratorController {
      * 保存生成器设置
      */
     @ResponseBody
-    @PostMapping("/settings/save")
+    @PostMapping("/sys/generator/settings/save")
     public R saveSettings(@RequestBody GeneratorSettings settings) {
         generatorSettingsService.saveSettings(settings);
         return R.ok();

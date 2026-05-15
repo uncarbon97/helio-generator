@@ -166,16 +166,14 @@ public class GenUtils {
         Properties prop = new Properties();
         prop.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
         Velocity.init(prop);
-        String mainPath = settings.getMainPath();
-        mainPath = StringUtils.isBlank(mainPath) ? "cc.uncarbon" : mainPath;
 
         // 封装模板数据
         Map<String, Object> map = new HashMap<>();
         map.put("tableName", tableEntity.getTableName());
 
-        // Helio: 如果最后一个字为"表"，则去除
+        // Helio: 如果最后一个字为「表」，但不以「报表」结尾，去除最后一个「表」字
         String tableComments = tableEntity.getComments();
-        if (StrUtil.endWith(tableComments, "表")) {
+        if (StrUtil.endWith(tableComments, "表") && !StrUtil.endWith(tableComments, "报表")) {
             tableComments = StrUtil.subBefore(tableComments, "表", true);
         }
         map.put("comments", tableComments);
@@ -186,7 +184,6 @@ public class GenUtils {
         map.put("columns", tableEntity.getColumns());
         map.put("hasBigDecimal", hasBigDecimal);
         map.put("hasList", hasList);
-        map.put("mainPath", mainPath);
         map.put("package", settings.getPackageName());
         map.put("moduleName", settings.getModuleName());
         // className 的 kebab-case 形式

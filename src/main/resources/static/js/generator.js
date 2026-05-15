@@ -1,124 +1,149 @@
-$(function () {
-    $("#jqGrid").jqGrid({
-        url: 'sys/generator/list',
-        datatype: "json",
-        colModel: [
-			{ label: '表名', name: 'tableName', width: 100, key: true },
-			{ label: 'Engine', name: 'engine', width: 70},
-			{ label: '表备注', name: 'tableComment', width: 100 },
-			{ label: '创建时间', name: 'createTime', width: 100 }
-        ],
-		viewrecords: true,
-        height: 385,
-        rowNum: 10,
-		rowList : [10,30,50,100,200],
-        rownumbers: true,
-        rownumWidth: 25,
-        autowidth:true,
-        multiselect: true,
-        pager: "#jqGridPager",
-        jsonReader : {
-            root: "page.list",
-            page: "page.currPage",
-            total: "page.totalPage",
-            records: "page.totalCount"
-        },
-        prmNames : {
-            page:"page",
-            rows:"limit",
-            order: "order"
-        },
-        gridComplete:function(){
-        	//隐藏grid底部滚动条
-        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
-        }
-    });
-});
+document.addEventListener('alpine:init', () => {
+  Alpine.data('generator', () => ({
+    searchTableName: '',
+    tableData: [],
+    selectedTables: [],
+    selectAll: false,
+    currentPage: 1,
+    pageSize: 10,
+    totalCount: 0,
+    totalPage: 0,
 
-var vm = new Vue({
-	el:'#app',
-	data:{
-		q:{
-			tableName: null,
-            generateType: 'boot',
-            helioFrameworkVersion: 'v2',
-            queryFormSchema: true,
-            serviceAndImpl: false,
-            mybatisXML: false,
-            useYesOrNoEnum: true,
-            useEnabledStatusEnum: true,
-            mainPath: '',
-            package: '',
-            moduleName: '',
-            tablePrefix: ''
-		}
-	},
-	created: function() {
-		this.loadSettings();
-	},
-	methods: {
-		query: function () {
-				$("#jqGrid").jqGrid('setGridParam',{
-	                postData:{'tableName': vm.q.tableName},
-	                page:1
-	            }).trigger("reloadGrid");
-			},
-			generator: function() {
-	            const tableNames = getSelectedRows();
-	            if(tableNames == null){
-	                return ;
-	            }
-	            location.href = "sys/generator/code?tables=" + tableNames.join()
-	                + '&generateType=' + vm.q.generateType
-	                + '&helioFrameworkVersion=' + vm.q.helioFrameworkVersion
-	                // 借助 !! 操作符转换为 boolean 型
-	                + '&queryFormSchema=' + !!vm.q.queryFormSchema
-	                + '&serviceAndImpl=' + !!vm.q.serviceAndImpl
-	                + '&mybatisXML=' + !!vm.q.mybatisXML
-	                + '&useYesOrNoEnum=' + !!vm.q.useYesOrNoEnum
-	                + '&useEnabledStatusEnum=' + !!vm.q.useEnabledStatusEnum
-	            ;
-			},
-			loadSettings: function() {
-				$.ajax({
-					url: 'sys/generator/settings',
-					type: 'GET',
-					dataType: 'json',
-					contentType: 'application/json',
-					success: function(r) {
-						if (r.code === 0 && r.settings) {
-							vm.q.mainPath = r.settings.mainPath || '';
-							vm.q.package = r.settings.package || '';
-							vm.q.moduleName = r.settings.moduleName || '';
-							vm.q.tablePrefix = r.settings.tablePrefix || '';
-						}
-					}
-				});
-			},
-			saveSettings: function() {
-				var settings = {
-					mainPath: vm.q.mainPath,
-					package: vm.q.package,
-					moduleName: vm.q.moduleName,
-					tablePrefix: vm.q.tablePrefix
-				};
-				$.ajax({
-					url: 'sys/generator/settings/save',
-					type: 'POST',
-					dataType: 'json',
-					contentType: 'application/json',
-					data: JSON.stringify(settings),
-					success: function(r) {
-						if (r.code === 0) {
-							alert('设置已保存');
-						} else {
-							alert('保存失败：' + (r.msg || '未知错误'));
-						}
-					},
-					error: function() {
-						alert('保存失败：网络错误');
-					}
-				});
-			}
-	}
+    settings: {
+      package: '',
+      moduleName: '',
+      tablePrefix: ''
+    },
+
+    options: {
+      generateType: 'boot',
+      helioFrameworkVersion: 'v2',
+      queryFormSchema: true,
+      serviceAndImpl: false,
+      mybatisXML: false,
+      useYesOrNoEnum: true,
+      useEnabledStatusEnum: true
+    },
+
+    toast: { show: false, message: '', type: 'success' },
+
+    init() {
+      this.loadData();
+      this.loadSettings();
+    },
+
+    get pageNumbers() {
+      const pages = [];
+      const tp = this.totalPage;
+      const cp = this.currentPage;
+      if (tp <= 7) {
+        for (let i = 1; i <= tp; i++) pages.push(i);
+      } else {
+        pages.push(1);
+        if (cp > 3) pages.push('...');
+        for (let i = Math.max(2, cp - 1); i <= Math.min(tp - 1, cp + 1); i++) pages.push(i);
+        if (cp < tp - 2) pages.push('...');
+        pages.push(tp);
+      }
+      return pages;
+    },
+
+    async loadData() {
+      const params = new URLSearchParams({
+        page: this.currentPage,
+        limit: this.pageSize
+      });
+      if (this.searchTableName) {
+        params.set('tableName', this.searchTableName);
+      }
+      try {
+        const res = await fetch('sys/generator/list?' + params.toString());
+        const data = await res.json();
+        if (data.page) {
+          this.tableData = data.page.list || [];
+          this.currentPage = data.page.currPage || 1;
+          this.totalPage = data.page.totalPage || 0;
+          this.totalCount = data.page.totalCount || 0;
+        }
+        this.selectedTables = [];
+        this.selectAll = false;
+      } catch (e) {
+        this.showToast('加载数据失败', 'error');
+      }
+    },
+
+    query() {
+      this.currentPage = 1;
+      this.loadData();
+    },
+
+    goToPage(page) {
+      if (page === '...') return;
+      this.currentPage = page;
+      this.loadData();
+    },
+
+    toggleSelectAll() {
+      if (this.selectAll) {
+        this.selectedTables = this.tableData.map(r => r.tableName);
+      } else {
+        this.selectedTables = [];
+      }
+    },
+
+    generate() {
+      if (this.selectedTables.length === 0) {
+        this.showToast('请至少选择一张表', 'error');
+        return;
+      }
+      const params = new URLSearchParams({
+        tables: this.selectedTables.join(','),
+        generateType: this.options.generateType,
+        helioFrameworkVersion: this.options.helioFrameworkVersion,
+        queryFormSchema: !!this.options.queryFormSchema,
+        serviceAndImpl: !!this.options.serviceAndImpl,
+        mybatisXML: !!this.options.mybatisXML,
+        useYesOrNoEnum: !!this.options.useYesOrNoEnum,
+        useEnabledStatusEnum: !!this.options.useEnabledStatusEnum
+      });
+      location.href = 'sys/generator/code?' + params.toString();
+    },
+
+    async loadSettings() {
+      try {
+        const res = await fetch('sys/generator/settings');
+        const data = await res.json();
+        if (data.code === 0 && data.settings) {
+          this.settings.package = data.settings.package || '';
+          this.settings.moduleName = data.settings.moduleName || '';
+          this.settings.tablePrefix = data.settings.tablePrefix || '';
+        }
+      } catch (e) {
+        // settings load failure is non-critical
+      }
+    },
+
+    async saveSettings() {
+      try {
+        const res = await fetch('sys/generator/settings/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(this.settings)
+        });
+        const data = await res.json();
+        if (data.code === 0) {
+          this.showToast('设置已保存');
+        } else {
+          this.showToast('保存失败：' + (data.msg || '未知错误'), 'error');
+        }
+      } catch (e) {
+        this.showToast('保存失败：网络错误', 'error');
+      }
+    },
+
+    showToast(message, type = 'success') {
+      this.toast = { show: true, message, type };
+      setTimeout(() => { this.toast.show = false; }, 2500);
+    }
+  }));
 });
