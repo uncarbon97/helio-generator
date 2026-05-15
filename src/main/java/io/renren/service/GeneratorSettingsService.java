@@ -1,16 +1,20 @@
 package io.renren.service;
 
-import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.renren.model.setting.GeneratorSettings;
 import org.springframework.stereotype.Service;
 
-import javax.imageio.stream.FileCacheImageInputStream;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 
 @Service
 public class GeneratorSettingsService {
 
     private static final String SETTINGS_FILE = System.getProperty("user.dir") + File.separator + "generator-settings.json";
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     public GeneratorSettings getSettings() {
         File file = new File(SETTINGS_FILE);
@@ -18,7 +22,7 @@ public class GeneratorSettingsService {
             return new GeneratorSettings();
         }
         try (FileInputStream fis = new FileInputStream(file)) {
-            return JSONObject.parseObject(fis, GeneratorSettings.class);
+            return OBJECT_MAPPER.readValue(fis, GeneratorSettings.class);
         } catch (IOException e) {
             return new GeneratorSettings();
         }
@@ -26,7 +30,7 @@ public class GeneratorSettingsService {
 
     public void saveSettings(GeneratorSettings settings) {
         try (Writer writer = new FileWriter(SETTINGS_FILE)) {
-            writer.write(JSONObject.toJSONString(settings, false));
+            OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValue(writer, settings);
         } catch (IOException e) {
             throw new RuntimeException("保存设置文件失败", e);
         }

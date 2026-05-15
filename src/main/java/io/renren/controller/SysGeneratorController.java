@@ -8,6 +8,7 @@
 
 package io.renren.controller;
 
+import cn.hutool.core.io.IoUtil;
 import io.renren.model.setting.GeneratorSettings;
 import io.renren.model.request.GenerateOptionsRequest;
 import io.renren.service.GeneratorSettingsService;
@@ -15,12 +16,11 @@ import io.renren.service.SysGeneratorService;
 import io.renren.utils.PageUtils;
 import io.renren.utils.Query;
 import io.renren.utils.R;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
@@ -64,7 +64,7 @@ public class SysGeneratorController {
         response.addHeader("Content-Length", "" + data.length);
         response.setContentType("application/octet-stream; charset=UTF-8");
 
-        IOUtils.write(data, response.getOutputStream());
+        IoUtil.write(response.getOutputStream(), false, data);
     }
 
     /**

@@ -1,7 +1,10 @@
 package io.renren.model.request;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
+@Data
 public class GenerateOptionsRequest implements Serializable {
 
     /**
@@ -38,61 +41,4 @@ public class GenerateOptionsRequest implements Serializable {
      * 对status结尾的字段，Java代码使用EnabledStatusEnum枚举
      */
     private Boolean useEnabledStatusEnum;
-
-
-    public String getGenerateType() {
-        return generateType;
-    }
-
-    public void setGenerateType(String generateType) {
-        this.generateType = generateType;
-    }
-
-    public String getHelioFrameworkVersion() {
-        return helioFrameworkVersion;
-    }
-
-    public void setHelioFrameworkVersion(String helioFrameworkVersion) {
-        this.helioFrameworkVersion = helioFrameworkVersion;
-    }
-
-    public Boolean getQueryFormSchema() {
-        return queryFormSchema;
-    }
-
-    public void setQueryFormSchema(Boolean queryFormSchema) {
-        this.queryFormSchema = queryFormSchema;
-    }
-
-    public Boolean getServiceAndImpl() {
-        return serviceAndImpl;
-    }
-
-    public void setServiceAndImpl(Boolean serviceAndImpl) {
-        this.serviceAndImpl = serviceAndImpl;
-    }
-
-    public Boolean getMybatisXML() {
-        return mybatisXML;
-    }
-
-    public void setMybatisXML(Boolean mybatisXML) {
-        this.mybatisXML = mybatisXML;
-    }
-
-    public Boolean getUseYesOrNoEnum() {
-        return useYesOrNoEnum;
-    }
-
-    public void setUseYesOrNoEnum(Boolean useYesOrNoEnum) {
-        this.useYesOrNoEnum = useYesOrNoEnum;
-    }
-
-    public Boolean getUseEnabledStatusEnum() {
-        return useEnabledStatusEnum;
-    }
-
-    public void setUseEnabledStatusEnum(Boolean useEnabledStatusEnum) {
-        this.useEnabledStatusEnum = useEnabledStatusEnum;
-    }
 }

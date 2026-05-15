@@ -1,55 +1,58 @@
 package io.renren.utils;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 返回数据
- * 
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2016年10月27日 下午9:59:27
- */
-public class R extends HashMap<String, Object> {
-	private static final long serialVersionUID = 1L;
-	
-	public R() {
-		put("code", 0);
-	}
-	
-	public static R error() {
-		return error(500, "未知异常，请联系管理员");
-	}
-	
-	public static R error(String msg) {
-		return error(500, msg);
-	}
-	
-	public static R error(int code, String msg) {
-		R r = new R();
-		r.put("code", code);
-		r.put("msg", msg);
-		return r;
-	}
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class R {
 
-	public static R ok(String msg) {
-		R r = new R();
-		r.put("msg", msg);
-		return r;
-	}
-	
-	public static R ok(Map<String, Object> map) {
-		R r = new R();
-		r.putAll(map);
-		return r;
-	}
-	
-	public static R ok() {
-		return new R();
-	}
+    private int code;
+    private String msg;
+    private Map<String, Object> data;
 
-	public R put(String key, Object value) {
-		super.put(key, value);
-		return this;
-	}
+    public static R error() {
+        return error(500, "未知异常，请联系管理员");
+    }
+
+    public static R error(String msg) {
+        return error(500, msg);
+    }
+
+    public static R error(int code, String msg) {
+        return new R(code, msg, null);
+    }
+
+    public static R ok(String msg) {
+        return new R(0, msg, null);
+    }
+
+    public static R ok(Map<String, Object> map) {
+        R r = new R();
+        r.setCode(0);
+        r.setData(new HashMap<>(map));
+        return r;
+    }
+
+    public static R ok() {
+        return new R(0, null, null);
+    }
+
+    /**
+     * 兼容链式 put 调用，如 R.ok().put("page", pageUtil)
+     */
+    public R put(String key, Object value) {
+        if (this.data == null) {
+            this.data = new HashMap<>();
+        }
+        this.data.put(key, value);
+        return this;
+    }
 }

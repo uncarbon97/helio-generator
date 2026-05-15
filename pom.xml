@@ -8,29 +8,23 @@
 	<description>基于renren-generator改造适配的代码生成器，可一键生成单体or微服务版的前、后端代码，减少无谓的重复劳动</description>
 
 	<!-- 生成器制品版本号 -->
-	<version>2.3.1</version>
+	<version>4.0.0</version>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.6.RELEASE</version>
+		<version>3.4.6</version>
 	</parent>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
-		<mybatisplus.version>3.3.1</mybatisplus.version>
-		<druid.version>1.1.13</druid.version>
-		<commons.lang.version>2.6</commons.lang.version>
-		<commons.io.version>2.5</commons.io.version>
-		<commons.configuration.version>1.10</commons.configuration.version>
-		<fastjson.version>1.2.60</fastjson.version>
-		<velocity.version>1.7</velocity.version>
-		<pagehelper.spring.boot.version>1.2.5</pagehelper.spring.boot.version>
-		<mysql.version>8.0.17</mysql.version>
-		<hutool.version>5.7.14</hutool.version>
-		<lombok.version>1.28.20</lombok.version>
+		<java.version>17</java.version>
+		<mybatis-plus.version>3.5.16</mybatis-plus.version>
+		<druid.version>1.2.24</druid.version>
+		<velocity.version>2.4.1</velocity.version>
+		<pagehelper.spring.boot.version>2.1.0</pagehelper.spring.boot.version>
+		<hutool.version>5.8.34</hutool.version>
 	</properties>
 
 	<dependencies>
@@ -45,8 +39,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.baomidou</groupId>
-			<artifactId>mybatis-plus-boot-starter</artifactId>
-			<version>${mybatisplus.version}</version>
+			<artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+			<version>${mybatis-plus.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>com.baomidou</groupId>
@@ -60,27 +54,7 @@
 			<version>${druid.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>${commons.lang.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>${commons.io.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-configuration</groupId>
-			<artifactId>commons-configuration</artifactId>
-			<version>${commons.configuration.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-			<version>${fastjson.version}</version>
-		</dependency>
-		<dependency>
-			<artifactId>velocity</artifactId>
+			<artifactId>velocity-engine-core</artifactId>
 			<groupId>org.apache.velocity</groupId>
 			<version>${velocity.version}</version>
 		</dependency>
@@ -101,9 +75,8 @@
 		</dependency>
 		<!-- mysql驱动 -->
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql.version}</version>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
 		</dependency>
 		<!-- postgresql驱动 -->
 		<dependency>
@@ -122,6 +95,13 @@
 			<groupId>org.yaml</groupId>
 			<artifactId>snakeyaml</artifactId>
 		</dependency>
+
+		<!-- lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -137,7 +117,7 @@
 		<repository>
 			<id>public</id>
 			<name>aliyun nexus</name>
-			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+			<url>https://maven.aliyun.com/nexus/content/groups/public/</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
@@ -147,7 +127,7 @@
 		<pluginRepository>
 			<id>public</id>
 			<name>aliyun nexus</name>
-			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+			<url>https://maven.aliyun.com/nexus/content/groups/public/</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>

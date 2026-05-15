@@ -10,13 +10,13 @@ package io.renren.service;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import cn.hutool.core.io.IoUtil;
 import io.renren.dao.GeneratorDao;
 import io.renren.model.setting.GeneratorSettings;
 import io.renren.model.request.GenerateOptionsRequest;
 import io.renren.utils.GenUtils;
 import io.renren.utils.PageUtils;
 import io.renren.utils.Query;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,7 +69,7 @@ public class SysGeneratorService {
             GenUtils.generatorCode(table, columns, zip, dto, settings);
         }
 
-        IOUtils.closeQuietly(zip);
+        IoUtil.close(zip);
         return outputStream.toByteArray();
     }
 }

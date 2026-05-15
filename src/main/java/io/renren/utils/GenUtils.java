@@ -2,24 +2,23 @@ package io.renren.utils;
 
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.text.NamingCase;
 import cn.hutool.core.util.StrUtil;
 import io.renren.entity.ColumnEntity;
 import io.renren.entity.TableEntity;
 import io.renren.model.setting.GeneratorSettings;
 import io.renren.model.request.GenerateOptionsRequest;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.WordUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
+import org.apache.velocity.app.VelocityEngine;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -100,7 +99,7 @@ public class GenUtils {
         String[] tablePrefixArray = settings.getTablePrefix() != null ? settings.getTablePrefix().split(",") : new String[0];
         String className = tableToJava(tableEntity.getTableName(), tablePrefixArray);
         tableEntity.setClassName(className);
-        tableEntity.setClassname(StringUtils.uncapitalize(className));
+        tableEntity.setClassname(StrUtil.lowerFirst(className));
 
         //列信息
         List<ColumnEntity> columsList = new ArrayList<>();
@@ -117,7 +116,7 @@ public class GenUtils {
             //列名转换成Java属性名
             String attrName = columnToJava(columnEntity.getColumnName());
             columnEntity.setPascalAttrName(attrName);
-            columnEntity.setCamelAttrName(StringUtils.uncapitalize(attrName));
+            columnEntity.setCamelAttrName(StrUtil.lowerFirst(attrName));
 
             //列的数据类型，转换成Java类型
             String attrType = typeMapping.getOrDefault(columnEntity.getDataType(), columnToJava(columnEntity.getDataType()));
@@ -164,8 +163,8 @@ public class GenUtils {
 
         //设置velocity资源加载器
         Properties prop = new Properties();
-        prop.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
-        Velocity.init(prop);
+        prop.put("resource.loader.file.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+        VelocityEngine engine = new VelocityEngine(prop);
 
         // 封装模板数据
         Map<String, Object> map = new HashMap<>();
@@ -212,7 +211,7 @@ public class GenUtils {
         for (String template : templates) {
             //渲染模板
             StringWriter sw = new StringWriter();
-            Template tpl = Velocity.getTemplate(template, "UTF-8");
+            Template tpl = engine.getTemplate(template, "UTF-8");
             tpl.merge(context, sw);
 
             try {
@@ -228,8 +227,8 @@ public class GenUtils {
                                 )
                         )
                 );
-                IOUtils.write(sw.toString(), zip, "UTF-8");
-                IOUtils.closeQuietly(sw);
+                zip.write(sw.toString().getBytes(StandardCharsets.UTF_8));
+                IoUtil.close(sw);
                 zip.closeEntry();
             } catch (IOException e) {
                 throw new RRException("渲染模板失败，表名：" + tableEntity.getTableName(), e);
@@ -241,7 +240,7 @@ public class GenUtils {
      * 列名转换成Java属性名
      */
     public static String columnToJava(String columnName) {
-        return WordUtils.capitalizeFully(columnName, new char[]{'_'}).replace("_", "");
+        return NamingCase.toPascalCase(columnName);
     }
 
     /**
@@ -286,7 +285,7 @@ public class GenUtils {
         若需要可以自行加上
          */
         String packagePath = pathSeparator + "main" + pathSeparator + "java" + pathSeparator;
-        if (StringUtils.isNotBlank(packageName)) {
+        if (StrUtil.isNotBlank(packageName)) {
             packagePath += packageName.replace(".", pathSeparator) + pathSeparator + moduleName + pathSeparator;
         }
 
@@ -382,10 +381,5 @@ public class GenUtils {
 
 
         return null;
-    }
-
-    private static String splitInnerName(String name) {
-        name = name.replaceAll("\\.", "_");
-        return name;
     }
 }

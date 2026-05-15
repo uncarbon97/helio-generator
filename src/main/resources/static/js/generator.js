@@ -59,11 +59,12 @@ document.addEventListener('alpine:init', () => {
       try {
         const res = await fetch('sys/generator/list?' + params.toString());
         const data = await res.json();
-        if (data.page) {
-          this.tableData = data.page.list || [];
-          this.currentPage = data.page.currPage || 1;
-          this.totalPage = data.page.totalPage || 0;
-          this.totalCount = data.page.totalCount || 0;
+        if (data.code === 0 && data.data && data.data.page) {
+          const page = data.data.page;
+          this.tableData = page.list || [];
+          this.currentPage = page.currPage || 1;
+          this.totalPage = page.totalPage || 0;
+          this.totalCount = page.totalCount || 0;
         }
         this.selectedTables = [];
         this.selectAll = false;
@@ -113,10 +114,11 @@ document.addEventListener('alpine:init', () => {
       try {
         const res = await fetch('sys/generator/settings');
         const data = await res.json();
-        if (data.code === 0 && data.settings) {
-          this.settings.package = data.settings.package || '';
-          this.settings.moduleName = data.settings.moduleName || '';
-          this.settings.tablePrefix = data.settings.tablePrefix || '';
+        if (data.code === 0 && data.data && data.data.settings) {
+          const settings = data.data.settings;
+          this.settings.package = settings.package || '';
+          this.settings.moduleName = settings.moduleName || '';
+          this.settings.tablePrefix = settings.tablePrefix || '';
         }
       } catch (e) {
         // settings load failure is non-critical
