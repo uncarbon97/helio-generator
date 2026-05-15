@@ -11,7 +11,8 @@ package io.renren.service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import io.renren.dao.GeneratorDao;
-import io.renren.model.request.GenerateOptionsDTO;
+import io.renren.model.setting.GeneratorSettings;
+import io.renren.model.request.GenerateOptionsRequest;
 import io.renren.utils.GenUtils;
 import io.renren.utils.PageUtils;
 import io.renren.utils.Query;
@@ -33,6 +34,8 @@ import java.util.zip.ZipOutputStream;
 public class SysGeneratorService {
     @Autowired
     private GeneratorDao generatorDao;
+    @Autowired
+    private GeneratorSettingsService generatorSettingsService;
 
 
     public PageUtils queryList(Query query) {
@@ -51,16 +54,19 @@ public class SysGeneratorService {
     }
 
 
-    public byte[] generatorCode(String[] tableNames, GenerateOptionsDTO dto) {
+    public byte[] generatorCode(String[] tableNames, GenerateOptionsRequest dto) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
+
+        GeneratorSettings settings = generatorSettingsService.getSettings();
+
         for (String tableName : tableNames) {
             //查询表信息
             Map<String, String> table = queryTable(tableName);
             //查询列信息
             List<Map<String, String>> columns = queryColumns(tableName);
             //生成代码
-            GenUtils.generatorCode(table, columns, zip, dto);
+            GenUtils.generatorCode(table, columns, zip, dto, settings);
         }
 
         IOUtils.closeQuietly(zip);

@@ -30,6 +30,27 @@
 		<div style="height: 10px" data-note="PLACEHOLDER"></div>
 
 		<div>
+			<b>生成器设置</b>（保存后立即生效，无需重启）
+			<div class="next-line">
+				<label>mainPath:
+					<input type="text" v-model="q.mainPath" style="width:140px;" />
+				</label>
+				<label>package:
+					<input type="text" v-model="q.package" style="width:200px;" />
+				</label>
+				<label>moduleName:
+					<input type="text" v-model="q.moduleName" style="width:100px;" />
+				</label>
+				<label>tablePrefix:
+					<input type="text" v-model="q.tablePrefix" style="width:100px;" />
+				</label>
+				<a class="btn btn-success btn-sm" @click="saveSettings"><i class="fa fa-save"></i>&nbsp;保存设置</a>
+			</div>
+		</div>
+
+		<hr style="margin: 10px 0;" />
+
+		<div>
 			脚手架架构：
 			<label>
 				<input name="generate-type" type="radio" v-model="q.generateType" value="boot" />

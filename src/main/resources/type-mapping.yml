@@ -1,0 +1,25 @@
+# DB列类型 -> Java类型 映射关系（不区分MySQL/PostgreSQL）
+tinyint: Integer
+smallint: Integer
+mediumint: Integer
+int: Integer
+integer: Integer
+bigint: Long
+float: Float
+double: Double
+decimal: BigDecimal
+bit: Boolean
+bool: Boolean
+char: String
+varchar: String
+tinytext: String
+text: String
+mediumtext: String
+longtext: String
+date: LocalDate
+datetime: LocalDateTime
+timestamp: LocalDateTime
+int8: Long
+int4: Integer
+int2: Integer
+numeric: BigDecimal

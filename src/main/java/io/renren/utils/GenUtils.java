@@ -6,19 +6,19 @@ import cn.hutool.core.text.NamingCase;
 import cn.hutool.core.util.StrUtil;
 import io.renren.entity.ColumnEntity;
 import io.renren.entity.TableEntity;
-import io.renren.model.request.GenerateOptionsDTO;
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
+import io.renren.model.setting.GeneratorSettings;
+import io.renren.model.request.GenerateOptionsRequest;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.*;
 import java.util.zip.ZipEntry;
@@ -33,7 +33,7 @@ import java.util.zip.ZipOutputStream;
  */
 public class GenUtils {
 
-    public static List<String> getTemplates(GenerateOptionsDTO dto) {
+    public static List<String> getTemplates(GenerateOptionsRequest dto) {
         List<String> templates = new ArrayList<>();
         /*
         后端
@@ -80,10 +80,10 @@ public class GenUtils {
     public static void generatorCode(Map<String, String> table,
                                      List<Map<String, String>> columns,
                                      ZipOutputStream zip,
-                                     GenerateOptionsDTO dto
+                                     GenerateOptionsRequest dto,
+                                     GeneratorSettings settings
     ) {
-        //配置信息
-        Configuration config = getConfig();
+        Map<String, String> typeMapping = getTypeMapping();
         boolean hasBigDecimal = false;
         boolean hasList = false;
 
@@ -97,7 +97,8 @@ public class GenUtils {
         tableEntity.setTableName(table.get("tableName"));
         tableEntity.setComments(table.get("tableComment"));
         //表名转换成Java类名
-        String className = tableToJava(tableEntity.getTableName(), config.getStringArray("tablePrefix"));
+        String[] tablePrefixArray = settings.getTablePrefix() != null ? settings.getTablePrefix().split(",") : new String[0];
+        String className = tableToJava(tableEntity.getTableName(), tablePrefixArray);
         tableEntity.setClassName(className);
         tableEntity.setClassname(StringUtils.uncapitalize(className));
 
@@ -119,7 +120,7 @@ public class GenUtils {
             columnEntity.setCamelAttrName(StringUtils.uncapitalize(attrName));
 
             //列的数据类型，转换成Java类型
-            String attrType = config.getString(columnEntity.getDataType(), columnToJava(columnEntity.getDataType()));
+            String attrType = typeMapping.getOrDefault(columnEntity.getDataType(), columnToJava(columnEntity.getDataType()));
             columnEntity.setAttrType(attrType);
 
             // 是否允许空值
@@ -165,7 +166,7 @@ public class GenUtils {
         Properties prop = new Properties();
         prop.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
         Velocity.init(prop);
-        String mainPath = config.getString("mainPath");
+        String mainPath = settings.getMainPath();
         mainPath = StringUtils.isBlank(mainPath) ? "cc.uncarbon" : mainPath;
 
         // 封装模板数据
@@ -186,8 +187,8 @@ public class GenUtils {
         map.put("hasBigDecimal", hasBigDecimal);
         map.put("hasList", hasList);
         map.put("mainPath", mainPath);
-        map.put("package", config.getString("package"));
-        map.put("moduleName", config.getString("moduleName"));
+        map.put("package", settings.getPackageName());
+        map.put("moduleName", settings.getModuleName());
         // className 的 kebab-case 形式
         map.put("kebabCaseClassName", NamingCase.toKebabCase(tableEntity.getClassName()));
 
@@ -224,8 +225,8 @@ public class GenUtils {
                                 getFileName(
                                         template,
                                         tableEntity.getClassName(),
-                                        config.getString("package"),
-                                        config.getString("moduleName"),
+                                        settings.getPackageName(),
+                                        settings.getModuleName(),
                                         dto
                                 )
                         )
@@ -261,13 +262,18 @@ public class GenUtils {
     }
 
     /**
-     * 获取配置信息
+     * 获取DB类型 -> Java类型映射
      */
-    public static Configuration getConfig() {
-        try {
-            return new PropertiesConfiguration("generator.properties");
-        } catch (ConfigurationException e) {
-            throw new RRException("获取配置文件失败，", e);
+    @SuppressWarnings("unchecked")
+    public static Map<String, String> getTypeMapping() {
+        Yaml yaml = new Yaml();
+        try (InputStream is = GenUtils.class.getClassLoader().getResourceAsStream("type-mapping.yml")) {
+            if (is == null) {
+                throw new RRException("找不到 type-mapping.yml 配置文件");
+            }
+            return yaml.loadAs(is, Map.class);
+        } catch (IOException e) {
+            throw new RRException("读取 type-mapping.yml 失败，", e);
         }
     }
 
@@ -275,7 +281,7 @@ public class GenUtils {
      * 获取文件名
      */
     public static String getFileName(String template, String className, String packageName, String moduleName,
-                                     GenerateOptionsDTO dto) {
+                                     GenerateOptionsRequest dto) {
         // 路径分隔符
         final String pathSeparator = File.separator;
         /*
