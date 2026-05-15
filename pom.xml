@@ -29,9 +29,6 @@
 		<velocity.version>1.7</velocity.version>
 		<pagehelper.spring.boot.version>1.2.5</pagehelper.spring.boot.version>
 		<mysql.version>8.0.17</mysql.version>
-		<mssql.version>4.0</mssql.version>
-		<oracle.version>11.2.0.3</oracle.version>
-		<mongo.version>3.11.0</mongo.version>
 		<hutool.version>5.7.14</hutool.version>
 		<lombok.version>1.28.20</lombok.version>
 	</properties>
@@ -112,13 +109,6 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-		</dependency>
-		<!-- 不再默认引入 SQLServer、Oracle JDBC 驱动，请根据 JDK 版本自行引入 -->
-		<!-- mongo驱动 -->
-		<dependency>
-			<groupId>org.mongodb</groupId>
-			<artifactId>mongo-java-driver</artifactId>
-			<version>${mongo.version}</version>
 		</dependency>
 
 		<!-- hutool -->

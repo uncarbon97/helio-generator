@@ -10,10 +10,7 @@ package io.renren.service;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import io.renren.config.MongoManager;
 import io.renren.dao.GeneratorDao;
-import io.renren.dao.MongoDBGeneratorDao;
-import io.renren.factory.MongoDBCollectionFactory;
 import io.renren.model.request.GenerateOptionsDTO;
 import io.renren.utils.GenUtils;
 import io.renren.utils.PageUtils;
@@ -42,9 +39,6 @@ public class SysGeneratorService {
         Page<?> page = PageHelper.startPage(query.getPage(), query.getLimit());
         List<Map<String, Object>> list = generatorDao.queryList(query);
         int total = (int) page.getTotal();
-        if (generatorDao instanceof MongoDBGeneratorDao) {
-            total = MongoDBCollectionFactory.getCollectionTotal(query);
-        }
         return new PageUtils(list, total, query.getLimit(), query.getPage());
     }
 
@@ -68,10 +62,6 @@ public class SysGeneratorService {
             //生成代码
             GenUtils.generatorCode(table, columns, zip, dto);
         }
-        if (MongoManager.isMongo()) {
-            GenUtils.generatorMongoCode(tableNames, zip);
-        }
-
 
         IOUtils.closeQuietly(zip);
         return outputStream.toByteArray();

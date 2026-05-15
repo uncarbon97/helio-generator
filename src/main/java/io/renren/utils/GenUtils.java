@@ -4,11 +4,8 @@ import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.text.NamingCase;
 import cn.hutool.core.util.StrUtil;
-import io.renren.config.MongoManager;
 import io.renren.entity.ColumnEntity;
 import io.renren.entity.TableEntity;
-import io.renren.entity.mongo.MongoDefinition;
-import io.renren.entity.mongo.MongoGeneratorEntity;
 import io.renren.model.request.GenerateOptionsDTO;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -35,8 +32,6 @@ import java.util.zip.ZipOutputStream;
  * @date 2016年12月19日 下午11:40:24
  */
 public class GenUtils {
-
-    private static String currentTableName;
 
     public static List<String> getTemplates(GenerateOptionsDTO dto) {
         List<String> templates = new ArrayList<>();
@@ -76,19 +71,6 @@ public class GenUtils {
         templates.add("template/frontend/views/update-drawer.vue.vm");
         templates.add("template/frontend/views/index.vue.vm");
 
-        if (MongoManager.isMongo()) {
-            // mongo不需要mapper、sql   实体类需要替换
-            templates.remove(0);
-            templates.remove(1);
-            templates.remove(2);
-            templates.add("template/useless/MongoEntity.java.vm");
-        }
-        return templates;
-    }
-
-    public static List<String> getMongoChildTemplates() {
-        List<String> templates = new ArrayList<String>();
-        templates.add("template/useless/MongoChildrenEntity.java.vm");
         return templates;
     }
 
@@ -190,7 +172,7 @@ public class GenUtils {
         Map<String, Object> map = new HashMap<>();
         map.put("tableName", tableEntity.getTableName());
 
-        // Helio: 如果最后一个字为“表”，则去除
+        // Helio: 如果最后一个字为"表"，则去除
         String tableComments = tableEntity.getComments();
         if (StrUtil.endWith(tableComments, "表")) {
             tableComments = StrUtil.subBefore(tableComments, "表", true);
@@ -258,118 +240,6 @@ public class GenUtils {
     }
 
     /**
-     * 生成mongo其他实体类的代码
-     */
-    public static void generatorMongoCode(String[] tableNames, ZipOutputStream zip) {
-        for (String tableName : tableNames) {
-            MongoDefinition info = MongoManager.getInfo(tableName);
-            currentTableName = tableName;
-            List<MongoGeneratorEntity> childrenInfo = info.getChildrenInfo(tableName);
-            childrenInfo.remove(0);
-            for (MongoGeneratorEntity mongoGeneratorEntity : childrenInfo) {
-                generatorChildrenBeanCode(mongoGeneratorEntity, zip);
-            }
-        }
-    }
-
-    private static void generatorChildrenBeanCode(MongoGeneratorEntity mongoGeneratorEntity, ZipOutputStream zip) {
-        //配置信息
-        Configuration config = getConfig();
-        boolean hasList = false;
-        //表信息
-        TableEntity tableEntity = mongoGeneratorEntity.toTableEntity();
-        //表名转换成Java类名
-        String className = tableToJava(tableEntity.getTableName(), config.getStringArray("tablePrefix"));
-        tableEntity.setClassName(className);
-        tableEntity.setClassname(StringUtils.uncapitalize(className));
-        //列信息
-        List<ColumnEntity> columsList = new ArrayList<>();
-        for (Map<String, String> column : mongoGeneratorEntity.getColumns()) {
-            ColumnEntity columnEntity = new ColumnEntity();
-            String columnName = column.get("columnName");
-            if (columnName.contains(".")) {
-                columnName = columnName.substring(columnName.lastIndexOf(".") + 1);
-            }
-            columnEntity.setColumnName(columnName);
-            columnEntity.setDataType(column.get("dataType"));
-            columnEntity.setExtra(column.get("extra"));
-
-            //列名转换成Java属性名
-            String attrName = columnToJava(columnEntity.getColumnName());
-            columnEntity.setPascalAttrName(attrName);
-            columnEntity.setCamelAttrName(StringUtils.uncapitalize(attrName));
-
-            //列的数据类型，转换成Java类型
-            String attrType = config.getString(columnEntity.getDataType(), columnToJava(columnEntity.getDataType()));
-            columnEntity.setAttrType(attrType);
-
-            if (!hasList && "array".equals(columnEntity.getExtra())) {
-                hasList = true;
-            }
-            columsList.add(columnEntity);
-        }
-        tableEntity.setColumns(columsList);
-
-        //设置velocity资源加载器
-        Properties prop = new Properties();
-        prop.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
-        Velocity.init(prop);
-        String mainPath = config.getString("mainPath");
-        mainPath = StringUtils.isBlank(mainPath) ? "io.renren" : mainPath;
-        //封装模板数据
-        Map<String, Object> map = new HashMap<>();
-        map.put("tableName", tableEntity.getTableName());
-
-        // Helio: 如果最后一个字为“表”，则去除
-        String tableComments = tableEntity.getComments();
-        if (StrUtil.endWith(tableComments, "表")) {
-            tableComments = StrUtil.subBefore(tableComments, "表", true);
-        }
-        map.put("comments", tableComments);
-        map.put("pk", tableEntity.getPk());
-        map.put("className", tableEntity.getClassName());
-        map.put("classname", tableEntity.getClassname());
-        map.put("pathName", tableEntity.getClassname().toLowerCase());
-        map.put("columns", tableEntity.getColumns());
-        map.put("hasList", hasList);
-        map.put("mainPath", mainPath);
-        map.put("package", config.getString("package"));
-        map.put("moduleName", config.getString("moduleName"));
-        map.put("author", config.getString("author"));
-        map.put("email", config.getString("email"));
-        map.put("datetime", DateUtils.format(new Date(), DateUtils.DATE_TIME_PATTERN));
-        VelocityContext context = new VelocityContext(map);
-
-        //获取模板列表
-        List<String> templates = getMongoChildTemplates();
-        for (String template : templates) {
-            //渲染模板
-            StringWriter sw = new StringWriter();
-            Template tpl = Velocity.getTemplate(template, "UTF-8");
-            tpl.merge(context, sw);
-            try {
-                //添加到zip
-                zip.putNextEntry(
-                        new ZipEntry(
-                                getFileName(template,
-                                        tableEntity.getClassName(),
-                                        config.getString("package"),
-                                        config.getString("moduleName"),
-                                        new GenerateOptionsDTO()
-                                )
-                        )
-                );
-                IOUtils.write(sw.toString(), zip, "UTF-8");
-                IOUtils.closeQuietly(sw);
-                zip.closeEntry();
-            } catch (IOException e) {
-                throw new RRException("渲染模板失败，表名：" + tableEntity.getTableName(), e);
-            }
-        }
-
-    }
-
-    /**
      * 列名转换成Java属性名
      */
     public static String columnToJava(String columnName) {
@@ -422,10 +292,7 @@ public class GenUtils {
          */
         String backendPathPrefix = "后端代码" + pathSeparator;
 
-        if (template.contains("MongoChildrenEntity.java.vm")) {
-            return backendPathPrefix + "entity" + pathSeparator + "inner" + pathSeparator + currentTableName + pathSeparator + splitInnerName(className) + "InnerEntity.java";
-        }
-        if (template.contains("Entity.java.vm") || template.contains("MongoEntity.java.vm")) {
+        if (template.contains("Entity.java.vm")) {
             return backendPathPrefix + "entity" + pathSeparator + className + "Entity.java";
         }
 
