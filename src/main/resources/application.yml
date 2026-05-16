@@ -21,19 +21,17 @@ spring:
 #    username: postgre
 #    password: helio
 
-
-
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
-  resources:
-    static-locations: classpath:/static/,classpath:/views/
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/views/
 
 mybatis-plus:
   mapperLocations: classpath:mapper/**/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-
 
 pagehelper:
   reasonable: true

@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Helio 代码生成器</title>
     <link rel="stylesheet" href="css/tailwind.css">
+    <style>
+        :root {
+            --font-sans: "Microsoft YaHei", "PingFang SC", ui-sans-serif, system-ui, sans-serif,
+                         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+    </style>
     <script defer src="libs/alpine.min.js"></script>
 </head>
 <body class="bg-gray-50 text-gray-900 antialiased" x-data="generator">
@@ -63,25 +69,6 @@
                 <label class="flex items-center gap-2 cursor-pointer">
                     <input type="radio" x-model="options.generateType" value="boot" class="text-blue-600">
                     <span class="text-sm">单体 Boot 版</span>
-                </label>
-                <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="radio" x-model="options.generateType" value="cloud" class="text-blue-600">
-                    <span class="text-sm">微服务 Cloud 版</span>
-                </label>
-            </div>
-        </section>
-
-        <!-- 脚手架版本 -->
-        <section class="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 class="text-sm font-semibold mb-4">脚手架版本</h3>
-            <div class="flex gap-6">
-                <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="radio" x-model="options.helioFrameworkVersion" value="v2" class="text-blue-600">
-                    <span class="text-sm">2.x（Spring Boot 3、SpringDoc、jakarta.*）</span>
-                </label>
-                <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="radio" x-model="options.helioFrameworkVersion" value="v1" class="text-blue-600">
-                    <span class="text-sm">1.x（Spring Boot 2、SpringFox、javax.*）</span>
                 </label>
             </div>
         </section>
@@ -148,7 +135,7 @@
                     <th class="px-4 py-2.5 text-left font-medium text-gray-600">表名</th>
                     <th class="px-4 py-2.5 text-left font-medium text-gray-600 w-24">Engine</th>
                     <th class="px-4 py-2.5 text-left font-medium text-gray-600">表备注</th>
-                    <th class="px-4 py-2.5 text-left font-medium text-gray-600 w-40">创建时间</th>
+                    <th class="px-4 py-2.5 text-left font-medium text-gray-600 w-48">创建时间</th>
                 </tr>
                 </thead>
                 <tbody>
