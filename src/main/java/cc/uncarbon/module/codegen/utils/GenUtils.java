@@ -185,7 +185,6 @@ public class GenUtils {
 
         // configured from dto
         map.put("backendArch", dto.getBackendArch());
-        map.put("helioFrameworkVersion", dto.getHelioFrameworkVersion());
         map.put("queryFormSchemaFlag", queryFormSchemaFlag);
         map.put("serviceAndImplFlag", serviceAndImplFlag);
         map.put("useYesOrNoEnum", useYesOrNoEnum);

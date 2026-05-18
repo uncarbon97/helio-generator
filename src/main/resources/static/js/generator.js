@@ -17,7 +17,6 @@ document.addEventListener('alpine:init', () => {
 
     options: {
       backendArch: 'boot',
-      helioFrameworkVersion: 'v2',
       queryFormSchema: true,
       serviceAndImpl: false,
       mybatisXML: false,
@@ -100,7 +99,6 @@ document.addEventListener('alpine:init', () => {
       const params = new URLSearchParams({
         tables: this.selectedTables.join(','),
         backendArch: this.options.backendArch,
-        helioFrameworkVersion: this.options.helioFrameworkVersion,
         queryFormSchema: !!this.options.queryFormSchema,
         serviceAndImpl: !!this.options.serviceAndImpl,
         mybatisXML: !!this.options.mybatisXML,

@@ -16,8 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
-#if(${helioFrameworkVersion} == 'v2')import jakarta.annotation.Resource;#end
-#if(${helioFrameworkVersion} == 'v1')import javax.annotation.Resource;#end
+import jakarta.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -13,11 +13,6 @@ public class GenerateOptionsRequest implements Serializable {
     private String backendArch;
 
     /**
-     * 脚手架版本：v2 or v1
-     */
-    private String helioFrameworkVersion;
-
-    /**
      * 生成分页列表查询条件
      */
     private Boolean queryFormSchema;
