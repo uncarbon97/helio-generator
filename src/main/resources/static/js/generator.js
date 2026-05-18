@@ -16,7 +16,7 @@ document.addEventListener('alpine:init', () => {
     },
 
     options: {
-      generateType: 'boot',
+      backendArch: 'boot',
       helioFrameworkVersion: 'v2',
       queryFormSchema: true,
       serviceAndImpl: false,
@@ -99,7 +99,7 @@ document.addEventListener('alpine:init', () => {
       }
       const params = new URLSearchParams({
         tables: this.selectedTables.join(','),
-        generateType: this.options.generateType,
+        backendArch: this.options.backendArch,
         helioFrameworkVersion: this.options.helioFrameworkVersion,
         queryFormSchema: !!this.options.queryFormSchema,
         serviceAndImpl: !!this.options.serviceAndImpl,

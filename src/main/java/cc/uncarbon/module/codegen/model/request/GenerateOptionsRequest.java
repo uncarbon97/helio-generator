@@ -10,7 +10,7 @@ public class GenerateOptionsRequest implements Serializable {
     /**
      * 脚手架架构：单体or微服务
      */
-    private String generateType;
+    private String backendArch;
 
     /**
      * 脚手架版本：v2 or v1

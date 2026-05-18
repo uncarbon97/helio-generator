@@ -47,11 +47,6 @@ public class GenUtils {
         templates.add("template/backend/sys_menu.sql.vm");
         templates.add("template/backend/UnitTest.java.vm");
 
-        if (Constant.GENERATE_TYPE_CLOUD.equals(dto.getGenerateType())) {
-            templates.add("template/backend/Facade.java.vm");
-            templates.add("template/backend/FacadeImpl.java.vm");
-        }
-
         if (dto.getServiceAndImpl()) {
             templates.add("template/backend/ServiceInterface.java.vm");
         }
@@ -189,7 +184,7 @@ public class GenUtils {
         map.put("kebabCaseClassName", NamingCase.toKebabCase(tableEntity.getClassName()));
 
         // configured from dto
-        map.put("generateType", dto.getGenerateType());
+        map.put("backendArch", dto.getBackendArch());
         map.put("helioFrameworkVersion", dto.getHelioFrameworkVersion());
         map.put("queryFormSchemaFlag", queryFormSchemaFlag);
         map.put("serviceAndImplFlag", serviceAndImplFlag);
