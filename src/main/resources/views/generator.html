@@ -35,23 +35,25 @@
     <!-- 生成选项区域 -->
     <div class="space-y-6">
 
-        <!-- 生成器设置 -->
+        <!-- 包名设置 -->
         <section class="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 class="text-sm font-semibold mb-4">生成器设置 <span
-                    class="font-normal text-gray-400">（保存后立即生效，无需重启）</span></h3>
+            <h3 class="text-sm font-semibold mb-4">包名设置</h3>
             <div class="flex flex-wrap items-end gap-4">
                 <label class="flex flex-col gap-1">
                     <span class="text-xs text-gray-500">package</span>
+                    <span class="text-sm text-gray-400">主要包名</span>
                     <input type="text" x-model="settings.package"
                            class="h-9 w-56 px-3 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </label>
                 <label class="flex flex-col gap-1">
                     <span class="text-xs text-gray-500">moduleName</span>
+                    <span class="text-sm text-gray-400">模块名</span>
                     <input type="text" x-model="settings.moduleName"
                            class="h-9 w-36 px-3 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </label>
                 <label class="flex flex-col gap-1">
                     <span class="text-xs text-gray-500">tablePrefix</span>
+                    <span class="text-sm text-gray-400">被裁切的数据表前缀，可留空</span>
                     <input type="text" x-model="settings.tablePrefix"
                            class="h-9 w-36 px-3 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </label>
