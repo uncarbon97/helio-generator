@@ -1,4 +1,4 @@
-# helio-generator
+# helio-codegen
 
 ## 项目说明
 基于 [renren-generator](https://gitee.com/renrenio/renren-generator) 改造适配的代码生成器，可一键生成单体or微服务版的前、后端代码，减少无谓的重复劳动
@@ -29,4 +29,4 @@
 [GPL-3.0](./LICENSE)
 
 ## 演示效果图
-![](.readme_static/helio-generator-1.JPG)
+![](.readme_static/helio-codegen-1.JPG)

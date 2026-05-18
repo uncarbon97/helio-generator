@@ -2,14 +2,14 @@
     INSERT INTO sys_menu (id, tenant_id, revision, del_flag, created_at, created_by, updated_at, updated_by,
                           title,
                           parent_id, type, permission, icon, sort, status, component)
-    VALUES (${parentMenuId}, NULL, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '${comments}管理', 0, 1,
+    VALUES (${parentMenuId}, NULL, 1, 0, NOW(), 'helio-codegen', NOW(), 'helio-codegen', '${comments}管理', 0, 1,
                              '${className}', 'ant-design:flag-outlined', 100, 1, '/${moduleName}/${className}/index');
 
 -- 子按钮
     INSERT INTO sys_menu (id, tenant_id, revision, del_flag, created_at, created_by, updated_at, updated_by,
                           title, parent_id,
                           type, permission, icon, sort, status)
-    VALUES (${childMenuId1}, NULL, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '查询${comments}', ${parentMenuId},
+    VALUES (${childMenuId1}, NULL, 1, 0, NOW(), 'helio-codegen', NOW(), 'helio-codegen', '查询${comments}', ${parentMenuId},
                              2,
                              '${className}:retrieve', NULL, 1, 1);
 
@@ -18,7 +18,7 @@
                           type,
                           permission, icon,
                           sort, status)
-    VALUES (${childMenuId2}, NULL, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '新增${comments}', ${parentMenuId},
+    VALUES (${childMenuId2}, NULL, 1, 0, NOW(), 'helio-codegen', NOW(), 'helio-codegen', '新增${comments}', ${parentMenuId},
                              2,
                              '${className}:create', NULL, 2, 1);
 
@@ -27,7 +27,7 @@
                           type,
                           permission, icon,
                           sort, status)
-    VALUES (${childMenuId3}, NULL, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '编辑${comments}', ${parentMenuId},
+    VALUES (${childMenuId3}, NULL, 1, 0, NOW(), 'helio-codegen', NOW(), 'helio-codegen', '编辑${comments}', ${parentMenuId},
                              2,
                              '${className}:update', NULL, 3, 1);
 
@@ -36,7 +36,7 @@
                           type,
                           permission, icon,
                           sort, status)
-    VALUES (${childMenuId4}, NULL, 1, 0, NOW(), 'helio-generator', NOW(), 'helio-generator', '删除${comments}', ${parentMenuId},
+    VALUES (${childMenuId4}, NULL, 1, 0, NOW(), 'helio-codegen', NOW(), 'helio-codegen', '删除${comments}', ${parentMenuId},
                              2,
                              '${className}:delete', NULL, 4, 1);
 

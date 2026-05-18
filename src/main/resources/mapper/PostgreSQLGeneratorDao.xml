@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="io.renren.dao.PostgreSQLGeneratorDao">
+<mapper namespace="cc.uncarbon.module.codegen.dao.PostgreSQLGeneratorDao">
 	<!--	参考文档 http://www.postgres.cn/docs/9.3.4/catalogs.html	-->
 
 	<resultMap id="tableMap" type="map">
