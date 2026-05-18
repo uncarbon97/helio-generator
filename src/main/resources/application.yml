@@ -9,14 +9,13 @@ spring:
     name: helio-generator
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-# MySQL配置
+    # MySQL
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/helio_generator?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: root
-
-# PostgreSQL配置
-#    driverClassName: org.postgresql.Driver
+  # PostgreSQL
+#    driver-class-name: org.postgresql.Driver
 #    url: jdbc:postgresql://localhost:5432/helio_generator
 #    username: postgre
 #    password: helio
@@ -29,7 +28,7 @@ spring:
       static-locations: classpath:/static/,classpath:/views/
 
 mybatis-plus:
-  mapperLocations: classpath:mapper/**/*.xml
+  mapper-locations: classpath:mapper/**/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
@@ -37,4 +36,3 @@ pagehelper:
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
-
