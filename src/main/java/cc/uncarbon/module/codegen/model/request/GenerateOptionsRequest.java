@@ -1,6 +1,7 @@
 package cc.uncarbon.module.codegen.model.request;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -8,32 +9,33 @@ import java.io.Serializable;
 public class GenerateOptionsRequest implements Serializable {
 
     /**
-     * 脚手架架构：单体or微服务
+     * 脚手架架构
+     * 目前只有 standalone
      */
     private String backendArch;
 
     /**
      * 生成分页列表查询条件
      */
-    private Boolean queryFormSchema;
-
-    /**
-     * 按Service+Impl范式生成
-     */
-    private Boolean serviceAndImpl;
+    @Accessors(fluent = true)
+    private boolean useQueryFormSchema;
 
     /**
      * 生成配套Mapper.xml
      */
-    private Boolean mybatisXML;
+    @Accessors(fluent = true)
+    private boolean useMatchedMybatisXML;
 
     /**
-     * 对_flag结尾或is_开头的字段，Java代码使用YesOrNoEnum枚举
+     * 使用YesOrNoEnum枚举
      */
-    private Boolean useYesOrNoEnum;
+    @Accessors(fluent = true)
+    private boolean useYesOrNoEnum;
 
     /**
-     * 对status结尾的字段，Java代码使用EnabledStatusEnum枚举
+     * 使用EnabledStatusEnum枚举
      */
-    private Boolean useEnabledStatusEnum;
+    @Accessors(fluent = true)
+    private boolean useEnabledStatusEnum;
+
 }

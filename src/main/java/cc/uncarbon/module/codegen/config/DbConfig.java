@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Primary;
  */
 @Configuration
 public class DbConfig {
-    @Value("${databaseArch:mysql}")
+    @Value("${spring.datasource.dynamic.databaseArch:mysql}")
     private String database;
     @Autowired
     private MySQLGeneratorDao mySQLGeneratorDao;

@@ -15,11 +15,11 @@ import {ref} from 'vue';
 import {BasicDrawer, useDrawerInner} from '@/components/Drawer';
 import {Description} from '@/components/Description';
 import {retrieveDetailFormSchema} from './data';
-import {retrieve${className}Api} from '@/api/${moduleName}/${className}Api';
+import {retrieve${pascalCaseClassName}Api} from '@/api/${moduleName}/${pascalCaseClassName}Api';
 
 const record = ref({});
 
 const [registerDrawer] = useDrawerInner(async (data) => {
-  record.value = await retrieve${className}Api(data.record.id);
+  record.value = await retrieve${pascalCaseClassName}Api(data.record.id);
 });
 </script>

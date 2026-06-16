@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Helio 代码生成器</title>
+    <title>Helium 代码生成器</title>
     <link rel="stylesheet" href="css/tailwind.css">
     <style>
         :root {
@@ -69,8 +69,8 @@
             <h3 class="text-sm font-semibold mb-4">脚手架架构</h3>
             <div class="flex gap-6">
                 <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="radio" x-model="options.backendArch" value="boot" class="text-blue-600">
-                    <span class="text-sm">单体 Boot 版</span>
+                    <input type="radio" x-model="options.backendArch" value="standalone" class="text-blue-600">
+                    <span class="text-sm">单体</span>
                 </label>
             </div>
         </section>
@@ -83,11 +83,6 @@
                     <input type="checkbox" x-model="options.queryFormSchema"
                            class="rounded border-gray-300 text-blue-600">
                     <span class="text-sm">生成分页列表查询条件</span>
-                </label>
-                <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" x-model="options.serviceAndImpl"
-                           class="rounded border-gray-300 text-blue-600">
-                    <span class="text-sm">按 Service+Impl 范式生成（默认仅 Impl）</span>
                 </label>
                 <label class="flex items-center gap-2 cursor-pointer">
                     <input type="checkbox" x-model="options.mybatisXML" class="rounded border-gray-300 text-blue-600">

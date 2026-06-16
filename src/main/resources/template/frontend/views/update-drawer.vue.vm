@@ -15,7 +15,7 @@ import {ref, computed, unref} from 'vue';
 import {BasicForm, useForm} from '@/components/Form';
 import {BasicDrawer, useDrawerInner} from '@/components/Drawer';
 import {insertOrUpdateFormSchema} from './data';
-import {insert${className}Api, update${className}Api} from '@/api/${moduleName}/${className}Api';
+import {insert${pascalCaseClassName}Api, update${pascalCaseClassName}Api} from '@/api/${moduleName}/${pascalCaseClassName}Api';
 
 const isUpdateView = ref(true);
 let recordId: string;
@@ -57,9 +57,9 @@ async function handleSubmit() {
     setDrawerProps({ confirmLoading: true });
 
     if (recordId) {
-      await update${className}Api(recordId, values);
+      await update${pascalCaseClassName}Api(recordId, values);
     } else {
-      await insert${className}Api(values);
+      await insert${pascalCaseClassName}Api(values);
     }
 
     closeDrawer();

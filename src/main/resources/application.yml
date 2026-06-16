@@ -1,24 +1,13 @@
 server:
   port: 6688
 
-# !!! 指定数据库类型，可选值有【mysql、postgresql】
-databaseArch: mysql
-
 spring:
   application:
-    name: helio-generator
-  datasource:
-    # MySQL
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/helio_generator?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
-    username: root
-    password: root
-    # PostgreSQL
-#    driver-class-name: org.postgresql.Driver
-#    url: jdbc:postgresql://localhost:5432/helio_generator
-#    username: postgre
-#    password: helio
-
+    name: helium-codegen
+  profiles:
+    # 具体的数据源，在子配置文件中指定
+    # 为了安全考虑，可以另外复制出来一个 local 配置文件，不要放在版本控制系统中
+    active: datasource,local
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss

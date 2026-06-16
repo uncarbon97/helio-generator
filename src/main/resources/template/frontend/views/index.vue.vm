@@ -3,7 +3,7 @@
     <BasicTable @register="registerTable">
       <template #toolbar>
         <!--    新增按钮    -->
-        <a-button v-if="hasPermission('${className}:create')" type="primary" @click="handleInsert">
+        <a-button v-if="hasPermission('${pascalCaseClassName}:create')" type="primary" @click="handleInsert">
           新增
         </a-button>
       </template>
@@ -13,19 +13,19 @@
           :actions="[
             {
               tooltip: '详情',
-              ifShow: hasPermission('${className}:retrieve'),
+              ifShow: hasPermission('${pascalCaseClassName}:retrieve'),
               icon: 'ant-design:eye-outlined',
               onClick: handleRetrieveDetail.bind(null, record),
             },
             {
               tooltip: '编辑',
-              ifShow: hasPermission('${className}:update'),
+              ifShow: hasPermission('${pascalCaseClassName}:update'),
               icon: 'clarity:note-edit-line',
               onClick: handleUpdate.bind(null, record),
             },
             {
               tooltip: '删除',
-              ifShow: hasPermission('${className}:delete'),
+              ifShow: hasPermission('${pascalCaseClassName}:delete'),
               icon: 'ant-design:delete-outlined',
               color: 'error',
               popConfirm: {
@@ -38,9 +38,9 @@
       </template>
     </BasicTable>
     <!--  详情侧边抽屉  -->
-    <${className}DetailDrawer @register="registerDetailDrawer" />
+    <${pascalCaseClassName}DetailDrawer @register="registerDetailDrawer" />
     <!--  编辑侧边抽屉  -->
-    <${className}UpdateDrawer @register="registerUpdateDrawer" @success="handleSuccess" />
+    <${pascalCaseClassName}UpdateDrawer @register="registerUpdateDrawer" @success="handleSuccess" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -48,9 +48,9 @@ import {BasicTable, TableAction, useTable} from '@/components/Table';
 import {useDrawer} from '@/components/Drawer';
 import {hasPermission} from '@/utils/auth';
 import {columns, queryFormSchema} from './data';
-import {delete${className}Api, list${className}Api} from '@/api/${moduleName}/${className}Api';
-import ${className}DetailDrawer from './detail-drawer.vue';
-import ${className}UpdateDrawer from './update-drawer.vue';
+import {delete${pascalCaseClassName}Api, list${pascalCaseClassName}Api} from '@/api/${moduleName}/${pascalCaseClassName}Api';
+import ${pascalCaseClassName}DetailDrawer from './detail-drawer.vue';
+import ${pascalCaseClassName}UpdateDrawer from './update-drawer.vue';
 
 // 查看详情
 const [registerDetailDrawer, { openDrawer: openDetailDrawer }] = useDrawer();
@@ -58,7 +58,7 @@ const [registerDetailDrawer, { openDrawer: openDetailDrawer }] = useDrawer();
 const [registerUpdateDrawer, { openDrawer: openUpdateDrawer }] = useDrawer();
 const [registerTable, { reload }] = useTable({
   title: '${comments}',
-  api: list${className}Api,
+  api: list${pascalCaseClassName}Api,
   columns,
   formConfig: {
     /*
@@ -112,7 +112,7 @@ function handleUpdate(record: Recordable) {
  * 单击删除按钮事件
  */
 async function handleDelete(record: Recordable) {
-  await delete${className}Api([record.id]);
+  await delete${pascalCaseClassName}Api([record.id]);
   await reload();
 }
 

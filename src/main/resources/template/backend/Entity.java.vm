@@ -1,23 +1,4 @@
-package ${package}.${moduleName}.entity;
-
-import cc.uncarbon.framework.crud.entity.HelioBaseEntity;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.*;
-import lombok.experimental.Accessors;
-import lombok.experimental.SuperBuilder;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-#if(${hasBigDecimal})
-import java.math.BigDecimal;
-#end
-#if(${useYesOrNoEnum})
-import cc.uncarbon.framework.core.enums.YesOrNoEnum;
-#end
-#if(${useEnabledStatusEnum})
-import cc.uncarbon.framework.core.enums.EnabledStatusEnum;
-#end
+package ${packageName}.${moduleName}.dal.entity;
 
 
 /**
@@ -25,16 +6,22 @@ import cc.uncarbon.framework.core.enums.EnabledStatusEnum;
  */
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @TableName(value = "${tableName}")
-public class ${className}Entity extends HelioBaseEntity<Long> {
+public class ${pascalCaseClassName}Entity extends AbstractTenantGenericEntity {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+
+    @Schema(description = "主键ID")
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
 && $column.columnName != "tenant_id"
-&& $column.columnName != "revision"
 && $column.columnName != "del_flag"
 && $column.columnName != "created_at"
 && $column.columnName != "created_by"

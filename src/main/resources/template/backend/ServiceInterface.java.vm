@@ -1,57 +1,40 @@
-package ${package}.${moduleName}.service;
+package ${packageName}.${moduleName}.service;
 
-import cc.uncarbon.framework.core.exception.BusinessException;
-import cc.uncarbon.framework.core.page.PageParam;
-import cc.uncarbon.framework.core.page.PageResult;
-import ${package}.${moduleName}.model.request.Admin${className}InsertOrUpdateDTO;
-import ${package}.${moduleName}.model.request.Admin${className}ListDTO;
-import ${package}.${moduleName}.model.response.${className}BO;
-
-import java.util.Collection;
-
+import ${packageName}.commons.exception.NoRecordException;
 
 /**
  * ${comments}
  */
-public interface ${className}Service {
+public interface ${pascalCaseClassName}Service {
 
     /**
-     * 后台管理-分页列表
+     * 后台管理-分页查询
      */
-    PageResult<${className}BO> adminList(PageParam pageParam, Admin${className}ListDTO dto);
-
-    /**
-     * 根据 ID 取详情
-     *
-     * @param id 主键ID
-     * @return null or BO
-     */
-    ${className}BO getOneById(Long id);
-
-    /**
-     * 根据 ID 取详情
-     *
-     * @param id 主键ID
-     * @param throwIfInvalidId 是否在 ID 无效时抛出异常
-     * @return null or BO
-     */
-    ${className}BO getOneById(Long id, boolean throwIfInvalidId) throws BusinessException;
+    PageResult<${pascalCaseClassName}DTO> adminList(Admin${pascalCaseClassName}ListQuery query);
 
     /**
      * 后台管理-新增
-     * @return 主键ID
      */
-    Long adminInsert(Admin${className}InsertOrUpdateDTO dto);
+    Long adminCreate(Admin${pascalCaseClassName}UpsertRequest request);
 
     /**
-     * 后台管理-编辑
+     * 后台管理-修改
      */
-    void adminUpdate(Admin${className}InsertOrUpdateDTO dto);
+    void adminUpdate(Admin${pascalCaseClassName}UpsertRequest request);
 
     /**
      * 后台管理-删除
-     * @param ids 主键ID集合
      */
     void adminDelete(Collection<Long> ids);
+
+    /**
+     * 根据 ID 取详情
+     */
+    ${pascalCaseClassName}DTO getById(Long id);
+
+    /**
+     * 根据 ID 取详情，未取到会抛出 {@link NoRecordException}
+     */
+    ${pascalCaseClassName}DTO getNonnullById(Long id) throws NoRecordException;
 
 }

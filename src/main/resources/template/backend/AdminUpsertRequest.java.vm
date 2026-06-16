@@ -1,0 +1,40 @@
+package ${packageName}.${moduleName}.model.request;
+
+
+/**
+ * ${comments}-后台管理-新增/修改
+ */
+@Accessors(chain = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+public class Admin${pascalCaseClassName}UpsertRequest implements Serializable {
+
+    @Schema(description = "主键ID", title = "仅修改时使用")
+    private Long id;
+#foreach ($column in $columns)
+#if($column.columnName != $pk.columnName
+    && $column.columnName != "tenant_id"
+    && $column.columnName != "del_flag"
+    && $column.columnName != "created_at"
+    && $column.columnName != "created_by"
+    && $column.columnName != "updated_at"
+    && $column.columnName != "updated_by"
+)
+
+    @Schema(description = "${column.comments}"#if(!$column.nullable), requiredMode = Schema.RequiredMode.REQUIRED#end)
+#if($column.attrType == 'String' && $column.characterMaximumLength != 0)
+    @Size(max = $column.characterMaximumLength, message = "${column.comments}最长{max}位")
+#end
+#if(!$column.nullable)
+#if($column.attrType == 'String')
+    @NotBlank(message = "${column.comments}必填")
+#else
+    @NotNull(message = "${column.comments}必填")
+#end
+#end
+    private $column.attrType $column.camelAttrName;
+#end
+#end
+
+}

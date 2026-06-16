@@ -1,42 +1,16 @@
 -- 菜单
-    INSERT INTO sys_menu (id, tenant_id, revision, del_flag, created_at, created_by, updated_at, updated_by,
-                          title,
-                          parent_id, type, permission, icon, sort, status, component)
-    VALUES (${parentMenuId}, NULL, 1, 0, NOW(), 'helio-codegen', NOW(), 'helio-codegen', '${comments}管理', 0, 1,
-                             '${className}', 'ant-design:flag-outlined', 100, 1, '/${moduleName}/${className}/index');
+INSERT INTO sys_menu (id, tenant_id, del_flag, created_at, created_by, name, parent_id, menu_type, permission, status, icon, sort, component)
+VALUES (${parentMenuId}, NULL, 0, NOW(), 'codegen', '${comments}管理', 0, 1, '${pascalCaseClassName}', 1, '', 100, '/${moduleName}/${pascalCaseClassName}/index');
 
 -- 子按钮
-    INSERT INTO sys_menu (id, tenant_id, revision, del_flag, created_at, created_by, updated_at, updated_by,
-                          title, parent_id,
-                          type, permission, icon, sort, status)
-    VALUES (${childMenuId1}, NULL, 1, 0, NOW(), 'helio-codegen', NOW(), 'helio-codegen', '查询${comments}', ${parentMenuId},
-                             2,
-                             '${className}:retrieve', NULL, 1, 1);
+INSERT INTO sys_menu (id, tenant_id, del_flag, created_at, created_by, name, parent_id, menu_type, permission, status, icon, sort, component)
+VALUES (${childMenuId1}, NULL, 0, NOW(), 'codegen', '查询${comments}', ${parentMenuId}, 2, '${pascalCaseClassName}:read', 1, '', 1, NULL);
 
-    INSERT INTO sys_menu (id, tenant_id, revision, del_flag, created_at, created_by, updated_at, updated_by,
-                          title, parent_id,
-                          type,
-                          permission, icon,
-                          sort, status)
-    VALUES (${childMenuId2}, NULL, 1, 0, NOW(), 'helio-codegen', NOW(), 'helio-codegen', '新增${comments}', ${parentMenuId},
-                             2,
-                             '${className}:create', NULL, 2, 1);
+INSERT INTO sys_menu (id, tenant_id, del_flag, created_at, created_by, name, parent_id, menu_type, permission, status, icon, sort, component)
+VALUES (${childMenuId2}, NULL, 0, NOW(), 'codegen', '新增${comments}', ${parentMenuId}, 2, '${pascalCaseClassName}:create', 1, '', 2, NULL);
 
-    INSERT INTO sys_menu (id, tenant_id, revision, del_flag, created_at, created_by, updated_at, updated_by,
-                          title, parent_id,
-                          type,
-                          permission, icon,
-                          sort, status)
-    VALUES (${childMenuId3}, NULL, 1, 0, NOW(), 'helio-codegen', NOW(), 'helio-codegen', '编辑${comments}', ${parentMenuId},
-                             2,
-                             '${className}:update', NULL, 3, 1);
+INSERT INTO sys_menu (id, tenant_id, del_flag, created_at, created_by, name, parent_id, menu_type, permission, status, icon, sort, component)
+VALUES (${childMenuId3}, NULL, 0, NOW(), 'codegen', '修改${comments}', ${parentMenuId}, 2, '${pascalCaseClassName}:update', 1, '', 3, NULL);
 
-    INSERT INTO sys_menu (id, tenant_id, revision, del_flag, created_at, created_by, updated_at, updated_by,
-                          title, parent_id,
-                          type,
-                          permission, icon,
-                          sort, status)
-    VALUES (${childMenuId4}, NULL, 1, 0, NOW(), 'helio-codegen', NOW(), 'helio-codegen', '删除${comments}', ${parentMenuId},
-                             2,
-                             '${className}:delete', NULL, 4, 1);
-
+INSERT INTO sys_menu (id, tenant_id, del_flag, created_at, created_by, name, parent_id, menu_type, permission, status, icon, sort, component)
+VALUES (${childMenuId4}, NULL, 0, NOW(), 'codegen', '删除${comments}', ${parentMenuId}, 2, '${pascalCaseClassName}:delete', 1, '', 4, NULL);

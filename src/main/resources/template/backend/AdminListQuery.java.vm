@@ -1,0 +1,38 @@
+package ${packageName}.${moduleName}.model.request;
+
+
+/**
+ * ${comments}-后台管理-分页查询
+ */
+@Accessors(chain = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+public class Admin${pascalCaseClassName}ListQuery implements Serializable, PageQuery {
+
+    @Schema(description = "分页查询参数")
+    private PageParam pageParam;
+
+    @Schema(description = "时间区间起")
+    private LocalDateTime beginAt;
+
+    @Schema(description = "时间区间止")
+    private LocalDateTime endAt;
+#if(${useQueryFormSchema})
+#foreach ($column in $columns)
+#if($column.columnName != $pk.columnName
+    && $column.columnName != "tenant_id"
+    && $column.columnName != "del_flag"
+    && $column.columnName != "created_at"
+    && $column.columnName != "created_by"
+    && $column.columnName != "updated_at"
+    && $column.columnName != "updated_by"
+)
+
+    @Schema(description = "$column.comments")
+    private $column.attrType $column.camelAttrName;
+#end
+#end
+#end
+
+}

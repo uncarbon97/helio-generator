@@ -9,11 +9,10 @@
 /**
  * ${comments}-新增/编辑请求体
  */
-export interface ${className}InsertOrUpdateForm {
+export interface ${pascalCaseClassName}InsertOrUpdateForm {
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
 && $column.columnName != "tenant_id"
-&& $column.columnName != "revision"
 && $column.columnName != "del_flag"
 && $column.columnName != "created_at"
 && $column.columnName != "created_by"
@@ -36,7 +35,7 @@ export interface ${className}InsertOrUpdateForm {
 /**
  * ${comments}-通用响应体
  */
-export type ${className}ApiResult = ${className}InsertOrUpdateForm & {
+export type ${pascalCaseClassName}ApiResult = ${pascalCaseClassName}InsertOrUpdateForm & {
   /**
    * 主键ID
    */

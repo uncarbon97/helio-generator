@@ -1,32 +1,4 @@
-#if(${serviceAndImplFlag})
-package ${package}.${moduleName}.service.impl;
-#else
-package ${package}.${moduleName}.service;
-#end
-
-import cc.uncarbon.framework.core.constant.HelioConstant;
-import cc.uncarbon.framework.core.exception.BusinessException;
-import cc.uncarbon.framework.core.page.PageParam;
-import cc.uncarbon.framework.core.page.PageResult;
-import ${package}.${moduleName}.entity.${className}Entity;
-import ${package}.${moduleName}.mapper.${className}Mapper;
-import ${package}.${moduleName}.model.request.Admin${className}InsertOrUpdateDTO;
-import ${package}.${moduleName}.model.request.Admin${className}ListDTO;
-import ${package}.${moduleName}.model.response.${className}BO;
-#if(${serviceAndImplFlag})
-import ${package}.${moduleName}.service.${className}Service;
-#end
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.text.CharSequenceUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
+package ${packageName}.${moduleName}.service.impl;
 
 
 /**
@@ -35,31 +7,20 @@ import java.util.*;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-#if(${serviceAndImplFlag})
-public class ${className}ServiceImpl implements ${className}Service {
-#else
-public class ${className}Service {
-#end
+public class ${pascalCaseClassName}ServiceImpl implements ${pascalCaseClassName}Service {
 
-    private final ${className}Mapper ${classname}Mapper;
+    private final ${pascalCaseClassName}Mapper ${camelCaseClassName}Mapper;
 
 
-    /**
-     * 后台管理-分页列表
-     */
-#if(${serviceAndImplFlag})
     @Override
-#end
-    public PageResult<${className}BO> adminList(PageParam pageParam, Admin${className}ListDTO dto) {
-        Page<${className}Entity> entityPage = ${classname}Mapper.selectPage(
-                new Page<>(pageParam.getPageNum(), pageParam.getPageSize()),
-                new QueryWrapper<${className}Entity>()
-                        .lambda()
-#if(${queryFormSchemaFlag})
+    public PageResult<${pascalCaseClassName}request> adminList(Admin${pascalCaseClassName}ListQuery query) {
+        Page<${pascalCaseClassName}Entity> entityPage = ${camelCaseClassName}Mapper.selectPage(
+                new Page<>(query.getPageNum(), query.getPageSize()),
+                new LambdaQueryWrapper<${pascalCaseClassName}Entity>()
+#if(${useQueryFormSchema})
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
 && $column.columnName != "tenant_id"
-&& $column.columnName != "revision"
 && $column.columnName != "del_flag"
 && $column.columnName != "created_at"
 && $column.columnName != "created_by"
@@ -68,101 +29,62 @@ public class ${className}Service {
 )
                         // $column.comments
 #if($column.attrType == 'String')
-                        .like(CharSequenceUtil.isNotBlank(dto.get${column.pascalAttrName}()), ${className}Entity::get$column.pascalAttrName, CharSequenceUtil.cleanBlank(dto.get${column.pascalAttrName}()))
+                        .like(CharSequenceUtil.isNotBlank(query.get${column.pascalAttrName}()), ${pascalCaseClassName}Entity::get$column.pascalAttrName, CharSequenceUtil.cleanBlank(query.get${column.pascalAttrName}()))
 #else
-                        .eq(Objects.nonNull(dto.get${column.pascalAttrName}()), ${className}Entity::get$column.pascalAttrName, dto.get${column.pascalAttrName}())
+                        .eq(Objects.nonNull(query.get${column.pascalAttrName}()), ${pascalCaseClassName}Entity::get$column.pascalAttrName, query.get${column.pascalAttrName}())
 #end
 #end
 #end
 #end
                         // 时间区间
-                        .between(Objects.nonNull(dto.getBeginAt()) && Objects.nonNull(dto.getEndAt()), ${className}Entity::getCreatedAt, dto.getBeginAt(), dto.getEndAt())
+                        .between(Objects.nonNull(query.getBeginAt()) && Objects.nonNull(query.getEndAt()), ${pascalCaseClassName}Entity::getCreatedAt, query.getBeginAt(), query.getEndAt())
                         // 排序
-                        .orderByDesc(${className}Entity::getCreatedAt)
+                        .orderByDesc(${pascalCaseClassName}Entity::getId)
         );
 
-        return this.entityPage2BOPage(entityPage);
+        return convertPage(entityPage);
     }
 
-    /**
-     * 根据 ID 取详情
-     *
-     * @param id 主键ID
-     * @return null or BO
-     */
-#if(${serviceAndImplFlag})
-    @Override
-#end
-    public ${className}BO getOneById(Long id) {
-        return this.getOneById(id, false);
-    }
-
-    /**
-     * 根据 ID 取详情
-     *
-     * @param id 主键ID
-     * @param throwIfInvalidId 是否在 ID 无效时抛出异常
-     * @return null or BO
-     */
-#if(${serviceAndImplFlag})
-    @Override
-#end
-    public ${className}BO getOneById(Long id, boolean throwIfInvalidId) throws BusinessException {
-        ${className}Entity entity = ${classname}Mapper.selectById(id);
-        if (throwIfInvalidId && entity == null) {
-            throw new BusinessException(400, "无效${comments}ID");
-        }
-
-        return this.entity2BO(entity);
-    }
-
-    /**
-     * 后台管理-新增
-     */
-#if(${serviceAndImplFlag})
-    @Override
-#end
     @Transactional(rollbackFor = Exception.class)
-    public Long adminInsert(Admin${className}InsertOrUpdateDTO dto) {
-        log.info("[后台管理-${comments}-新增] >> DTO={}", dto);
-        this.checkExistence(dto);
+    @Override
+    public Long adminCreate(Admin${pascalCaseClassName}UpsertRequest request) {
+        checkRepeat(request);
 
-        dto.setId(null);
-        ${className}Entity entity = new ${className}Entity();
-        BeanUtil.copyProperties(dto, entity);
+        request.setId(null);
+        var entity = new ${pascalCaseClassName}Entity();
+        BeanUtil.copyProperties(request, entity);
 
-        ${classname}Mapper.insert(entity);
-
+        ${camelCaseClassName}Mapper.insert(entity);
         return entity.getId();
     }
 
-    /**
-     * 后台管理-编辑
-     */
-#if(${serviceAndImplFlag})
-    @Override
-#end
     @Transactional(rollbackFor = Exception.class)
-    public void adminUpdate(Admin${className}InsertOrUpdateDTO dto) {
-        log.info("[后台管理-${comments}-编辑] >> DTO={}", dto);
-        this.checkExistence(dto);
+    @Override
+    public void adminUpdate(Admin${pascalCaseClassName}UpsertRequest request) {
+        checkRepeat(request);
 
-        ${className}Entity entity = new ${className}Entity();
-        BeanUtil.copyProperties(dto, entity);
+        var entity = new ${pascalCaseClassName}Entity();
+        BeanUtil.copyProperties(request, entity);
 
-        ${classname}Mapper.updateById(entity);
+        ${camelCaseClassName}Mapper.updateById(entity);
     }
 
-    /**
-     * 后台管理-删除
-     */
-#if(${serviceAndImplFlag})
-    @Override
-#end
     @Transactional(rollbackFor = Exception.class)
+    @Override
     public void adminDelete(Collection<Long> ids) {
-        log.info("[后台管理-${comments}-删除] >> ids={}", ids);
-        ${classname}Mapper.deleteByIds(ids);
+        ${camelCaseClassName}Mapper.deleteByIds(ids);
+    }
+
+    @Override
+    public ${pascalCaseClassName}DTO getById(Long id) {
+        if (id == null) return null;
+        var entity = ${camelCaseClassName}Mapper.selectById(id);
+        return convertEntity(entity);
+    }
+
+    @Override
+    public ${pascalCaseClassName}DTO getNonnullById(Long id) throws NoRecordException {
+        return NoRecordException.throwIfNull(getById(id));
     }
 
 
@@ -173,77 +95,56 @@ public class ${className}Service {
      */
 
     /**
-     * 实体转 BO
-     *
-     * @param entity 实体
-     * @return BO
+     * 实体转值对象
      */
-    private ${className}BO entity2BO(${className}Entity entity) {
-        if (entity == null) {
-            return null;
-        }
+    private ${pascalCaseClassName}request convertEntity(${pascalCaseClassName}Entity entity) {
+        if (entity == null) return null;
 
-        ${className}BO bo = new ${className}BO();
-        BeanUtil.copyProperties(entity, bo);
-
-        // 可以在此处为BO填充字段
-
-        return bo;
-    }
-
-    /**
-     * 实体 List 转 BO List
-     *
-     * @param entityList 实体 List
-     * @return BO List
-     */
-    private List<${className}BO> entityList2BOs(List<${className}Entity> entityList) {
-        if (CollUtil.isEmpty(entityList)) {
-            return Collections.emptyList();
-        }
-
-        // 深拷贝
-        List<${className}BO> ret = new ArrayList<>(entityList.size());
-        entityList.forEach(
-            entity -> ret.add(this.entity2BO(entity))
-        );
-
+        var ret = new ${pascalCaseClassName}request();
+        BeanUtil.copyProperties(entity, ret);
+        // 按需改写字段
         return ret;
     }
 
     /**
-     * 实体分页转 BO 分页
-     *
-     * @param entityPage 实体分页
-     * @return BO 分页
+     * 实体转值对象
      */
-    private PageResult<${className}BO> entityPage2BOPage(Page<${className}Entity> entityPage) {
-        return new PageResult<${className}BO>()
-            .setCurrent(entityPage.getCurrent())
-            .setSize(entityPage.getSize())
-            .setTotal(entityPage.getTotal())
-            .setRecords(this.entityList2BOs(entityPage.getRecords()));
+    private List<${pascalCaseClassName}request> convertList(List<${pascalCaseClassName}Entity> entityList) {
+        if (CollUtil.isEmpty(entityList)) {
+            return List.of();
+        }
+        return entityList.stream().map(this::convertEntity).toList();
     }
 
     /**
-     * 检查是否已存在同名数据
-     *
-     * @param dto DTO
+     * 实体转值对象
      */
-    private void checkExistence(Admin${className}InsertOrUpdateDTO dto) {
-        /*
-        可以根据自己业务需要，解禁这段代码，修改判断条件和文案
+    private PageResult<${pascalCaseClassName}request> convertPage(Page<${pascalCaseClassName}Entity> entityPage) {
+        return new PageResult<${pascalCaseClassName}request>()
+                .setCurrent(entityPage.getCurrent())
+                .setSize(entityPage.getSize())
+                .setTotal(entityPage.getTotal())
+                .setRecords(convertList(entityPage.getRecords()));
+    }
 
-        ${className}Entity existingEntity = ${classname}Mapper.selectOne(
-                new QueryWrapper<${className}Entity>()
-                        .lambda()
-                        .select(${className}Entity::getId)
-                        .eq(${className}Entity::getTitle, dto.getTitle())
-                        .last(HelioConstant.CRUD.SQL_LIMIT_1)
+    /**
+     * 检查是否存在重复
+     */
+    private void checkRepeat(Admin${pascalCaseClassName}UpsertRequest request) {
+        /*
+        视业务解禁、修改本段代码
+        var entity = ${camelCaseClassName}Mapper.selectOne(new LambdaQueryWrapper<${pascalCaseClassName}Entity>()
+                // 仅取主键ID
+                .select(${pascalCaseClassName}Entity::getId)
+                // 并非原地更新
+                .ne(Objects.nonNull(request.getId()), ${pascalCaseClassName}Entity::getId, request.getId())
+                // 编码相同
+                .eq(${pascalCaseClassName}Entity::getCode, request.getCode())
+                .last(SQLSegment.LIMIT_1)
         );
 
-        if (existingEntity != null && !existingEntity.getId().equals(dto.getId())) {
-            throw new BusinessException(400, "已存在相同${comments}，请重新输入");
+        if (entity != null) {
+            throw new HasRepeatRecordException("已存在相同的编码");
         }
         */
     }

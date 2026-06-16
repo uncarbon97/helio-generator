@@ -1,92 +1,68 @@
-package ${package}.adminapi.web.${moduleName};
-
-import cc.uncarbon.framework.core.constant.HelioConstant;
-import cc.uncarbon.framework.core.page.PageParam;
-import cc.uncarbon.framework.core.page.PageResult;
-import cc.uncarbon.framework.web.model.request.IdsDTO;
-import cc.uncarbon.framework.web.model.response.ApiResult;
-import ${package}.adminapi.constant.AdminApiConstant;
-import ${package}.adminapi.util.AdminStpUtil;
-import ${package}.${moduleName}.model.request.Admin${className}InsertOrUpdateDTO;
-import ${package}.${moduleName}.model.request.Admin${className}ListDTO;
-import ${package}.${moduleName}.model.response.${className}BO;
-import ${package}.${moduleName}.service.${className}Service;
-import cn.dev33.satoken.annotation.SaCheckLogin;
-import cn.dev33.satoken.annotation.SaCheckPermission;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+package ${packageName}.adminapi.controller.${moduleName};
 
 
-/**
- * 后台管理-${comments}管理接口
- */
-@SaCheckLogin(type = AdminStpUtil.TYPE)
-@Tag(name = "后台管理-${comments}管理接口")
-#if(${generateType} == 'boot')
-@RequestMapping(AdminApiConstant.HTTP_API_URL_PREFIX + "/api/v1")
+@SaCheckLogin(type = StpLoginType.ADMIN)
+@Tag(name = "后台管理-${comments}管理")
+#if(${onStandaloneArch})
+@RequestMapping(AdminApiConstant.HTTP_API_URL_PREFIX + "/api/v1/${moduleName}/${kebabCaseClassName}")
 #end
 @RequiredArgsConstructor
 @RestController
 @Slf4j
-public class Admin${className}Controller {
+public class Admin${pascalCaseClassName}Controller {
 
     // 功能权限串前缀
-    private static final String PERMISSION_PREFIX = "${className}:";
+    private static final String PERMISSION_PREFIX = "${pascalCaseClassName}:";
+#if(${onStandaloneArch})
 
-#if(${generateType} == 'boot')
-    private final ${className}Service ${classname}Service;
+    private final ${pascalCaseClassName}Service ${camelCaseClassName}Service;
 #end
 
 
-    @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.RETRIEVE)
-    @Operation(summary = "分页列表")
-    @GetMapping("/${kebabCaseClassName}s")
-    public ApiResult<PageResult<${className}BO>> list(PageParam pageParam, Admin${className}ListDTO dto) {
-#if(${generateType} == 'boot')
-        return ApiResult.data(${classname}Service.adminList(pageParam, dto));
+    @SaCheckPermission(type = StpLoginType.ADMIN, value = PERMISSION_PREFIX + PermissionPattern.READ)
+    @Operation(summary = "分页查询")
+    @PostMapping(value = "/list")
+    public ApiResult<PageResult<${pascalCaseClassName}DTO>> list(@RequestBody @Valid Admin${pascalCaseClassName}ListQuery query) {
+#if(${onStandaloneArch})
+        return ApiResult.success(${camelCaseClassName}Service.adminList(query));
 #end
     }
 
-    @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.RETRIEVE)
+    @SaCheckPermission(type = StpLoginType.ADMIN, value = PERMISSION_PREFIX + PermissionPattern.READ)
     @Operation(summary = "详情")
-    @GetMapping(value = "/${kebabCaseClassName}s/{id}")
-    public ApiResult<${className}BO> getById(@PathVariable Long id) {
-#if(${generateType} == 'boot')
-        return ApiResult.data(${classname}Service.getOneById(id, true));
+    @PostMapping(value = "/detail")
+    public ApiResult<${pascalCaseClassName}DTO> detail(@RequestBody @Valid IdRequest<Long> request) {
+#if(${onStandaloneArch})
+        return ApiResult.success(${camelCaseClassName}Service.getNonnullById(request.getId()));
 #end
     }
 
-    @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.CREATE)
+    @SaCheckPermission(type = StpLoginType.ADMIN, value = PERMISSION_PREFIX + PermissionPattern.CREATE)
     @Operation(summary = "新增")
-    @PostMapping("/${kebabCaseClassName}s")
-    public ApiResult<Void> insert(@RequestBody @Valid Admin${className}InsertOrUpdateDTO dto) {
-#if(${generateType} == 'boot')
-        ${classname}Service.adminInsert(dto);
+    @PostMapping(value = "/create")
+    public ApiResult<Void> create(@RequestBody @Valid Admin${pascalCaseClassName}UpsertRequest request) {
+#if(${onStandaloneArch})
+        ${camelCaseClassName}Service.adminCreate(request);
 #end
         return ApiResult.success();
     }
 
-    @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.UPDATE)
-    @Operation(summary = "编辑")
-    @PutMapping(value = "/${kebabCaseClassName}s/{id}")
-    public ApiResult<Void> update(@PathVariable Long id, @RequestBody @Valid Admin${className}InsertOrUpdateDTO dto) {
-        dto.setId(id);
-#if(${generateType} == 'boot')
-        ${classname}Service.adminUpdate(dto);
+    @SaCheckPermission(type = StpLoginType.ADMIN, value = PERMISSION_PREFIX + PermissionPattern.UPDATE)
+    @Operation(summary = "修改")
+    @PostMapping(value = "/update")
+    public ApiResult<Void> update(@RequestBody @Valid Admin${pascalCaseClassName}UpsertRequest request) {
+#if(${onStandaloneArch})
+        ${camelCaseClassName}Service.adminUpdate(request);
 #end
         return ApiResult.success();
     }
 
-    @SaCheckPermission(type = AdminStpUtil.TYPE, value = PERMISSION_PREFIX + HelioConstant.Permission.DELETE)
+    @SaCheckPermission(type = StpLoginType.ADMIN, value = PERMISSION_PREFIX + PermissionPattern.DELETE)
     @Operation(summary = "删除")
-    @DeleteMapping("/${kebabCaseClassName}s")
-    public ApiResult<Void> delete(@RequestBody @Valid IdsDTO<Long> dto) {
-#if(${generateType} == 'boot')
-        ${classname}Service.adminDelete(dto.getIds());
+    @PostMapping(value = "/delete")
+    public ApiResult<Void> delete(@RequestBody @Valid IdsRequest<Long> request) {
+#if(${onStandaloneArch})
+        ${camelCaseClassName}Service.adminDelete(request.getIds());
 #end
         return ApiResult.success();
     }

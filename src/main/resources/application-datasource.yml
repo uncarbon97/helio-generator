@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    dynamic:
+      # 方便快速切换数据源
+      primary: mysql
+      # 指定一下数据源类型
+      databaseArch: mysql
+      datasource:
+        mysql:
+          lazy: true
+          url: jdbc:mysql://localhost:3306/helium?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+          username: helium
+          password: helium
+        postgresql:
+          lazy: true
+          url: jdbc:postgresql://localhost:5432/helium
+          username: helium
+          password: helium

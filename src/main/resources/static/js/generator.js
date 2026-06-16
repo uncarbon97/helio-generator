@@ -16,7 +16,7 @@ document.addEventListener('alpine:init', () => {
     },
 
     options: {
-      backendArch: 'boot',
+      backendArch: 'standalone',
       queryFormSchema: true,
       serviceAndImpl: false,
       mybatisXML: false,

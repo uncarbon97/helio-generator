@@ -1,15 +1,14 @@
-package ${package}.${moduleName}.mapper;
+package ${packageName}.${moduleName}.dal.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-
-import ${package}.${moduleName}.entity.${className}Entity;
+import ${packageName}.${moduleName}.dal.entity.${pascalCaseClassName}Entity;
 
 
 /**
  * ${comments}
  */
 @Mapper
-public interface ${className}Mapper extends BaseMapper<${className}Entity> {
+public interface ${pascalCaseClassName}Mapper extends BaseMapper<${pascalCaseClassName}Entity> {
 
 }

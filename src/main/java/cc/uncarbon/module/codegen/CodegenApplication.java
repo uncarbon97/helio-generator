@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @MapperScan("cc.uncarbon.module.codegen.dao")
 public class CodegenApplication {
 
-	public static void main(String[] args) {
+	static void main(String[] args) {
 		SpringApplication.run(CodegenApplication.class, args);
 	}
 }
