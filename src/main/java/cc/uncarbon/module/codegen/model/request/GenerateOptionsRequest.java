@@ -1,6 +1,7 @@
 package cc.uncarbon.module.codegen.model.request;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
@@ -17,25 +18,36 @@ public class GenerateOptionsRequest implements Serializable {
     /**
      * 生成分页列表查询条件
      */
-    @Accessors(fluent = true)
     private boolean useQueryFormSchema;
 
     /**
      * 生成配套Mapper.xml
      */
-    @Accessors(fluent = true)
     private boolean useMatchedMybatisXML;
 
     /**
      * 使用YesOrNoEnum枚举
      */
-    @Accessors(fluent = true)
     private boolean useYesOrNoEnum;
 
     /**
      * 使用EnabledStatusEnum枚举
      */
-    @Accessors(fluent = true)
     private boolean useEnabledStatusEnum;
 
+    public boolean useQueryFormSchema() {
+        return useQueryFormSchema;
+    }
+
+    public boolean useMatchedMybatisXML() {
+        return useMatchedMybatisXML;
+    }
+
+    public boolean useYesOrNoEnum() {
+        return useYesOrNoEnum;
+    }
+
+    public boolean useEnabledStatusEnum() {
+        return useEnabledStatusEnum;
+    }
 }

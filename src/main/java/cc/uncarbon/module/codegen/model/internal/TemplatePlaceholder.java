@@ -68,17 +68,12 @@ public class TemplatePlaceholder {
     private boolean hasBigDecimal;
 
     /**
-     * 是否包含 List 类型字段
-     */
-    private boolean hasList;
-
-    /**
-     * 是否包含 YesOrNoEnum 枚举
+     * 是否包含 YesOrNoEnum 类型字段
      */
     private boolean hasYesOrNoEnum;
 
     /**
-     * 是否包含 EnabledStatusEnum 枚举
+     * 是否包含 EnabledStatusEnum 类型字段
      */
     private boolean hasEnabledStatusEnum;
 
@@ -106,16 +101,6 @@ public class TemplatePlaceholder {
      * 生成配套Mapper.xml
      */
     private boolean useMatchedMybatisXML;
-
-    /**
-     * 使用YesOrNoEnum枚举
-     */
-    private boolean useYesOrNoEnum;
-
-    /**
-     * 使用EnabledStatusEnum枚举
-     */
-    private boolean useEnabledStatusEnum;
 
     /**
      * 父级菜单 ID
@@ -166,7 +151,6 @@ public class TemplatePlaceholder {
                 .setLowerCaseClassName(tableEntity.getCamelCaseClassName().toLowerCase())
                 .setColumns(tableEntity.getColumns())
                 .setHasBigDecimal(resolvedColumns.hasBigDecimal)
-                .setHasList(resolvedColumns.hasList)
                 .setHasYesOrNoEnum(resolvedColumns.hasYesOrNoEnum)
                 .setHasEnabledStatusEnum(resolvedColumns.hasEnabledStatusEnum)
                 .setPackageName(settings.getPackageName())

@@ -69,7 +69,7 @@ public class GenUtils {
         String[] tablePrefixArray = settings.getTablePrefix() != null ? settings.getTablePrefix().split(",") : new String[0];
         String pascalCaseClassName = tableToJava(tableEntity.getTableName(), tablePrefixArray);
         tableEntity.setPascalCaseClassName(pascalCaseClassName);
-        tableEntity.setCamelCaseClassName(NamingCase.toCamelCase(pascalCaseClassName));
+        tableEntity.setCamelCaseClassName(CharSequenceUtil.lowerFirst(pascalCaseClassName));
 
         //列信息
         var resolvedColumns = resolveTableColumn(request, tableEntity, columns);
@@ -195,7 +195,7 @@ public class GenUtils {
             return backendPathPrefix + "dal" + sep + "mapper" + sep + pascalCaseClassName + "Mapper.java";
         }
 
-        if (template.contains("Mapper.xml.vm")) {
+        if (template.contains("Mapper.xml.vm") && placeholder.isUseMatchedMybatisXML()) {
             return backendPathPrefix + "dal" + sep + "mapper" + sep + pascalCaseClassName + "Mapper.xml";
         }
 
@@ -272,9 +272,6 @@ public class GenUtils {
 
             if ("BigDecimal".equals(attrType)) {
                 ret.hasBigDecimal = true;
-            }
-            if ("array".equals(columnEntity.getExtra())) {
-                ret.hasList = true;
             }
             if (request.useYesOrNoEnum()) {
                 if (StrUtil.endWithIgnoreCase(tableColumnName, "_flag")

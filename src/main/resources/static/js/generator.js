@@ -17,9 +17,8 @@ document.addEventListener('alpine:init', () => {
 
     options: {
       backendArch: 'standalone',
-      queryFormSchema: true,
-      serviceAndImpl: false,
-      mybatisXML: false,
+      useQueryFormSchema: true,
+      useMatchedMybatisXML: false,
       useYesOrNoEnum: true,
       useEnabledStatusEnum: true
     },
@@ -99,9 +98,8 @@ document.addEventListener('alpine:init', () => {
       const params = new URLSearchParams({
         tables: this.selectedTables.join(','),
         backendArch: this.options.backendArch,
-        queryFormSchema: !!this.options.queryFormSchema,
-        serviceAndImpl: !!this.options.serviceAndImpl,
-        mybatisXML: !!this.options.mybatisXML,
+        useQueryFormSchema: !!this.options.useQueryFormSchema,
+        useMatchedMybatisXML: !!this.options.useMatchedMybatisXML,
         useYesOrNoEnum: !!this.options.useYesOrNoEnum,
         useEnabledStatusEnum: !!this.options.useEnabledStatusEnum
       });

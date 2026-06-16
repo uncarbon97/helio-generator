@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Helium 代码生成器</title>
+    <title>Helium代码生成器</title>
     <link rel="stylesheet" href="css/tailwind.css">
     <style>
         :root {
@@ -80,12 +80,12 @@
             <h3 class="text-sm font-semibold mb-4">其他选项</h3>
             <div class="flex flex-wrap gap-x-6 gap-y-3">
                 <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" x-model="options.queryFormSchema"
+                    <input type="checkbox" x-model="options.useQueryFormSchema"
                            class="rounded border-gray-300 text-blue-600">
                     <span class="text-sm">生成分页列表查询条件</span>
                 </label>
                 <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" x-model="options.mybatisXML" class="rounded border-gray-300 text-blue-600">
+                    <input type="checkbox" x-model="options.useMatchedMybatisXML" class="rounded border-gray-300 text-blue-600">
                     <span class="text-sm">生成配套 Mapper.xml</span>
                 </label>
                 <label class="flex items-center gap-2 cursor-pointer">

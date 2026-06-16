@@ -1,6 +1,37 @@
 package ${packageName}.${moduleName}.service.impl;
 
 
+import cc.uncarbon.framework.helium.base.page.PageResult;
+import ${packageName}.commons.exception.NoRecordException;
+import ${packageName}.${moduleName}.dal.entity.${pascalCaseClassName}Entity;
+import ${packageName}.${moduleName}.dal.mapper.${pascalCaseClassName}Mapper;
+import ${packageName}.${moduleName}.model.query.Admin${pascalCaseClassName}ListQuery;
+import ${packageName}.${moduleName}.model.request.Admin${pascalCaseClassName}UpsertRequest;
+import ${packageName}.${moduleName}.model.valueobj.${pascalCaseClassName}DTO;
+import ${packageName}.${moduleName}.service.${pascalCaseClassName}Service;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.text.CharSequenceUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
+import java.util.Objects;
+import java.util.List;
+#if(${hasBigDecimal})
+import java.math.BigDecimal;
+#end
+#if(${hasYesOrNoEnum})
+import cc.uncarbon.framework.helium.db.enums.YesOrNoEnum;
+#end
+#if(${hasEnabledStatusEnum})
+import cc.uncarbon.framework.helium.db.enums.EnabledStatusEnum;
+#end
+
 /**
  * ${comments}
  */
@@ -13,7 +44,7 @@ public class ${pascalCaseClassName}ServiceImpl implements ${pascalCaseClassName}
 
 
     @Override
-    public PageResult<${pascalCaseClassName}request> adminList(Admin${pascalCaseClassName}ListQuery query) {
+    public PageResult<${pascalCaseClassName}DTO> adminList(Admin${pascalCaseClassName}ListQuery query) {
         Page<${pascalCaseClassName}Entity> entityPage = ${camelCaseClassName}Mapper.selectPage(
                 new Page<>(query.getPageNum(), query.getPageSize()),
                 new LambdaQueryWrapper<${pascalCaseClassName}Entity>()
@@ -97,10 +128,10 @@ public class ${pascalCaseClassName}ServiceImpl implements ${pascalCaseClassName}
     /**
      * 实体转值对象
      */
-    private ${pascalCaseClassName}request convertEntity(${pascalCaseClassName}Entity entity) {
+    private ${pascalCaseClassName}DTO convertEntity(${pascalCaseClassName}Entity entity) {
         if (entity == null) return null;
 
-        var ret = new ${pascalCaseClassName}request();
+        var ret = new ${pascalCaseClassName}DTO();
         BeanUtil.copyProperties(entity, ret);
         // 按需改写字段
         return ret;
@@ -109,7 +140,7 @@ public class ${pascalCaseClassName}ServiceImpl implements ${pascalCaseClassName}
     /**
      * 实体转值对象
      */
-    private List<${pascalCaseClassName}request> convertList(List<${pascalCaseClassName}Entity> entityList) {
+    private List<${pascalCaseClassName}DTO> convertList(List<${pascalCaseClassName}Entity> entityList) {
         if (CollUtil.isEmpty(entityList)) {
             return List.of();
         }
@@ -119,8 +150,8 @@ public class ${pascalCaseClassName}ServiceImpl implements ${pascalCaseClassName}
     /**
      * 实体转值对象
      */
-    private PageResult<${pascalCaseClassName}request> convertPage(Page<${pascalCaseClassName}Entity> entityPage) {
-        return new PageResult<${pascalCaseClassName}request>()
+    private PageResult<${pascalCaseClassName}DTO> convertPage(Page<${pascalCaseClassName}Entity> entityPage) {
+        return new PageResult<${pascalCaseClassName}DTO>()
                 .setCurrent(entityPage.getCurrent())
                 .setSize(entityPage.getSize())
                 .setTotal(entityPage.getTotal())

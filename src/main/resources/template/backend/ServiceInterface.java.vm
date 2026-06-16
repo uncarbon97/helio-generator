@@ -1,6 +1,12 @@
 package ${packageName}.${moduleName}.service;
 
+import cc.uncarbon.framework.helium.base.page.PageResult;
 import ${packageName}.commons.exception.NoRecordException;
+import ${packageName}.${moduleName}.model.query.Admin${pascalCaseClassName}ListQuery;
+import ${packageName}.${moduleName}.model.request.Admin${pascalCaseClassName}UpsertRequest;
+import ${packageName}.${moduleName}.model.valueobj.${pascalCaseClassName}DTO;
+
+import java.util.Collection;
 
 /**
  * ${comments}

@@ -1,6 +1,25 @@
 package ${packageName}.${moduleName}.model.valueobj;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.List;
+#if(${hasBigDecimal})
+import java.math.BigDecimal;
+#end
+#if(${hasYesOrNoEnum})
+import cc.uncarbon.framework.helium.db.enums.YesOrNoEnum;
+#end
+#if(${hasEnabledStatusEnum})
+import cc.uncarbon.framework.helium.db.enums.EnabledStatusEnum;
+#end
+
 /**
  * ${comments}
  */

@@ -1,10 +1,33 @@
 package ${packageName}.adminapi.controller.${moduleName};
 
 
+import cc.uncarbon.framework.helium.base.constant.PermissionPattern;
+import cc.uncarbon.framework.helium.base.page.PageResult;
+import cc.uncarbon.framework.helium.web.model.response.ApiResult;
+import ${packageName}.commons.constant.ApiPathPrefix;
+import ${packageName}.commons.model.request.IdRequest;
+import ${packageName}.commons.model.request.IdsRequest;
+import ${packageName}.commons.satoken.StpLoginType;
+import ${packageName}.${moduleName}.model.query.Admin${pascalCaseClassName}ListQuery;
+import ${packageName}.${moduleName}.model.request.Admin${pascalCaseClassName}UpsertRequest;
+import ${packageName}.${moduleName}.model.valueobj.${pascalCaseClassName}DTO;
+import ${packageName}.${moduleName}.service.${pascalCaseClassName}Service;
+import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckPermission;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 @SaCheckLogin(type = StpLoginType.ADMIN)
 @Tag(name = "后台管理-${comments}管理")
 #if(${onStandaloneArch})
-@RequestMapping(AdminApiConstant.HTTP_API_URL_PREFIX + "/api/v1/${moduleName}/${kebabCaseClassName}")
+@RequestMapping(value = ApiPathPrefix.ADMIN + "/v1/${moduleName}/${kebabCaseClassName}")
 #end
 @RequiredArgsConstructor
 @RestController

@@ -17,7 +17,6 @@ public class ResolveTableColumnResult {
     public List<ColumnEntity> columsList = List.of();
 
     public boolean hasBigDecimal = false;
-    public boolean hasList = false;
     public boolean hasYesOrNoEnum = false;
     public boolean hasEnabledStatusEnum = false;
 }
