@@ -72,7 +72,6 @@ public class ${pascalCaseClassName}ServiceImpl implements ${pascalCaseClassName}
                         // 排序
                         .orderByDesc(${pascalCaseClassName}Entity::getId)
         );
-
         return convertPage(entityPage);
     }
 
