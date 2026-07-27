@@ -1,3 +1,6 @@
+# 数据时区
+DB_TIMEZONE: ${user.timezone:Asia/Shanghai}
+
 spring:
   datasource:
     dynamic:
@@ -6,12 +9,14 @@ spring:
       # 指定一下数据源类型
       databaseArch: mysql
       datasource:
+        # MySQL 数据源
         mysql:
           lazy: true
           url: jdbc:mysql://localhost:3306/helium?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
           username: helium
           password: helium
-        postgresql:
+        # PG 数据源
+        postgres:
           lazy: true
           url: jdbc:postgresql://localhost:5432/helium
           username: helium
