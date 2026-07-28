@@ -20,7 +20,8 @@ document.addEventListener('alpine:init', () => {
       useQueryFormSchema: true,
       useMatchedMybatisXML: false,
       useYesOrNoEnum: true,
-      useEnabledStatusEnum: true
+      useEnabledStatusEnum: true,
+      useAutoIncrementId: false
     },
 
     toast: { show: false, message: '', type: 'success' },
@@ -101,7 +102,8 @@ document.addEventListener('alpine:init', () => {
         useQueryFormSchema: !!this.options.useQueryFormSchema,
         useMatchedMybatisXML: !!this.options.useMatchedMybatisXML,
         useYesOrNoEnum: !!this.options.useYesOrNoEnum,
-        useEnabledStatusEnum: !!this.options.useEnabledStatusEnum
+        useEnabledStatusEnum: !!this.options.useEnabledStatusEnum,
+        useAutoIncrementId: !!this.options.useAutoIncrementId
       });
       location.href = 'sys/generator/code?' + params.toString();
     },

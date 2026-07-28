@@ -103,6 +103,11 @@ public class TemplatePlaceholder {
     private boolean useMatchedMybatisXML;
 
     /**
+     * 主键ID策略；对应 IdType.${idType}，AUTO=自增，ASSIGN_ID=雪花ID
+     */
+    private String idType;
+
+    /**
      * 父级菜单 ID
      */
     private long parentMenuId;
@@ -157,7 +162,8 @@ public class TemplatePlaceholder {
                 .setModuleName(settings.getModuleName())
                 .setOnStandaloneArch("standalone".equalsIgnoreCase(request.getBackendArch()))
                 .setUseQueryFormSchema(request.useQueryFormSchema())
-                .setUseMatchedMybatisXML(request.useMatchedMybatisXML());
+                .setUseMatchedMybatisXML(request.useMatchedMybatisXML())
+                .setIdType(request.useAutoIncrementId() ? "AUTO" : "ASSIGN_ID");
 
         // 生成后台管理菜单主键ID
         long menuId = Long.parseLong(LocalDateTimeUtil.format(LocalDateTimeUtil.now(),

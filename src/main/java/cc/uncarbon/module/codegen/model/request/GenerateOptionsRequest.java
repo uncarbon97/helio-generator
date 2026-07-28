@@ -1,8 +1,6 @@
 package cc.uncarbon.module.codegen.model.request;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -35,6 +33,11 @@ public class GenerateOptionsRequest implements Serializable {
      */
     private boolean useEnabledStatusEnum;
 
+    /**
+     * 主键ID使用自增
+     */
+    private boolean useAutoIncrementId;
+
     public boolean useQueryFormSchema() {
         return useQueryFormSchema;
     }
@@ -49,5 +52,9 @@ public class GenerateOptionsRequest implements Serializable {
 
     public boolean useEnabledStatusEnum() {
         return useEnabledStatusEnum;
+    }
+
+    public boolean useAutoIncrementId() {
+        return useAutoIncrementId;
     }
 }
