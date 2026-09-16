@@ -108,27 +108,27 @@ public class TemplatePlaceholder {
     private String idType;
 
     /**
-     * 父级菜单 ID
+     * 父级菜单 ID（仅 ASSIGN_ID 雪花ID策略时使用）
      */
     private long parentMenuId;
 
     /**
-     * 子级菜单 ID 1
+     * 子级菜单 ID 1（仅 ASSIGN_ID 雪花ID策略时使用）
      */
     private long childMenuId1;
 
     /**
-     * 子级菜单 ID 2
+     * 子级菜单 ID 2（仅 ASSIGN_ID 雪花ID策略时使用）
      */
     private long childMenuId2;
 
     /**
-     * 子级菜单 ID 3
+     * 子级菜单 ID 3（仅 ASSIGN_ID 雪花ID策略时使用）
      */
     private long childMenuId3;
 
     /**
-     * 子级菜单 ID 4
+     * 子级菜单 ID 4（仅 ASSIGN_ID 雪花ID策略时使用）
      */
     private long childMenuId4;
 
@@ -165,7 +165,7 @@ public class TemplatePlaceholder {
                 .setUseMatchedMybatisXML(request.useMatchedMybatisXML())
                 .setIdType(request.useAutoIncrementId() ? "AUTO" : "ASSIGN_ID");
 
-        // 生成后台管理菜单主键ID
+        // ASSIGN_ID 雪花ID策略时，模板侧生成后台管理菜单主键ID
         long menuId = Long.parseLong(LocalDateTimeUtil.format(LocalDateTimeUtil.now(),
                 DatePattern.PURE_DATETIME_MS_FORMATTER));
         placeholder.setParentMenuId(menuId)

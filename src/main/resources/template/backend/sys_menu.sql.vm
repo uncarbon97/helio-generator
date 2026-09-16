@@ -1,16 +1,38 @@
 -- 菜单
-INSERT INTO sys_menu (id, tenant_id, del_flag, created_at, created_by, name, parent_id, menu_type, permission, status, icon, sort, component)
-VALUES (${parentMenuId}, NULL, 0, NOW(), 'codegen', '${comments}管理', 0, 1, '${pascalCaseClassName}', 1, '', 100, '/${moduleName}/${pascalCaseClassName}/index');
+START TRANSACTION;
+
+#if($idType == "AUTO")
+INSERT INTO sys_menu (tenant_id, del_flag, created_at, created_by, name, parent_id, menu_type, path, permission, status, icon, sort, component, external_link)
+VALUES (NULL, 0, NOW(), 'codegen', '${comments}管理', 0, 1, '/${moduleName}/${pascalCaseClassName}', '', 1, 'ant-design:appstore-filled', 100, '${moduleName}/${pascalCaseClassName}/index', '');
 
 -- 子按钮
-INSERT INTO sys_menu (id, tenant_id, del_flag, created_at, created_by, name, parent_id, menu_type, permission, status, icon, sort, component)
-VALUES (${childMenuId1}, NULL, 0, NOW(), 'codegen', '查询${comments}', ${parentMenuId}, 2, '${pascalCaseClassName}:read', 1, '', 1, NULL);
+INSERT INTO sys_menu (tenant_id, del_flag, created_at, created_by, name, parent_id, menu_type, path, permission, status, icon, sort, component, external_link)
+VALUES (NULL, 0, NOW(), 'codegen', '查询', (SELECT id FROM sys_menu WHERE menu_type = 1 AND path = '/${moduleName}/${pascalCaseClassName}' ORDER BY id DESC LIMIT 1), 2, '', '${pascalCaseClassName}:read', 1, '', 1, NULL, '');
 
-INSERT INTO sys_menu (id, tenant_id, del_flag, created_at, created_by, name, parent_id, menu_type, permission, status, icon, sort, component)
-VALUES (${childMenuId2}, NULL, 0, NOW(), 'codegen', '新增${comments}', ${parentMenuId}, 2, '${pascalCaseClassName}:create', 1, '', 2, NULL);
+INSERT INTO sys_menu (tenant_id, del_flag, created_at, created_by, name, parent_id, menu_type, path, permission, status, icon, sort, component, external_link)
+VALUES (NULL, 0, NOW(), 'codegen', '新增', (SELECT id FROM sys_menu WHERE menu_type = 1 AND path = '/${moduleName}/${pascalCaseClassName}' ORDER BY id DESC LIMIT 1), 2, '', '${pascalCaseClassName}:create', 1, '', 2, NULL, '');
 
-INSERT INTO sys_menu (id, tenant_id, del_flag, created_at, created_by, name, parent_id, menu_type, permission, status, icon, sort, component)
-VALUES (${childMenuId3}, NULL, 0, NOW(), 'codegen', '修改${comments}', ${parentMenuId}, 2, '${pascalCaseClassName}:update', 1, '', 3, NULL);
+INSERT INTO sys_menu (tenant_id, del_flag, created_at, created_by, name, parent_id, menu_type, path, permission, status, icon, sort, component, external_link)
+VALUES (NULL, 0, NOW(), 'codegen', '修改', (SELECT id FROM sys_menu WHERE menu_type = 1 AND path = '/${moduleName}/${pascalCaseClassName}' ORDER BY id DESC LIMIT 1), 2, '', '${pascalCaseClassName}:update', 1, '', 3, NULL, '');
 
-INSERT INTO sys_menu (id, tenant_id, del_flag, created_at, created_by, name, parent_id, menu_type, permission, status, icon, sort, component)
-VALUES (${childMenuId4}, NULL, 0, NOW(), 'codegen', '删除${comments}', ${parentMenuId}, 2, '${pascalCaseClassName}:delete', 1, '', 4, NULL);
+INSERT INTO sys_menu (tenant_id, del_flag, created_at, created_by, name, parent_id, menu_type, path, permission, status, icon, sort, component, external_link)
+VALUES (NULL, 0, NOW(), 'codegen', '删除', (SELECT id FROM sys_menu WHERE menu_type = 1 AND path = '/${moduleName}/${pascalCaseClassName}' ORDER BY id DESC LIMIT 1), 2, '', '${pascalCaseClassName}:delete', 1, '', 4, NULL, '');
+#elseif($idType == "ASSIGN_ID")
+INSERT INTO sys_menu (id, tenant_id, del_flag, created_at, created_by, name, parent_id, menu_type, path, permission, status, icon, sort, component, external_link)
+VALUES (${parentMenuId}, NULL, 0, NOW(), 'codegen', '${comments}管理', 0, 1, '/${moduleName}/${pascalCaseClassName}', '', 1, 'ant-design:appstore-filled', 100, '${moduleName}/${pascalCaseClassName}/index', '');
+
+-- 子按钮
+INSERT INTO sys_menu (id, tenant_id, del_flag, created_at, created_by, name, parent_id, menu_type, path, permission, status, icon, sort, component, external_link)
+VALUES (${childMenuId1}, NULL, 0, NOW(), 'codegen', '查询', ${parentMenuId}, 2, '', '${pascalCaseClassName}:read', 1, '', 1, NULL, '');
+
+INSERT INTO sys_menu (id, tenant_id, del_flag, created_at, created_by, name, parent_id, menu_type, path, permission, status, icon, sort, component, external_link)
+VALUES (${childMenuId2}, NULL, 0, NOW(), 'codegen', '新增', ${parentMenuId}, 2, '', '${pascalCaseClassName}:create', 1, '', 2, NULL, '');
+
+INSERT INTO sys_menu (id, tenant_id, del_flag, created_at, created_by, name, parent_id, menu_type, path, permission, status, icon, sort, component, external_link)
+VALUES (${childMenuId3}, NULL, 0, NOW(), 'codegen', '修改', ${parentMenuId}, 2, '', '${pascalCaseClassName}:update', 1, '', 3, NULL, '');
+
+INSERT INTO sys_menu (id, tenant_id, del_flag, created_at, created_by, name, parent_id, menu_type, path, permission, status, icon, sort, component, external_link)
+VALUES (${childMenuId4}, NULL, 0, NOW(), 'codegen', '删除', ${parentMenuId}, 2, '', '${pascalCaseClassName}:delete', 1, '', 4, NULL, '');
+#end
+
+COMMIT;

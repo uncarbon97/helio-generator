@@ -18,7 +18,7 @@ mediumtext: String
 longtext: String
 date: LocalDate
 datetime: LocalDateTime
-timestamp: LocalDateTime
+timestamp: Instant
 int8: Long
 int4: Integer
 int2: Integer

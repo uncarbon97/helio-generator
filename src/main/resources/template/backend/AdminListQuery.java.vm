@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 #if(${hasBigDecimal})
 import java.math.BigDecimal;
@@ -35,10 +35,10 @@ public class Admin${pascalCaseClassName}ListQuery implements Serializable, PageQ
     private PageParam pageParam;
 
     @Schema(description = "时间区间起")
-    private LocalDateTime beginAt;
+    private Instant beginAt;
 
     @Schema(description = "时间区间止")
-    private LocalDateTime endAt;
+    private Instant endAt;
 #if(${useQueryFormSchema})
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
