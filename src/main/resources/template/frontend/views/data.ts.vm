@@ -1,131 +1,248 @@
-import {BasicColumn, FormSchema} from '@/components/Table';
-import {DescItem} from '@/components/Description';
-
-/**
- * 表格列
- */
-export const columns: BasicColumn[] = [
+import type {VbenFormSchema} from '#/adapter/form';
+import type {OnActionClickFn, VxeTableGridColumns} from '#/adapter/vxe-table';
+import type {${pascalCaseClassName}Api} from '#/api';
+import {EnabledStatusEnum, YesOrNoEnum} from '#/api/common';
+#if(${hasEnabledStatusEnum})
+#end
+#if(${hasYesOrNoEnum})
+#end
+#set($nameField = $pk.camelAttrName)
+#set($nameTitle = 'ID')
+#set($nameFieldFound = false)
+#set($hasCreatedAt = false)
 #foreach ($column in $columns)
-#if($column.columnName != $pk.columnName
+#if($column.columnName == 'created_at')
+#set($hasCreatedAt = true)
+#end
+#if(!$nameFieldFound
+    && $column.attrType == 'String'
+    && $column.columnName != $pk.columnName
     && $column.columnName != "tenant_id"
-    && $column.columnName != "revision"
     && $column.columnName != "del_flag"
     && $column.columnName != "created_at"
     && $column.columnName != "created_by"
     && $column.columnName != "updated_at"
     && $column.columnName != "updated_by"
 )
-  {
-    title: '$column.comments',
-    dataIndex: '$column.camelAttrName',
-    width: 80,
-  },
+#set($nameField = $column.camelAttrName)
+#set($nameTitle = $column.comments)
+#set($nameFieldFound = true)
 #end
 #end
-  {
-    title: '创建时间',
-    dataIndex: 'createdAt',
-    width: 80,
-  },
-];
-
 /**
- * 查询条件
+ * 上方查询条件
  */
-export const queryFormSchema: FormSchema[] = [
+export function useGridFormSchema(): VbenFormSchema[] {
+  return [
 #if(${useQueryFormSchema})
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
     && $column.columnName != "tenant_id"
-    && $column.columnName != "revision"
     && $column.columnName != "del_flag"
     && $column.columnName != "created_at"
     && $column.columnName != "created_by"
     && $column.columnName != "updated_at"
     && $column.columnName != "updated_by"
 )
-  {
-    field: '$column.camelAttrName',
-    label: '$column.comments',
-    component: 'Input',
-    componentProps: {},
-    colProps: { span: 8 },
-  },
+    {
+#if($column.attrType == 'YesOrNoEnum')
+      component: 'Switch',
+      componentProps: {
+        checkedChildren: '是',
+        checkedValue: YesOrNoEnum.YES,
+        class: 'w-auto',
+        unCheckedChildren: '否',
+        unCheckedValue: YesOrNoEnum.NO,
+      },
+#elseif($column.attrType == 'EnabledStatusEnum')
+      component: 'Switch',
+      componentProps: {
+        checkedChildren: '启用',
+        checkedValue: EnabledStatusEnum.ENABLED,
+        class: 'w-auto',
+        unCheckedChildren: '禁用',
+        unCheckedValue: EnabledStatusEnum.DISABLED,
+      },
+#elseif($column.attrType == 'Instant' || $column.attrType == 'LocalDateTime')
+      component: 'DatePicker',
+      componentProps: {
+        showTime: true,
+      },
+#elseif($column.attrType == 'LocalDate')
+      component: 'DatePicker',
+#elseif($column.attrType == 'Integer' || $column.attrType == 'Long' || $column.attrType == 'Double' || $column.attrType == 'Float' || $column.attrType == 'BigDecimal')
+      component: 'InputNumber',
+#else
+      component: 'Input',
 #end
-#end
-  {
-    field: '[beginAt, endAt]',
-    label: '创建时间区间',
-    component: 'RangePicker',
-    componentProps: {
-      valueFormat: 'YYYY-MM-DD',
-      placeholder: ['开始时间', '结束时间'],
-      // 不显示时分秒部分
-      showTime: false,
+      fieldName: '$column.camelAttrName',
+      label: '$column.comments',
     },
-    colProps: { span: 8 },
-  },
 #end
-];
+#end
+#end
+#if($hasCreatedAt)
+    {
+      component: 'RangePicker',
+      componentProps: {
+        showTime: true,
+      },
+      fieldName: 'createdAtRange',
+      label: '创建时刻',
+    },
+#end
+  ];
+}
 
 /**
- * 查看详情表单
+ * 表格列
+ * @param onActionClick 操作列点击回调
  */
-export const retrieveDetailFormSchema: DescItem[] = [
+export function useColumns<T = ${pascalCaseClassName}Api.${pascalCaseClassName}DTO>(
+  onActionClick: OnActionClickFn<T>,
+): VxeTableGridColumns {
+  return [
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
     && $column.columnName != "tenant_id"
-    && $column.columnName != "revision"
     && $column.columnName != "del_flag"
     && $column.columnName != "created_at"
     && $column.columnName != "created_by"
     && $column.columnName != "updated_at"
     && $column.columnName != "updated_by"
 )
-  {
-    field: '$column.camelAttrName',
-    label: '$column.comments',
-  },
+    {
+#if($column.attrType == 'EnabledStatusEnum')
+      cellRender: {
+        name: 'CellTag',
+        options: [
+          {
+            color: 'success',
+            label: '启用',
+            value: EnabledStatusEnum.ENABLED,
+          },
+          {
+            color: 'error',
+            label: '禁用',
+            value: EnabledStatusEnum.DISABLED,
+          },
+        ],
+      },
+#elseif($column.attrType == 'YesOrNoEnum')
+      cellRender: {
+        name: 'CellTag',
+        options: [
+          {
+            color: 'success',
+            label: '是',
+            value: YesOrNoEnum.YES,
+          },
+          {
+            color: 'default',
+            label: '否',
+            value: YesOrNoEnum.NO,
+          },
+        ],
+      },
+#elseif($column.attrType == 'Instant' || $column.attrType == 'LocalDateTime' || $column.attrType == 'LocalDate')
+      formatter: 'formatDateTime',
+#end
+      field: '$column.camelAttrName',
+#if($column.attrType == 'String' && $column.characterMaximumLength > 500)
+      minWidth: 200,
+#else
+      width: 200,
+#end
+      title: '$column.comments',
+    },
 #end
 #end
-  {
-    field: 'createdAt',
-    label: '创建时间',
-  },
-  {
-    field: 'updatedAt',
-    label: '更新时间',
-  },
-];
+#if($hasCreatedAt)
+    {
+      field: 'createdAt',
+      formatter: 'formatDateTime',
+      title: '创建时刻',
+      width: 200,
+    },
+#end
+    {
+      // 操作列
+      align: 'center',
+      cellRender: {
+        attrs: {
+          nameField: '$nameField',
+          nameTitle: '$nameTitle',
+          onClick: onActionClick,
+        },
+        name: 'CellOperation',
+        options: ['edit', 'delete'],
+      },
+      field: 'operation',
+      fixed: 'right',
+      // 关闭溢出 tooltip
+      showOverflow: false,
+      title: '操作',
+      width: 140,
+    },
+  ];
+}
 
 /**
- * 新增/编辑表单
+ * 新增/修改表单
  */
-export const insertOrUpdateFormSchema: FormSchema[] = [
-  {
-    field: 'id',
-    // 只是为了把ID带过来
-    label: '主键ID',
-    component: 'Render',
-    ifShow: false,
-  },
+export function useFormSchema(): VbenFormSchema[] {
+  return [
 #foreach ($column in $columns)
 #if($column.columnName != $pk.columnName
     && $column.columnName != "tenant_id"
-    && $column.columnName != "revision"
     && $column.columnName != "del_flag"
     && $column.columnName != "created_at"
     && $column.columnName != "created_by"
     && $column.columnName != "updated_at"
     && $column.columnName != "updated_by"
 )
-  {
-    field: '$column.camelAttrName',
-    label: '$column.comments',
-    required:#if(!$column.nullable) true#else false#end,
-    component: 'Input',
-    componentProps: {},
-  },
+    {
+#if($column.attrType == 'YesOrNoEnum')
+      component: 'Switch',
+      componentProps: {
+        checkedChildren: '是',
+        checkedValue: YesOrNoEnum.YES,
+        class: 'w-auto',
+        unCheckedChildren: '否',
+        unCheckedValue: YesOrNoEnum.NO,
+      },
+      defaultValue: YesOrNoEnum.NO,
+#elseif($column.attrType == 'EnabledStatusEnum')
+      component: 'Switch',
+      componentProps: {
+        checkedChildren: '启用',
+        checkedValue: EnabledStatusEnum.ENABLED,
+        class: 'w-auto',
+        unCheckedChildren: '禁用',
+        unCheckedValue: EnabledStatusEnum.DISABLED,
+      },
+      defaultValue: EnabledStatusEnum.ENABLED,
+#elseif($column.attrType == 'Instant' || $column.attrType == 'LocalDateTime')
+      component: 'DatePicker',
+      componentProps: {
+        showTime: true,
+      },
+#elseif($column.attrType == 'LocalDate')
+      component: 'DatePicker',
+#elseif($column.attrType == 'Integer' || $column.attrType == 'Long' || $column.attrType == 'Double' || $column.attrType == 'Float' || $column.attrType == 'BigDecimal')
+      component: 'InputNumber',
+#elseif($column.attrType == 'String' && $column.characterMaximumLength > 500)
+      component: 'Textarea',
+#else
+      component: 'Input',
+#end
+      fieldName: '$column.camelAttrName',
+      label: '$column.comments',
+#if(!$column.nullable && $column.attrType != 'YesOrNoEnum' && $column.attrType != 'EnabledStatusEnum')
+      rules: 'required',
+#end
+    },
 #end
 #end
-];
+  ];
+}

@@ -1,18 +1,17 @@
 package cc.uncarbon.module.codegen.utils;
 
+import cc.uncarbon.module.codegen.entity.ColumnEntity;
+import cc.uncarbon.module.codegen.entity.TableEntity;
 import cc.uncarbon.module.codegen.model.internal.ResolveTableColumnResult;
+import cc.uncarbon.module.codegen.model.internal.TemplatePlaceholder;
+import cc.uncarbon.module.codegen.model.request.GenerateOptionsRequest;
+import cc.uncarbon.module.codegen.model.setting.GeneratorSettings;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.text.NamingCase;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
-import cc.uncarbon.module.codegen.entity.ColumnEntity;
-import cc.uncarbon.module.codegen.entity.TableEntity;
-import cc.uncarbon.module.codegen.model.internal.TemplatePlaceholder;
-import cc.uncarbon.module.codegen.model.setting.GeneratorSettings;
-import cc.uncarbon.module.codegen.model.request.GenerateOptionsRequest;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -23,7 +22,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -37,18 +39,24 @@ import java.util.zip.ZipOutputStream;
 public class GenUtils {
 
     public static List<String> getTemplates() {
-        List<String> templates = new ArrayList<>(100);
+        List<String> templates = new ArrayList<>(20);
         // 后端
-        final String backendPathPrefix = "template/backend";
-        FileUtil.walkFiles(FileUtil.file(backendPathPrefix), file -> templates.add(
-                backendPathPrefix + CharSequenceUtil.subAfter(file.getPath(), backendPathPrefix, true)
-        ));
+        templates.add("template/backend/AdminController.java.vm");
+        templates.add("template/backend/AdminListQuery.java.vm");
+        templates.add("template/backend/AdminUpsertRequest.java.vm");
+        templates.add("template/backend/DTO.java.vm");
+        templates.add("template/backend/Entity.java.vm");
+        templates.add("template/backend/Mapper.java.vm");
+        templates.add("template/backend/Mapper.xml.vm");
+        templates.add("template/backend/ServiceImpl.java.vm");
+        templates.add("template/backend/ServiceInterface.java.vm");
+        templates.add("template/backend/sys_menu.sql.vm");
 
         // 前端
-        final String frontendPathPrefix = "template/frontend";
-        FileUtil.walkFiles(FileUtil.file(backendPathPrefix), file -> templates.add(
-                frontendPathPrefix + CharSequenceUtil.subAfter(file.getPath(), frontendPathPrefix, true)
-        ));
+        templates.add("template/frontend/api/Api.ts.vm");
+        templates.add("template/frontend/views/data.ts.vm");
+        templates.add("template/frontend/views/index.vue.vm");
+        templates.add("template/frontend/views/modules/form.vue.vm");
         return templates;
     }
 
@@ -214,30 +222,23 @@ public class GenUtils {
         /*
         前端代码
          */
-//        String frontendPathPrefix = "前端代码" + sep + "src" + sep;
-//        if (template.contains("Api.ts.vm")) {
-//            return frontendPathPrefix + "api" + sep + moduleName + sep + pascalCaseClassName + "Api.ts";
-//        }
-//
-//        if (template.contains("Model.ts.vm")) {
-//            return frontendPathPrefix + "api" + sep + moduleName + sep + "model" + sep + pascalCaseClassName + "Model.ts";
-//        }
-//
-//        if (template.contains("data.ts.vm")) {
-//            return frontendPathPrefix + "views" + sep + moduleName + sep + pascalCaseClassName + sep + "data.ts";
-//        }
-//
-//        if (template.contains("detail-drawer.vue.vm")) {
-//            return frontendPathPrefix + "views" + sep + moduleName + sep + pascalCaseClassName + sep + "detail-drawer.vue";
-//        }
-//
-//        if (template.contains("update-drawer.vue.vm")) {
-//            return frontendPathPrefix + "views" + sep + moduleName + sep + pascalCaseClassName + sep + "update-drawer.vue";
-//        }
-//
-//        if (template.contains("index.vue.vm")) {
-//            return frontendPathPrefix + "views" + sep + moduleName + sep + pascalCaseClassName + sep + "index.vue";
-//        }
+        final String frontendPathPrefix = "前端代码" + sep + "src" + sep;
+        final String viewPathPrefix = frontendPathPrefix + "views" + sep + moduleName + sep + placeholder.getKebabCaseClassName() + sep;
+        if (template.contains("Api.ts.vm")) {
+            return frontendPathPrefix + "api" + sep + moduleName + sep + placeholder.getKebabCaseClassName() + ".ts";
+        }
+
+        if (template.contains("data.ts.vm")) {
+            return viewPathPrefix + "data.ts";
+        }
+
+        if (template.contains("index.vue.vm")) {
+            return viewPathPrefix + "index.vue";
+        }
+
+        if (template.contains("form.vue.vm")) {
+            return viewPathPrefix + "modules" + sep + "form.vue";
+        }
         return null;
     }
 

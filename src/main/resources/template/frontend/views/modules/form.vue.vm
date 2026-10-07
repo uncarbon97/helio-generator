@@ -1,0 +1,113 @@
+<script lang="ts" setup>
+import type { ${pascalCaseClassName}Api } from '#/api';
+
+import {computed, ref} from 'vue';
+
+import {useVbenDrawer} from '@vben/common-ui';
+
+import {useVbenForm} from '#/adapter/form';
+
+import {create${pascalCaseClassName}, update${pascalCaseClassName}} from '#/api';
+
+import {useFormSchema} from '../data';
+
+const emits = defineEmits(['success']);
+
+const formData = ref<${pascalCaseClassName}Api.${pascalCaseClassName}DTO>();
+
+const [Form, formApi] = useVbenForm({
+  commonConfig: {
+    // 长字段名不换行
+    labelWidth: 120,
+  },
+  schema: useFormSchema(),
+  showDefaultActions: false,
+});
+
+const id = ref<string>();
+const [Drawer, drawerApi] = useVbenDrawer<null | ${pascalCaseClassName}Api.${pascalCaseClassName}DTO>({
+  async onConfirm() {
+    const { valid } = await formApi.validate();
+    if (!valid) return;
+    const values = await formApi.getValues();
+    drawerApi.lock();
+    try {
+      const idVal = id.value;
+      await (idVal
+        ? update${pascalCaseClassName}({
+            id: idVal,
+#foreach ($column in $columns)
+#if($column.columnName != $pk.columnName
+    && $column.columnName != "tenant_id"
+    && $column.columnName != "del_flag"
+    && $column.columnName != "created_at"
+    && $column.columnName != "created_by"
+    && $column.columnName != "updated_at"
+    && $column.columnName != "updated_by"
+)
+            $column.camelAttrName: values.$column.camelAttrName,
+#end
+#end
+          })
+        : create${pascalCaseClassName}({
+#foreach ($column in $columns)
+#if($column.columnName != $pk.columnName
+    && $column.columnName != "tenant_id"
+    && $column.columnName != "del_flag"
+    && $column.columnName != "created_at"
+    && $column.columnName != "created_by"
+    && $column.columnName != "updated_at"
+    && $column.columnName != "updated_by"
+)
+            $column.camelAttrName: values.$column.camelAttrName,
+#end
+#end
+          }));
+      emits('success');
+      drawerApi.close();
+    } catch {
+      drawerApi.unlock();
+    }
+  },
+
+  async onOpenChange(isOpen) {
+    if (isOpen) {
+      const data = drawerApi.getData();
+      // 先清空，避免加载中展示上一次的表单数据
+      formApi.reset();
+      formData.value = undefined;
+      id.value = undefined;
+
+      if (data) {
+        formData.value = data;
+        id.value = data.id;
+        formApi.setValues({
+#foreach ($column in $columns)
+#if($column.columnName != $pk.columnName
+    && $column.columnName != "tenant_id"
+    && $column.columnName != "del_flag"
+    && $column.columnName != "created_at"
+    && $column.columnName != "created_by"
+    && $column.columnName != "updated_at"
+    && $column.columnName != "updated_by"
+)
+          $column.camelAttrName: data.$column.camelAttrName,
+#end
+#end
+        });
+      }
+    }
+  },
+});
+
+defineExpose({ drawerApi });
+
+const getDrawerTitle = computed(() => {
+  return formData.value?.id ? $t('common.edit') : $t('common.create');
+});
+</script>
+<template>
+  <Drawer :title="getDrawerTitle">
+    <Form />
+  </Drawer>
+</template>

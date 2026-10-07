@@ -71,3 +71,7 @@ Desktop.ini
 # 环境变量文件（可能包含密钥、Token 等敏感信息）
 .env
 .env.*
+
+# 本地配置文件（可能包含数据库账号密码等敏感信息）
+**/application-local.yml
+**/application-local.yaml

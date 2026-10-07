@@ -1,12 +1,12 @@
 package ${packageName}.adminapi.controller.${moduleName};
 
 
-import cc.uncarbon.framework.helium.base.constant.PermissionPattern;
 import cc.uncarbon.framework.helium.base.page.PageResult;
 import cc.uncarbon.framework.helium.web.model.response.ApiResult;
 import ${packageName}.commons.constant.ApiPathPrefix;
+import ${packageName}.commons.constant.PermissionPattern;
 import ${packageName}.commons.model.request.IdRequest;
-import ${packageName}.commons.model.request.IdsRequest;
+import ${packageName}.commons.model.response.IdResponse;
 import ${packageName}.commons.satoken.StpLoginType;
 import ${packageName}.${moduleName}.model.query.Admin${pascalCaseClassName}ListQuery;
 import ${packageName}.${moduleName}.model.request.Admin${pascalCaseClassName}UpsertRequest;
@@ -24,8 +24,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Set;
+
 @SaCheckLogin(type = StpLoginType.ADMIN)
-@Tag(name = "后台管理-${comments}管理")
+@Tag(name = "后台管理-" + Admin${pascalCaseClassName}Controller.BIZ_TYPE)
 #if(${onStandaloneArch})
 @RequestMapping(value = ApiPathPrefix.ADMIN + "/v1/${moduleName}/${kebabCaseClassName}")
 #end
@@ -34,8 +36,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class Admin${pascalCaseClassName}Controller {
 
-    // 功能权限串前缀
-    private static final String PERMISSION_PREFIX = "${pascalCaseClassName}:";
+    private static final String PERMISSION_PREFIX = "${moduleName}:${kebabCaseClassName}:";
+    static final String BIZ_TYPE = "${comments}管理";
 #if(${onStandaloneArch})
 
     private final ${pascalCaseClassName}Service ${camelCaseClassName}Service;
@@ -63,11 +65,11 @@ public class Admin${pascalCaseClassName}Controller {
     @SaCheckPermission(type = StpLoginType.ADMIN, value = PERMISSION_PREFIX + PermissionPattern.CREATE)
     @Operation(summary = "新增")
     @PostMapping(value = "/create")
-    public ApiResult<Void> create(@RequestBody @Valid Admin${pascalCaseClassName}UpsertRequest request) {
+    public ApiResult<IdResponse<Long>> create(@RequestBody @Valid Admin${pascalCaseClassName}UpsertRequest request) {
 #if(${onStandaloneArch})
-        ${camelCaseClassName}Service.adminCreate(request);
+        Long newId = ${camelCaseClassName}Service.adminCreate(request);
+        return ApiResult.success(new IdResponse<>(newId));
 #end
-        return ApiResult.success();
     }
 
     @SaCheckPermission(type = StpLoginType.ADMIN, value = PERMISSION_PREFIX + PermissionPattern.UPDATE)
@@ -83,9 +85,9 @@ public class Admin${pascalCaseClassName}Controller {
     @SaCheckPermission(type = StpLoginType.ADMIN, value = PERMISSION_PREFIX + PermissionPattern.DELETE)
     @Operation(summary = "删除")
     @PostMapping(value = "/delete")
-    public ApiResult<Void> delete(@RequestBody @Valid IdsRequest<Long> request) {
+    public ApiResult<Void> delete(@RequestBody @Valid IdRequest<Long> request) {
 #if(${onStandaloneArch})
-        ${camelCaseClassName}Service.adminDelete(request.getIds());
+        ${camelCaseClassName}Service.adminDelete(Set.of(request.getId()));
 #end
         return ApiResult.success();
     }

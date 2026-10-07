@@ -1,66 +1,134 @@
-import { defHttp } from '@/utils/http/axios';
-import { ${pascalCaseClassName}ApiResult, ${pascalCaseClassName}InsertOrUpdateForm } from './model/${pascalCaseClassName}Model';
+#macro (tsType $attrType)#if($attrType == 'String')string#elseif($attrType == 'Boolean')boolean#elseif($attrType == 'YesOrNoEnum')YesOrNoEnumValue#elseif($attrType == 'EnabledStatusEnum')EnabledStatusEnumValue#elseif($attrType == 'Instant' || $attrType == 'LocalDateTime' || $attrType == 'LocalDate' || $attrType == 'LocalTime')string#{else}number#end#end
+import type {PageParam, PageResult} from '#/api/common';
+import {requestClient} from '#/api/request';
+#if(${hasEnabledStatusEnum})
+#end
+#if(${hasYesOrNoEnum})
+#end
 
-enum Api {
-  REST = '/api/v1/${kebabCaseClassName}s',
+export namespace ${pascalCaseClassName}Api {
+  /** 列表查询条件 */
+  export interface ListQuery {
+    /** 分页参数 */
+    pageParam: PageParam;
+    /** 时间区间起 */
+    beginAt?: string;
+    /** 时间区间止 */
+    endAt?: string;
+#if(${useQueryFormSchema})
+#foreach ($column in $columns)
+#if($column.columnName != $pk.columnName
+    && $column.columnName != "tenant_id"
+    && $column.columnName != "del_flag"
+    && $column.columnName != "created_at"
+    && $column.columnName != "created_by"
+    && $column.columnName != "updated_at"
+    && $column.columnName != "updated_by"
+)
+
+    /** $column.comments */
+    $column.camelAttrName?: #tsType($column.attrType);
+#end
+#end
+#end
+  }
+
+  /** 新增/修改请求表单 */
+  export interface UpsertRequest {
+    /** 主键ID（新增时不传） */
+    id?: string;
+#foreach ($column in $columns)
+#if($column.columnName != $pk.columnName
+    && $column.columnName != "tenant_id"
+    && $column.columnName != "del_flag"
+    && $column.columnName != "created_at"
+    && $column.columnName != "created_by"
+    && $column.columnName != "updated_at"
+    && $column.columnName != "updated_by"
+)
+
+    /** $column.comments */
+    $column.camelAttrName#if($column.nullable)?#end: #tsType($column.attrType);
+#end
+#end
+  }
+
+  /** 值对象 */
+  export interface ${pascalCaseClassName}DTO {
+    /** 主键ID */
+    id: string;
+    /** 创建时刻 */
+    createdAt: string;
+    /** 更新时刻 */
+    updatedAt: string;
+#foreach ($column in $columns)
+#if($column.columnName != $pk.columnName
+    && $column.columnName != "tenant_id"
+    && $column.columnName != "del_flag"
+    && $column.columnName != "created_at"
+    && $column.columnName != "created_by"
+    && $column.columnName != "updated_at"
+    && $column.columnName != "updated_by"
+)
+
+    /** $column.comments */
+    $column.camelAttrName: #tsType($column.attrType);
+#end
+#end
+  }
+}
+
+const API_PATH = '/v1/${moduleName}/${kebabCaseClassName}';
+
+/**
+ * 分页查询
+ */
+async function get${pascalCaseClassName}List(data: ${pascalCaseClassName}Api.ListQuery) {
+  return requestClient.post<PageResult<${pascalCaseClassName}Api.${pascalCaseClassName}DTO>>(
+    `${API_PATH}/list`,
+    data,
+  );
 }
 
 /**
- * ${comments}-分页列表
+ * 详情
+ * @param id ID
  */
-export const list${pascalCaseClassName}Api = (queryForm: any) => {
-  // 选择的是日期，补全时分秒部分
-  if (queryForm.beginAt) {
-    queryForm.beginAt += ' 00:00:00';
-  }
-
-  if (queryForm.endAt) {
-    queryForm.endAt += ' 23:59:59';
-  }
-
-  return defHttp.get<${pascalCaseClassName}ApiResult[]>({
-    url: Api.REST,
-    params: queryForm,
-  });
-};
+async function get${pascalCaseClassName}Detail(id: string) {
+  return requestClient.post<${pascalCaseClassName}Api.${pascalCaseClassName}DTO>(
+    `${API_PATH}/detail`,
+    { id },
+  );
+}
 
 /**
- * ${comments}-详情
+ * 新增
+ * @param request 请求表单
  */
-export const retrieve${pascalCaseClassName}Api = (id: string) => {
-  return defHttp.get<${pascalCaseClassName}ApiResult>({
-    url: `${Api.REST}/${id}`,
-  });
-};
+async function create${pascalCaseClassName}(request: ${pascalCaseClassName}Api.UpsertRequest) {
+  return requestClient.post(`${API_PATH}/create`, request);
+}
 
 /**
- * ${comments}-新增
+ * 修改
+ * @param request 请求表单
  */
-export const insert${pascalCaseClassName}Api = (insertForm: ${pascalCaseClassName}InsertOrUpdateForm) => {
-  return defHttp.post<void>({
-    url: Api.REST,
-    params: insertForm,
-  });
-};
+async function update${pascalCaseClassName}(request: ${pascalCaseClassName}Api.UpsertRequest) {
+  return requestClient.post(`${API_PATH}/update`, request);
+}
 
 /**
- * ${comments}-编辑
+ * 删除
+ * @param id ID
  */
-export const update${pascalCaseClassName}Api = (id: string, updateForm: ${pascalCaseClassName}InsertOrUpdateForm) => {
-  return defHttp.put<void>({
-    url: `${Api.REST}/${id}`,
-    params: updateForm,
-  });
-};
+async function delete${pascalCaseClassName}(id: string) {
+  return requestClient.post(`${API_PATH}/delete`, { ids: [id] });
+}
 
-/**
- * ${comments}-删除
- */
-export const delete${pascalCaseClassName}Api = (ids: string[]) => {
-  return defHttp.delete<void>({
-    url: Api.REST,
-    params: {
-      ids: ids,
-    },
-  });
+export {
+  create${pascalCaseClassName},
+  delete${pascalCaseClassName},
+  get${pascalCaseClassName}Detail,
+  get${pascalCaseClassName}List,
+  update${pascalCaseClassName},
 };

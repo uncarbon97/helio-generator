@@ -2,6 +2,7 @@ package ${packageName}.${moduleName}.service.impl;
 
 
 import cc.uncarbon.framework.helium.base.page.PageResult;
+import ${packageName}.commons.constant.SQLSegment;
 import ${packageName}.commons.exception.NoRecordException;
 import ${packageName}.${moduleName}.dal.entity.${pascalCaseClassName}Entity;
 import ${packageName}.${moduleName}.dal.mapper.${pascalCaseClassName}Mapper;
@@ -20,8 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.Objects;
 import java.util.List;
+import java.util.Objects;
 #if(${hasBigDecimal})
 import java.math.BigDecimal;
 #end
@@ -39,6 +40,8 @@ import cc.uncarbon.framework.helium.db.enums.EnabledStatusEnum;
 @Service
 @Slf4j
 public class ${pascalCaseClassName}ServiceImpl implements ${pascalCaseClassName}Service {
+
+    private static final String LOG_PREFIX = "[${comments}管理]";
 
     private final ${pascalCaseClassName}Mapper ${camelCaseClassName}Mapper;
 
@@ -78,6 +81,7 @@ public class ${pascalCaseClassName}ServiceImpl implements ${pascalCaseClassName}
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Long adminCreate(Admin${pascalCaseClassName}UpsertRequest request) {
+        log.info(LOG_PREFIX + "新增 >> {}", request);
         checkRepeat(request);
 
         request.setId(null);
@@ -91,6 +95,8 @@ public class ${pascalCaseClassName}ServiceImpl implements ${pascalCaseClassName}
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void adminUpdate(Admin${pascalCaseClassName}UpsertRequest request) {
+        log.info(LOG_PREFIX + "修改 >> {}", request);
+        checkExistence(request.getId());
         checkRepeat(request);
 
         var entity = new ${pascalCaseClassName}Entity();
@@ -102,6 +108,7 @@ public class ${pascalCaseClassName}ServiceImpl implements ${pascalCaseClassName}
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void adminDelete(Collection<Long> ids) {
+        log.info(LOG_PREFIX + "删除 >> {}", ids);
         ${camelCaseClassName}Mapper.deleteByIds(ids);
     }
 
@@ -155,6 +162,19 @@ public class ${pascalCaseClassName}ServiceImpl implements ${pascalCaseClassName}
                 .setSize(entityPage.getSize())
                 .setTotal(entityPage.getTotal())
                 .setRecords(convertList(entityPage.getRecords()));
+    }
+
+    /**
+     * 检查是否存在
+     */
+    private void checkExistence(Long id) {
+        boolean exists = ${camelCaseClassName}Mapper.exists(
+                new LambdaQueryWrapper<${pascalCaseClassName}Entity>()
+                        .select(${pascalCaseClassName}Entity::getId)
+                        .eq(${pascalCaseClassName}Entity::getId, id)
+                        .last(SQLSegment.LIMIT_1)
+        );
+        NoRecordException.throwIfFalse(exists);
     }
 
     /**
