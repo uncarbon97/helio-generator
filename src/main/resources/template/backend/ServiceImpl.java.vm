@@ -36,9 +36,9 @@ import cc.uncarbon.framework.helium.db.enums.EnabledStatusEnum;
 /**
  * ${comments}
  */
+@Slf4j
 @RequiredArgsConstructor
 @Service
-@Slf4j
 public class ${pascalCaseClassName}ServiceImpl implements ${pascalCaseClassName}Service {
 
     private static final String LOG_PREFIX = "[${comments}管理]";

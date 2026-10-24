@@ -33,12 +33,12 @@ import cc.uncarbon.framework.helium.db.enums.EnabledStatusEnum;
 /**
  * ${comments}
  */
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
 @TableName(value = "${tableName}")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
 public class ${pascalCaseClassName}Entity extends ${parentEntityClass} {
 
     @Serial
